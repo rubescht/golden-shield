@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Golden Shield – Staying Safe Online</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 10 10%22%3E%3Ccircle cx=%225%22 cy=%225%22 r=%225%22 fill=%22%23121117%22/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#FBF8F4; --card:#FFFFFF; --ink:#121117; --muted:#4A4A4A; --line:#E4DCC8;
+  --gold:#C99A2E; --gold-ink:#7A5A12; --gold-soft:#F6EBCF; --black:#121117;
+  --good:#1F6B3A; --good-soft:#E3F2E8; --warn:#8A5A00; --warn-soft:#FFF1CC; --bad:#A3241B; --bad-soft:#FBE3E0;
+  --radius:18px; --fs:20px;
+}
+html{font-size:var(--fs)}
+body.hc{--bg:#000;--card:#000;--ink:#FFF;--muted:#FFF;--line:#FFD400;--gold:#FFD400;--gold-ink:#FFD400;--gold-soft:#1a1a1a;--good-soft:#002b12;--warn-soft:#2b2000;--bad-soft:#2b0000;--good:#7CFFA8;--warn:#FFD400;--bad:#FF8A80}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Source Sans 3",system-ui,sans-serif;line-height:1.55;padding-bottom:110px}
+a{color:var(--gold-ink);font-weight:700}
+p a,li a{display:inline-block;padding:10px 2px;margin:-10px 0}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:4px solid var(--gold);outline-offset:3px}
+header{background:var(--black);color:#fff;padding:14px 18px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:5;border-bottom:4px solid var(--gold)}
+header .brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:#fff;flex:1 1 auto;min-width:0}
+header .brand>span{min-width:0;font-size:16px;line-height:1.15}
+header .brand b{display:block}
+@media (max-width:360px){header .brand small{display:none}}
+header .brand b{font-size:20px;letter-spacing:.3px;line-height:1.15}
+header .brand small{display:block;font-size:.7rem;color:#E9D49B;font-weight:400}
+.tools{display:flex;gap:6px}
+.tools{flex:none}
+.tbtn{font-size:16px;background:#222;border:2px solid #555;color:#fff;border-radius:12px;min-width:48px;height:48px;padding:0 10px;cursor:pointer;font-weight:700}
+.tbtn[aria-pressed="true"]{background:var(--gold);color:#111;border-color:var(--gold)}
+main{max-width:860px;margin:0 auto;padding:20px 16px}
+h1,h2,h3,.btn,nav.bar a,header .brand b{font-family:Poppins,system-ui,sans-serif}
+h1{font-size:1.7rem;line-height:1.2;margin:.3em 0 .4em}
+h2{font-size:1.3rem;margin:1.2em 0 .5em}
+h3{font-size:1.1rem;margin:.2em 0 .3em}
+p{margin:.4em 0 .8em}
+.muted{color:var(--muted)}
+.view{display:none}
+.view.on{display:block}
+.card{background:var(--card);border:2px solid var(--line);border-radius:var(--radius);padding:18px;margin:12px 0}
+.hero{background:var(--black);color:#fff;border-radius:var(--radius);padding:22px;border:3px solid var(--gold)}
+.hero h1{color:#fff}
+.hero p{color:#EEE}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px}
+.tile{display:flex;gap:14px;align-items:center;text-align:left;background:var(--card);border:2px solid var(--line);border-radius:var(--radius);padding:18px;cursor:pointer;min-height:96px;text-decoration:none;color:var(--ink);width:100%}
+.tile:hover{border-color:var(--gold)}
+.tile .ic{font-size:2rem;width:58px;height:58px;flex:none;display:grid;place-items:center;background:var(--gold-soft);border-radius:14px}
+.tile b{display:block;font-size:1.05rem}
+.tile span{font-size:.85rem;color:var(--muted)}
+.tile.help{background:var(--bad);color:#fff;border-color:var(--bad)}
+.tile.help span{color:#fff}
+.tile.help .ic{background:#fff2}
+.btn{max-width:100%;white-space:normal;overflow-wrap:anywhere;text-align:center;display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:58px;padding:0 24px;border-radius:14px;border:3px solid var(--black);background:var(--gold);color:#111;font-weight:700;font-size:1rem;cursor:pointer;text-decoration:none}
+body.hc .btn{border-color:var(--gold)}
+.btn.secondary{background:var(--card);color:var(--ink)}
+.btn.red{background:var(--bad);color:#fff;border-color:var(--bad)}
+.btn.wide{width:100%}
+.btn[disabled]{opacity:.55;cursor:wait}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.back{background:none;border:none;color:var(--gold-ink);font-weight:700;font-size:1rem;cursor:pointer;padding:8px 0;min-height:48px}
+.pill{display:inline-block;padding:3px 14px;font-family:Poppins,sans-serif;letter-spacing:.03em;border-radius:999px;font-size:.78rem;font-weight:700;background:var(--gold-soft);color:var(--gold-ink);border:1px solid var(--line)}
+.pill.done{background:var(--good-soft);color:var(--good)}
+.list{list-style:none;padding:0;margin:0}
+.list li{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid var(--line)}
+.list li:last-child{border-bottom:none}
+.list .n{flex:none;width:36px;height:36px;border-radius:50%;background:var(--gold);color:#111;font-weight:700;display:grid;place-items:center}
+.rule{background:var(--gold-soft);border-left:8px solid var(--gold);border-radius:12px;padding:14px 16px;font-size:1.05rem}
+.quiz button.opt{display:block;width:100%;text-align:left;margin:8px 0;padding:14px 16px;min-height:58px;border-radius:14px;border:2px solid var(--line);background:var(--card);cursor:pointer;font-size:1rem}
+.quiz button.opt.right{background:var(--good-soft);border-color:var(--good)}
+.quiz button.opt.wrong{background:var(--bad-soft);border-color:var(--bad)}
+.feedback{font-weight:700;margin-top:8px}
+label{display:block;font-weight:700;margin:14px 0 6px}
+input[type=text],input[type=tel],select,textarea{width:100%;padding:14px;border:2px solid #888;border-radius:12px;background:var(--card);font-size:1rem;min-height:56px}
+textarea{min-height:140px}
+.choices{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px}
+.choice{display:flex;align-items:center;gap:10px;padding:14px;border:2px solid var(--line);border-radius:14px;background:var(--card);cursor:pointer;min-height:64px;font-size:.95rem;text-align:left}
+.choice[aria-pressed="true"]{border-color:var(--gold);background:var(--gold-soft);box-shadow:0 0 0 2px var(--gold) inset}
+.choice .e{font-size:1.5rem}
+.verdict{border-radius:var(--radius);padding:18px;border:3px solid}
+.verdict.bad{background:var(--bad-soft);border-color:var(--bad)}
+.verdict.warn{background:var(--warn-soft);border-color:var(--warn)}
+.verdict.ok{background:var(--good-soft);border-color:var(--good)}
+.verdict h2{margin-top:0}
+.phone{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap}
+.phone .num{font-size:1.3rem;font-weight:700;letter-spacing:.5px}
+.session{display:flex;gap:14px}
+.date{flex:none;width:76px;text-align:center;background:var(--black);color:#fff;border-radius:14px;padding:8px 4px;border:2px solid var(--gold)}
+.date .d{font-size:1.6rem;font-weight:700;line-height:1}
+.date .m{font-size:.75rem;color:#E9D49B;text-transform:uppercase}
+.vid{display:flex;gap:14px;align-items:center}
+.vid>div,.phone>div,.tile>div{min-width:0}
+h1,h2,h3,p,li,td{overflow-wrap:break-word}
+.thumb{flex:none;width:96px;height:72px;border-radius:12px;background:linear-gradient(135deg,#111,#3a2c08);display:grid;place-items:center;border:2px solid var(--gold)}
+.thumb svg{width:34px;height:34px}
+.chat{display:flex;flex-direction:column;gap:10px;max-height:460px;overflow:auto;padding:4px}
+.msg{padding:12px 16px;border-radius:16px;max-width:88%;white-space:pre-wrap}
+.msg.me{align-self:flex-end;background:var(--gold-soft);border:2px solid var(--gold)}
+.msg.ai{align-self:flex-start;background:var(--card);border:2px solid var(--line)}
+.progress{height:16px;background:var(--line);border-radius:999px;overflow:hidden}
+.progress i{display:block;height:100%;background:var(--gold);width:0}
+nav.bar{position:fixed;bottom:0;left:0;right:0;background:var(--black);border-top:4px solid var(--gold);display:flex;justify-content:space-around;padding:6px 4px calc(6px + env(safe-area-inset-bottom));z-index:6}
+nav.bar a{flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:center;gap:2px;color:#ddd;text-decoration:none;font-size:14px;padding:6px 2px;border-radius:12px;min-height:64px;justify-content:center;font-weight:700}
+nav.bar a .e{font-size:26px;line-height:1}
+nav.bar a.on{color:#111;background:var(--gold)}
+nav.bar a.sos{color:#fff;background:var(--bad)}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:100px;background:var(--black);color:#fff;border:3px solid var(--gold);padding:14px 20px;border-radius:14px;z-index:9;display:none;max-width:90%}
+footer{max-width:860px;margin:30px auto 0;padding:0 16px;color:var(--muted);font-size:.8rem}
+table{width:100%;border-collapse:collapse;font-size:.85rem}
+th,td{text-align:left;padding:8px;border-bottom:1px solid var(--line);vertical-align:top}
+.sr{position:absolute;left:-9999px}
+.cbgmark{width:40px;height:40px;color:#fff;flex:none}
+header .brand small{font-size:13px;line-height:1.2;letter-spacing:.08em;text-transform:uppercase;font-family:Poppins,sans-serif;font-weight:300}
+.byline{display:flex;align-items:center;gap:10px;margin-top:14px;padding-top:14px;border-top:1px solid #444;color:#ddd;font-family:Poppins,sans-serif;font-size:.75rem;letter-spacing:.12em;text-transform:uppercase}
+.byline .cbgmark{width:28px;height:28px}
+.brandfoot{display:flex;gap:14px;align-items:center;background:var(--black);color:#fff;border-radius:var(--radius);padding:18px;margin-bottom:12px}
+.brandfoot .cbgmark{width:52px;height:52px}
+.brandfoot b{font-family:Poppins,sans-serif;letter-spacing:.12em;display:block}
+.brandfoot span{font-family:Poppins,sans-serif;font-weight:300;font-size:.8rem;color:#E9D49B}
+.divs{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.divs i{font-style:normal;font-size:.72rem;border:1px solid #555;border-radius:999px;padding:2px 10px;color:#ddd}
+@media (max-width:520px){header{padding:10px 12px;gap:8px} header .brand b{font-size:16px} .tbtn{min-width:44px;height:44px;padding:0 6px;font-size:15px} .cbgmark{width:34px;height:34px} header .brand small{font-size:12px} h1{font-size:1.45rem}}
+</style>
+</head>
+<body>
+<header>
+  <a class="brand" href="#home" aria-label="Golden Shield by Code Black Group, home"><svg class="cbgmark" viewBox="0 0 102.514 102.514" aria-hidden="true"><path fill="currentColor" transform="matrix(1,0,0,-1,60.90541,18.044983)" d="M0 0H-24.735V-11.17C-33.375-14.901-39.438-23.501-39.438-33.494-39.438-43.486-33.376-52.085-24.735-55.816V-66.423H0C5.38-66.423 10.438-64.328 14.242-60.524 18.046-56.72 20.141-51.662 20.141-46.282 20.141-41.475 18.409-36.836 15.321-33.211 18.409-29.587 20.141-24.948 20.141-20.141 20.141-9.035 11.106 0 0 0M10.13-35.078C13.291-37.939 15.105-42.023 15.105-46.282 15.105-50.317 13.533-54.11 10.681-56.963 7.828-59.816 4.034-61.387 0-61.387H-19.698V-57.362C-18.217-57.645-16.69-57.798-15.127-57.798L0-57.76C6.207-57.76 11.257-52.709 11.257-46.502 11.257-40.295 6.207-35.245 0-35.245H-24.735V-45.633C-23.251-46.81-21.549-47.721-19.698-48.294V-40.282L0-40.281C3.43-40.281 6.221-43.072 6.221-46.502 6.221-49.932 3.43-52.723-.007-52.723L-15.133-52.762C-25.758-52.762-34.402-44.118-34.402-33.494-34.401-22.869-25.758-14.226-15.12-14.226L0-14.144C3.308-14.144 5.999-16.835 5.999-20.143 5.999-23.451 3.308-26.142 0-26.142H-19.698V-18.695C-21.548-19.267-23.251-20.175-24.735-21.35V-31.179L0-31.178C6.085-31.178 11.035-26.228 11.035-20.143 11.035-14.058 6.085-9.107-.014-9.108L-15.133-9.189C-16.694-9.189-18.219-9.343-19.698-9.625V-5.037L0-5.036C8.329-5.036 15.105-11.812 15.105-20.141 15.105-24.4 13.291-28.483 10.13-31.344L8.066-33.211Z"/><path fill="currentColor" transform="matrix(1,0,0,-1,51.25702,.99993899)" d="M0 0C-27.712 0-50.257-22.546-50.257-50.257-50.257-77.969-27.712-100.514 0-100.513 27.712-100.513 50.256-77.968 50.257-50.256 50.257-22.545 27.712 0 0 0M0-95.477C-24.935-95.477-45.221-75.192-45.221-50.257-45.221-25.323-24.934-5.037 0-5.036 24.934-5.036 45.221-25.322 45.22-50.256 45.22-75.191 24.934-95.477 0-95.477"/></svg><span><b>Golden Shield</b><small>by Code Black Group</small></span></a>
+  <div class="tools" role="group" aria-label="Display settings">
+    <button class="tbtn" id="fsDown" aria-label="Smaller text">A−</button>
+    <button class="tbtn" id="fsUp" aria-label="Bigger text">A+</button>
+    <button class="tbtn" id="hcBtn" aria-pressed="false" aria-label="High contrast" style="font-size:1.4rem;line-height:1">◑</button>
+  </div>
+</header>
+
+<main id="app">
+
+<!-- HOME -->
+<section class="view" id="v-home">
+  <div class="hero">
+    <h1 id="greet">Welcome 👋</h1>
+    <p>Learn to spot scams, use AI with confidence, join a friendly class — and ask for help any time. Nothing here is a silly question.</p>
+    <div class="row"><a class="btn" href="#check">🔍 Is this a scam? Check a message</a></div>
+    <div class="byline"><svg class="cbgmark" viewBox="0 0 102.514 102.514" aria-hidden="true"><path fill="currentColor" transform="matrix(1,0,0,-1,60.90541,18.044983)" d="M0 0H-24.735V-11.17C-33.375-14.901-39.438-23.501-39.438-33.494-39.438-43.486-33.376-52.085-24.735-55.816V-66.423H0C5.38-66.423 10.438-64.328 14.242-60.524 18.046-56.72 20.141-51.662 20.141-46.282 20.141-41.475 18.409-36.836 15.321-33.211 18.409-29.587 20.141-24.948 20.141-20.141 20.141-9.035 11.106 0 0 0M10.13-35.078C13.291-37.939 15.105-42.023 15.105-46.282 15.105-50.317 13.533-54.11 10.681-56.963 7.828-59.816 4.034-61.387 0-61.387H-19.698V-57.362C-18.217-57.645-16.69-57.798-15.127-57.798L0-57.76C6.207-57.76 11.257-52.709 11.257-46.502 11.257-40.295 6.207-35.245 0-35.245H-24.735V-45.633C-23.251-46.81-21.549-47.721-19.698-48.294V-40.282L0-40.281C3.43-40.281 6.221-43.072 6.221-46.502 6.221-49.932 3.43-52.723-.007-52.723L-15.133-52.762C-25.758-52.762-34.402-44.118-34.402-33.494-34.401-22.869-25.758-14.226-15.12-14.226L0-14.144C3.308-14.144 5.999-16.835 5.999-20.143 5.999-23.451 3.308-26.142 0-26.142H-19.698V-18.695C-21.548-19.267-23.251-20.175-24.735-21.35V-31.179L0-31.178C6.085-31.178 11.035-26.228 11.035-20.143 11.035-14.058 6.085-9.107-.014-9.108L-15.133-9.189C-16.694-9.189-18.219-9.343-19.698-9.625V-5.037L0-5.036C8.329-5.036 15.105-11.812 15.105-20.141 15.105-24.4 13.291-28.483 10.13-31.344L8.066-33.211Z"/><path fill="currentColor" transform="matrix(1,0,0,-1,51.25702,.99993899)" d="M0 0C-27.712 0-50.257-22.546-50.257-50.257-50.257-77.969-27.712-100.514 0-100.513 27.712-100.513 50.256-77.968 50.257-50.256 50.257-22.545 27.712 0 0 0M0-95.477C-24.935-95.477-45.221-75.192-45.221-50.257-45.221-25.323-24.934-5.037 0-5.036 24.934-5.036 45.221-25.322 45.22-50.256 45.22-75.191 24.934-95.477 0-95.477"/></svg>Brought to you by Code Black Group</div>
+  </div>
+  <h2>What would you like to do?</h2>
+  <div class="grid">
+    <a class="tile" href="#learn"><div class="ic">🛡️</div><div><b>Stay Safe Online</b><span>Short, easy lessons on scams, passwords & banking</span></div></a>
+    <a class="tile" href="#ai"><div class="ic">🤖</div><div><b>AI Made Simple</b><span>What AI is, how it helps, and how to use it safely</span></div></a>
+    <a class="tile" href="#check"><div class="ic">🔍</div><div><b>Scam Checker</b><span>Paste a text or email and we'll tell you if it looks safe</span></div></a>
+    <a class="tile" href="#sessions"><div class="ic">📅</div><div><b>Classes & Sessions</b><span>Book a friendly awareness session</span></div></a>
+    <a class="tile" href="#videos"><div class="ic">▶️</div><div><b>Watch & Learn</b><span>Free trusted videos and courses</span></div></a>
+    <a class="tile help" href="#help"><div class="ic">🆘</div><div><b>I Need Help</b><span>Ask a real person to help you</span></div></a>
+  </div>
+  <div class="card">
+    <h3>Your progress</h3>
+    <div class="progress" aria-hidden="true"><i id="progBar"></i></div>
+    <p id="progText" class="muted">0 of 12 lessons done.</p>
+  </div>
+  <div class="rule"><b>The Golden Rule: STOP · CHECK · ASK.</b><br>If a message or call rushes you, asks for money, codes or passwords — stop, check with the real company using a number you find yourself, and ask someone you trust.</div>
+</section>
+
+<!-- LEARN -->
+<section class="view" id="v-learn">
+  <button class="back" onclick="go('home')">← Back</button>
+  <h1>🛡️ Stay Safe Online</h1>
+  <p class="muted">Each lesson takes about 3 minutes. Tap one to start. Use 🔊 to have it read aloud.</p>
+  <div id="cyberList"></div>
+</section>
+
+<!-- AI -->
+<section class="view" id="v-ai">
+  <button class="back" onclick="go('home')">← Back</button>
+  <h1>🤖 AI Made Simple</h1>
+  <p class="muted">No jargon. Learn what AI is, how it can make life a little easier, and the tricks scammers now use with it.</p>
+  <div id="aiList"></div>
+  <a class="tile" href="#practice" style="margin-top:12px"><div class="ic">💬</div><div><b>Practise talking to an AI helper</b><span>A safe place to try asking questions</span></div></a>
+</section>
+
+<!-- LESSON -->
+<section class="view" id="v-lesson">
+  <button class="back" id="lessonBack">← Back to lessons</button>
+  <div id="lessonBody"></div>
+</section>
+
+<!-- PRACTICE -->
+<section class="view" id="v-practice">
+  <button class="back" onclick="go('ai')">← Back</button>
+  <h1>💬 Practise with an AI helper</h1>
+  <div class="rule">Never type passwords, bank details, your Medicare number or full address into any AI. AI can be wrong — check health and money matters with a real person.</div>
+  <div class="card">
+    <p class="muted">Try one of these, or type your own:</p>
+    <div class="row" id="starters"></div>
+    <div class="chat" id="chat" aria-live="polite" style="margin-top:12px"></div>
+    <label for="chatIn">Your question</label>
+    <textarea id="chatIn" style="min-height:90px" placeholder="e.g. How do I make a video call to my grandson?"></textarea>
+    <div class="row" style="margin-top:10px"><button class="btn" id="chatSend">Send</button></div>
+    <p id="chatNote" class="muted"></p>
+  </div>
+</section>
+
+<!-- CHECK -->
+<section class="view" id="v-check">
+  <button class="back" onclick="go('home')">← Back</button>
+  <h1>🔍 Is this a scam?</h1>
+  <p>Copy and paste a text message, email or what someone said on the phone, and we'll check it for warning signs.</p>
+  <div class="card">
+    <label for="chkText">The message</label>
+    <textarea id="chkText" placeholder="e.g. AusPost: Your parcel is on hold. Pay $2.99 to redeliver: http://..."></textarea>
+    <div id="imgWrap" style="display:none">
+      <label for="chkImg">Or add a screenshot (optional)</label>
+      <input type="file" id="chkImg" accept="image/*">
+    </div>
+    <div class="row" style="margin-top:14px"><button class="btn" id="chkBtn">Check it for me</button><button class="btn secondary" id="chkClear">Clear</button></div>
+  </div>
+  <div id="chkOut" aria-live="polite"></div>
+  <p class="muted">This checker gives guidance only. If you've already paid money or shared details, go to <a href="#help">I Need Help</a> straight away.</p>
+</section>
+
+<!-- SESSIONS -->
+<section class="view" id="v-sessions">
+  <button class="back" onclick="go('home')">← Back</button>
+  <h1>📅 Classes & Sessions</h1>
+  <p class="muted">Friendly, small-group sessions run by Code Black Group trainers. Morning tea included. Bring your phone or tablet if you have one.</p>
+  <div id="sessList"></div>
+  <div class="card"><h3>Prefer one-on-one?</h3><p>Ask for a personal visit and we'll sit with you at your own pace.</p><a class="btn secondary" href="#help">Request a one-on-one</a></div>
+</section>
+
+<!-- VIDEOS -->
+<section class="view" id="v-videos">
+  <button class="back" onclick="go('home')">← Back</button>
+  <h1>▶️ Watch & Learn</h1>
+  <p class="muted">Free, trusted courses and videos from Australian Government services. They open in a new window.</p>
+  <div id="vidList"></div>
+</section>
+
+<!-- HELP -->
+<section class="view" id="v-help">
+  <button class="back" onclick="go('home')">← Back</button>
+  <h1>🆘 I Need Help</h1>
+  <div class="verdict bad">
+    <h2>Already lost money or shared bank details?</h2>
+    <p><b>Call your bank right now</b> — use the number on the back of your card. They may be able to stop the payment.</p>
+  </div>
+  <div class="card">
+    <h2 style="margin-top:0">Ask us to help you</h2>
+    <form id="helpForm">
+      <label>What do you need help with?</label>
+      <div class="choices" id="helpTopics"></div>
+      <label for="hName">Your name</label>
+      <input type="text" id="hName" autocomplete="name" required>
+      <label for="hRoom">Room number or where you live</label>
+      <input type="text" id="hRoom" placeholder="e.g. Room 12, or 'at home'">
+      <label for="hPhone">Best phone number to call you</label>
+      <input type="tel" id="hPhone" autocomplete="tel">
+      <label for="hHow">How would you like help?</label>
+      <select id="hHow"><option>Phone call</option><option>Come and see me in person</option><option>Video call</option><option>Contact my family member</option></select>
+      <label for="hUrg">How soon?</label>
+      <select id="hUrg"><option value="urgent">Urgent — today please</option><option value="soon" selected>In the next few days</option><option value="whenever">Whenever suits</option></select>
+      <label for="hMsg">Tell us a little more (optional)</label>
+      <textarea id="hMsg" placeholder="e.g. I got a call saying my computer has a virus"></textarea>
+      <div style="margin-top:16px"><button class="btn red wide" type="submit" id="hSubmit">Send my help request</button></div>
+      <p id="hNote" class="muted"></p>
+    </form>
+  </div>
+  <div id="myReqs"></div>
+  <h2>Phone numbers you can trust</h2>
+  <div id="phones"></div>
+</section>
+
+<!-- STAFF -->
+<section class="view" id="v-staff">
+  <button class="back" onclick="go('home')">← Back</button>
+  <h1>Staff dashboard</h1>
+  <p class="muted">Help requests and session bookings from residents. Staff only.</p>
+  <div id="staffBody"><div class="card">Loading…</div></div>
+</section>
+
+</main>
+
+<footer>
+  <div class="brandfoot"><svg class="cbgmark" viewBox="0 0 102.514 102.514" aria-hidden="true"><path fill="currentColor" transform="matrix(1,0,0,-1,60.90541,18.044983)" d="M0 0H-24.735V-11.17C-33.375-14.901-39.438-23.501-39.438-33.494-39.438-43.486-33.376-52.085-24.735-55.816V-66.423H0C5.38-66.423 10.438-64.328 14.242-60.524 18.046-56.72 20.141-51.662 20.141-46.282 20.141-41.475 18.409-36.836 15.321-33.211 18.409-29.587 20.141-24.948 20.141-20.141 20.141-9.035 11.106 0 0 0M10.13-35.078C13.291-37.939 15.105-42.023 15.105-46.282 15.105-50.317 13.533-54.11 10.681-56.963 7.828-59.816 4.034-61.387 0-61.387H-19.698V-57.362C-18.217-57.645-16.69-57.798-15.127-57.798L0-57.76C6.207-57.76 11.257-52.709 11.257-46.502 11.257-40.295 6.207-35.245 0-35.245H-24.735V-45.633C-23.251-46.81-21.549-47.721-19.698-48.294V-40.282L0-40.281C3.43-40.281 6.221-43.072 6.221-46.502 6.221-49.932 3.43-52.723-.007-52.723L-15.133-52.762C-25.758-52.762-34.402-44.118-34.402-33.494-34.401-22.869-25.758-14.226-15.12-14.226L0-14.144C3.308-14.144 5.999-16.835 5.999-20.143 5.999-23.451 3.308-26.142 0-26.142H-19.698V-18.695C-21.548-19.267-23.251-20.175-24.735-21.35V-31.179L0-31.178C6.085-31.178 11.035-26.228 11.035-20.143 11.035-14.058 6.085-9.107-.014-9.108L-15.133-9.189C-16.694-9.189-18.219-9.343-19.698-9.625V-5.037L0-5.036C8.329-5.036 15.105-11.812 15.105-20.141 15.105-24.4 13.291-28.483 10.13-31.344L8.066-33.211Z"/><path fill="currentColor" transform="matrix(1,0,0,-1,51.25702,.99993899)" d="M0 0C-27.712 0-50.257-22.546-50.257-50.257-50.257-77.969-27.712-100.514 0-100.513 27.712-100.513 50.256-77.968 50.257-50.256 50.257-22.545 27.712 0 0 0M0-95.477C-24.935-95.477-45.221-75.192-45.221-50.257-45.221-25.323-24.934-5.037 0-5.036 24.934-5.036 45.221-25.322 45.22-50.256 45.22-75.191 24.934-95.477 0-95.477"/></svg><div><b>CODE BLACK GROUP</b><span>One Code. One Strategy. One Outcome.</span><div class="divs"><i>Strike Force · Cyber Security</i><i>AI Dome · Safe AI</i><i>Midnight IT · 24/7 Support</i></div></div></div>
+  <p>Golden Shield is delivered by Code Black Group Global Pty Ltd. Phone 1300 737 562 · codeblackgroup.com.au</p>
+  <p>General information only. In an emergency call 000. · <a href="#staff">Staff</a></p>
+</footer>
+
+<nav class="bar" aria-label="Main">
+  <a href="#home" data-nav="home"><span class="e">🏠</span>Home</a>
+  <a href="#learn" data-nav="learn"><span class="e">🛡️</span>Learn</a>
+  <a href="#ai" data-nav="ai"><span class="e">🤖</span>AI</a>
+  <a href="#sessions" data-nav="sessions"><span class="e">📅</span>Classes</a>
+  <a href="#help" data-nav="help" class="sos"><span class="e">🆘</span>Help</a>
+</nav>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+/* ---------- CONTENT ---------- */
+const LESSONS = [
+ {id:"scams",track:"cyber",icon:"🚩",title:"Spot a scam in 5 seconds",intro:"Scammers are clever, but almost every scam shows the same warning signs.",
+  points:["They contact you out of the blue — a call, text, email or social media message you weren't expecting.","They rush you: \"Act now\", \"Your account will be closed\", \"You'll be arrested\".","They ask for money in an unusual way — gift cards, cryptocurrency, or a transfer to a new account.","They ask for your password, PIN, or the code sent to your phone.","It sounds too good (or too scary) to be true — a prize, an investment, a refund, a threat."],
+  todo:["STOP — don't reply, click, or pay.","CHECK — contact the company using a number you find yourself (on a bill, your card, or their official website).","ASK — talk it over with family, a staff member, or press I Need Help."],
+  q:{text:"A caller says they're from your bank and needs the 6-digit code just sent to your phone. What do you do?",opts:["Read them the code so they can help","Hang up, then call the bank on the number on your card","Ask them to call back tomorrow"],a:1,why:"Your bank will never ask for that code. Anyone asking for it is trying to get into your account."}},
+ {id:"texts",track:"cyber",icon:"📱",title:"Dodgy texts & emails",intro:"Fake messages often pretend to be AusPost, toll roads, myGov, the ATO or your bank.",
+  points:["The link takes you to a fake website that looks real and steals your details.","Real organisations rarely ask you to tap a link to 'verify' or 'pay a small fee'.","A message can appear in the same thread as real messages from that company — that doesn't make it real.","Spelling is no longer a giveaway: scammers now use AI to write perfect messages."],
+  todo:["Don't tap the link.","Open the official app, or type the website address yourself.","Delete the message and block the number.","Report it at scamwatch.gov.au."],
+  q:{text:"\"Your parcel couldn't be delivered. Pay $2.99 to redeliver: [link]\". What's the safest choice?",opts:["Pay — it's only $2.99","Tap the link to check if it's real","Delete it. If you're expecting a parcel, check in the official AusPost app"],a:2,why:"The small fee is bait. The real goal is your card details."}},
+ {id:"phone",track:"cyber",icon:"☎️",title:"Phone calls & 'computer problems'",intro:"Some scammers call pretending to be Microsoft, Telstra, the NBN, your bank or even the police.",
+  points:["Caller ID can be faked — the number can look genuine.","A pop-up may say your computer has a virus and show a number to call.","They'll ask you to install an app so they can 'fix' your device — this lets them control it.","They may keep you on the phone for a long time and tell you not to tell anyone."],
+  todo:["Hang up. It's not rude — it's smart.","Never let someone you don't know take control of your device.","Close the pop-up or switch the device off, then ask for help.","Call back using a number from a bill or the official website."],
+  q:{text:"A big warning pops up: \"VIRUS DETECTED! Call Microsoft now on 1800…\". What do you do?",opts:["Call the number quickly","Close it or switch the device off, and ask for help","Type your password to unlock it"],a:1,why:"Microsoft doesn't put phone numbers in warning pop-ups. It's a trick to get you to call scammers."}},
+ {id:"family",track:"cyber",icon:"👪",title:"'Hi Mum' & fake family emergencies",intro:"Scammers pretend to be a son, daughter or grandchild who needs money urgently.",
+  points:["Usually starts with \"Hi Mum/Dad, I've lost my phone, this is my new number\".","They then ask for money for a bill, a fine or an emergency.","AI can now copy a person's voice from a short video, so a phone call can sound just like them."],
+  todo:["Call your family member on their usual, saved number.","Agree on a family 'safe word' that only you know.","Never send money to a new account because of a message."],
+  q:{text:"You get a text from a new number: \"Hi Nan, it's me, lost my phone, can you pay this bill for me today?\"",opts:["Pay it — they sound stressed","Call your grandchild on their usual number first","Reply asking for the bank details"],a:1,why:"A quick call to their real number will tell you straight away if it's genuine."}},
+ {id:"passwords",track:"cyber",icon:"🔑",title:"Passwords made easy",intro:"A strong password doesn't have to be hard to remember.",
+  points:["Use a passphrase: four random words, like 'purple kangaroo teapot river'.","Use a different password for your email and your bank.","Turn on two-step verification — a code is sent to your phone when you log in.","It's fine to keep passwords in a notebook — keep it somewhere safe at home, away from your device."],
+  todo:["Change any password you use in lots of places.","Ask us to help you turn on two-step verification.","Never share a code sent to your phone with anyone."],
+  q:{text:"Which is the strongest password?",opts:["Mary1948","password123","garden piano sunset biscuit"],a:2,why:"Four random words are long, strong and easy for you to remember."}},
+ {id:"banking",track:"cyber",icon:"🏦",title:"Safe online banking",intro:"Online banking is safe when you follow a few simple habits.",
+  points:["Your bank will never ask for your password or codes by phone, text or email.","Use your bank's official app, or type the address yourself.","Turn on alerts so you get a message whenever money leaves your account.","Check your statements regularly for anything you don't recognise."],
+  todo:["If something looks wrong, call your bank immediately — they may be able to stop it.","Ask your bank about adding a trusted person to help watch your account."],
+  q:{text:"What will your bank NEVER ask you for?",opts:["Your online banking password or one-time code","Your name","Which branch you visit"],a:0,why:"No genuine bank staff will ask for your password or one-time code."}},
+ {id:"romance",track:"cyber",icon:"💌",title:"Online friends & romance scams",intro:"Some people online pretend to be friends or sweethearts to win your trust — then ask for money.",
+  points:["They become very affectionate very quickly.","They always have a reason they can't video call or meet in person.","Sooner or later there's an emergency, a travel cost, or an 'investment opportunity'.","Fake ads may show celebrities 'recommending' investments — these are scams."],
+  todo:["Never send money to someone you haven't met in person.","Talk to someone you trust — scammers ask you to keep it secret.","Report the profile to the website or app."],
+  q:{text:"An online friend you've never met asks to borrow $2,000 for a plane ticket to visit you.",opts:["Send it — they'll pay you back","Say no and talk to someone you trust","Send half"],a:1,why:"This is the most common pattern in romance scams."}},
+ {id:"devices",track:"cyber",icon:"📲",title:"Keep your phone & tablet healthy",intro:"A few small habits keep your device safe.",
+  points:["Install updates when your device asks — they fix security holes.","Lock your screen with a PIN, fingerprint or face.","Only download apps from the App Store or Google Play.","Back up your photos so you never lose them."],
+  todo:["Check for updates in Settings once a month.","Ask us at a session to set up backups for you."],
+  q:{text:"Your tablet says an update is ready. What's best?",opts:["Ignore it forever","Install it (when charged and on home Wi-Fi)","Turn the tablet off for good"],a:1,why:"Updates protect you from new threats."}},
+ {id:"ai-what",track:"ai",icon:"🧠",title:"What is AI? (in plain English)",intro:"AI — Artificial Intelligence — is a computer program that has learned from huge amounts of writing, pictures and sound.",
+  points:["Think of it like a very well-read assistant that guesses the most helpful answer.","You already use AI: voice assistants like Siri, predictive text, and suggestions on TV apps.","Chat assistants like ChatGPT, Microsoft Copilot, Google Gemini and Claude let you type or speak a question and get a reply.","AI is a tool, not a person — even when it sounds friendly."],
+  todo:["Try the 'Practise with an AI helper' page in this app."],
+  q:{text:"Can AI make mistakes?",opts:["No, it's a computer so it's always right","Yes — always double-check important things","Only on weekends"],a:1,why:"AI can sound confident and still be wrong."}},
+ {id:"ai-uses",track:"ai",icon:"✨",title:"How AI can help day to day",intro:"AI can save time and make some tasks easier.",
+  points:["Write a birthday message, letter or email.","Explain a confusing letter or long word in simple terms.","Suggest a recipe from what's in your fridge.","Help plan a trip or a family get-together.","Translate a message into another language."],
+  todo:["Ask it like you'd ask a person.","If the answer is hard to follow, say: \"Explain it more simply\".","Ask follow-up questions — it remembers the conversation."],
+  q:{text:"The AI's answer is too complicated. What can you do?",opts:["Give up","Ask it to explain more simply","Turn the device off"],a:1,why:"AI is happy to try again — just ask."}},
+ {id:"ai-safe",track:"ai",icon:"🔐",title:"Using AI safely",intro:"AI is useful, but treat it like a stranger on the phone when it comes to personal details.",
+  points:["Never type passwords, bank details, your Medicare number or full address.","Check health, money and legal advice with a real professional.","Only use well-known AI apps from official app stores.","Be wary of AI 'friends' or apps that ask you to pay or share personal details."],
+  todo:["Keep questions general: \"What are signs of a cold?\" not your full medical history."],
+  q:{text:"Is it OK to type your bank card number into an AI chat?",opts:["Yes, it's private","No — never share it","Only half of it"],a:1,why:"Keep financial details out of AI chats."}},
+ {id:"ai-scams",track:"ai",icon:"🎭",title:"AI tricks scammers use",intro:"Scammers now use AI too. Knowing their tricks takes away their power.",
+  points:["Voice cloning: a phone call that sounds exactly like a loved one.","Deepfake videos: fake clips of celebrities or politicians promoting 'investments'.","Fake photos and profiles that look completely real.","Perfectly written scam emails — no spelling mistakes to warn you."],
+  todo:["Slow down when anything feels urgent.","Check through a different way — call the person on their usual number.","Famous people don't message you with investment offers."],
+  q:{text:"You see a video of a famous TV presenter promoting a 'guaranteed' investment. Most likely?",opts:["It's a genuine tip","It's a deepfake scam","It's a government program"],a:1,why:"'Guaranteed' returns plus a celebrity face is a classic scam."}}
+];
+const SESSIONS = [
+ {id:"s1",date:"2026-11-17",time:"10:30am",title:"Spot the Scam",track:"Cyber safety",len:"45 min",desc:"Real examples of scam texts, calls and emails — and how to tell in seconds."},
+ {id:"s2",date:"2026-11-26",time:"2:00pm",title:"Passwords Made Easy",track:"Hands-on",len:"60 min",desc:"Create a passphrase and turn on two-step verification. Bring your device."},
+ {id:"s3",date:"2026-12-01",time:"10:30am",title:"AI Made Simple",track:"AI training",len:"60 min",desc:"Meet an AI assistant, try it together, and learn what to never share."},
+ {id:"s4",date:"2026-12-10",time:"2:00pm",title:"Safe Christmas Shopping",track:"Cyber safety",len:"45 min",desc:"Online shopping, fake parcel texts and gift card scams at Christmas."},
+ {id:"s5",date:"2027-02-02",time:"10:30am",title:"Video Calls with Family",track:"Hands-on",len:"60 min",desc:"FaceTime, WhatsApp and Zoom — step by step, at your pace."},
+ {id:"s6",date:"2027-02-16",time:"1:00pm",title:"Ask the Tech Expert",track:"Drop-in",len:"2 hours",desc:"Bring any question or device. One-on-one help from our engineers."}
+];
+const VIDEOS = [
+ {t:"Be Connected — free courses & videos",s:"eSafety Commissioner (Australian Government)",d:"Hundreds of free, self-paced lessons on scams, online banking, myGov and video calls, made for Australians over 50.",u:"https://beconnected.esafety.gov.au"},
+ {t:"Scamwatch — latest scam alerts",s:"National Anti-Scam Centre (ACCC)",d:"See what scams are going around right now, and report one.",u:"https://www.scamwatch.gov.au"},
+ {t:"Learn the basics of cyber security",s:"Australian Signals Directorate — cyber.gov.au",d:"Simple guides to updates, passphrases and two-step verification.",u:"https://www.cyber.gov.au"},
+ {t:"Online safety for older Australians",s:"eSafety Commissioner",d:"Advice on staying safe on social media, email and online dating.",u:"https://www.esafety.gov.au"},
+ {t:"Scams & how to protect your money",s:"Moneysmart (ASIC)",d:"Investment scams, recovering from a scam, and protecting your savings.",u:"https://moneysmart.gov.au"}
+];
+const PHONES = [
+ {n:"Emergency — someone is in danger",num:"000",tel:"000"},
+ {n:"Golden Shield support — Code Black Group",num:"1300 737 562",tel:"1300737562",d:"Our team can help with scams, devices and AI questions."},
+ {n:"IDCARE — identity theft support (free)",num:"1800 595 160",tel:"1800595160",d:"If your personal details or ID were taken. Weekday business hours."},
+ {n:"Australian Cyber Security Hotline",num:"1300 292 371",tel:"1300292371",d:"Expert cyber advice, 24 hours, 7 days."},
+ {n:"Report a scam — Scamwatch",num:"scamwatch.gov.au",url:"https://www.scamwatch.gov.au/report-a-scam",d:"Reporting helps warn others, even if you didn't lose money."}
+];
+const TOPICS = [["scammed","😟","I think I've been scammed"],["message","📩","I got a strange message or call"],["device","📱","Help with my phone, tablet or computer"],["password","🔑","Passwords or logging in"],["ai","🤖","I want to learn about AI"],["video","📹","Video calls with family"],["other","💬","Something else"]];
+
+/* ---------- STORAGE (this device only) ---------- */
+const LS = {get(k,d){try{const v=localStorage.getItem("gs_"+k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem("gs_"+k,JSON.stringify(v))}catch(e){}}};
+let done = LS.get("done",{}), myBookings = LS.get("bookings",{});
+
+/* ---------- UI helpers ---------- */
+const $ = s=>document.querySelector(s);
+const esc = s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+function toast(t){const el=$("#toast");el.textContent=t;el.style.display="block";clearTimeout(toast._t);toast._t=setTimeout(()=>el.style.display="none",4000)}
+function go(v){location.hash=v}
+let fs = LS.get("fs",20); const hc = LS.get("hc",false);
+function applyDisplay(){document.documentElement.style.setProperty("--fs",fs+"px");document.body.classList.toggle("hc",LS.get("hc",false));$("#hcBtn").setAttribute("aria-pressed",LS.get("hc",false))}
+$("#fsUp").onclick=()=>{fs=Math.min(30,fs+2);LS.set("fs",fs);applyDisplay()};
+$("#fsDown").onclick=()=>{fs=Math.max(16,fs-2);LS.set("fs",fs);applyDisplay()};
+$("#hcBtn").onclick=()=>{LS.set("hc",!LS.get("hc",false));applyDisplay()};
+
+function speak(text){
+  try{ if(!window.speechSynthesis) throw 0; speechSynthesis.cancel(); const u=new SpeechSynthesisUtterance(text); u.lang="en-AU"; u.rate=.9; speechSynthesis.speak(u); }
+  catch(e){ toast("Read-aloud isn't available on this device.") }
+}
+
+/* ---------- RENDER LISTS ---------- */
+function lessonTile(l){return `<a class="tile" href="#lesson-${l.id}" style="margin:10px 0"><div class="ic">${l.icon}</div><div style="flex:1"><b>${esc(l.title)}</b><span>${esc(l.intro)}</span></div>${done[l.id]?'<span class="pill done">✓ Done</span>':''}</a>`}
+function renderLists(){
+  $("#cyberList").innerHTML = LESSONS.filter(l=>l.track==="cyber").map(lessonTile).join("");
+  $("#aiList").innerHTML = LESSONS.filter(l=>l.track==="ai").map(lessonTile).join("");
+  const n=Object.keys(done).filter(k=>LESSONS.some(l=>l.id===k)).length;
+  $("#progBar").style.width=(n/LESSONS.length*100)+"%";
+  $("#progText").textContent = n===LESSONS.length ? "🏅 All 12 lessons done — you're a Golden Shield Champion!" : `${n} of ${LESSONS.length} lessons done. Keep going!`;
+}
+function renderLesson(id){
+  const l=LESSONS.find(x=>x.id===id); if(!l){go("learn");return}
+  $("#lessonBack").onclick=()=>go(l.track==="ai"?"ai":"learn");
+  const readText=[l.title,l.intro,"What to look for.",...l.points,"What to do.",...l.todo].join(". ");
+  $("#lessonBody").innerHTML=`
+   <span class="pill">${l.track==="ai"?"AI Made Simple":"Stay Safe Online"}</span>
+   <h1>${l.icon} ${esc(l.title)}</h1>
+   <p style="font-size:1.1rem">${esc(l.intro)}</p>
+   <button class="btn secondary" id="readBtn">🔊 Read it to me</button>
+   <div class="card"><h2 style="margin-top:0">${l.track==="ai"?"Good to know":"Warning signs"}</h2><ul class="list">${l.points.map((p,i)=>`<li><span class="n">${i+1}</span><span>${esc(p)}</span></li>`).join("")}</ul></div>
+   <div class="rule"><b>What to do</b><ul style="margin:.4em 0 0;padding-left:1.2em">${l.todo.map(t=>`<li>${esc(t)}</li>`).join("")}</ul></div>
+   <div class="card quiz"><h2 style="margin-top:0">Quick check ✅</h2><p><b>${esc(l.q.text)}</b></p>${l.q.opts.map((o,i)=>`<button class="opt" data-i="${i}">${esc(o)}</button>`).join("")}<div class="feedback" id="fb" aria-live="polite"></div></div>
+   <div class="row"><a class="btn secondary" href="#help">I have a question about this</a></div>`;
+  $("#readBtn").onclick=()=>speak(readText);
+  document.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{
+    const i=+b.dataset.i; document.querySelectorAll(".opt").forEach(x=>x.classList.remove("right","wrong"));
+    if(i===l.q.a){b.classList.add("right");$("#fb").innerHTML=`🎉 That's right! ${esc(l.q.why)}`;done[l.id]=1;LS.set("done",done);renderLists()}
+    else{b.classList.add("wrong");$("#fb").innerHTML=`Not quite — have another go. Hint: think STOP · CHECK · ASK.`}
+  });
+}
+function fmtDate(s){const d=new Date(s+"T12:00:00");return{d:d.getDate(),m:d.toLocaleString("en-AU",{month:"short"}),w:d.toLocaleString("en-AU",{weekday:"long"}),full:d.toLocaleDateString("en-AU",{weekday:"long",day:"numeric",month:"long",year:"numeric"})}}
+function renderSessions(){
+  $("#sessList").innerHTML=SESSIONS.map(s=>{const f=fmtDate(s.date);const booked=myBookings[s.id];return `<div class="card session"><div class="date"><div class="m">${f.m}</div><div class="d">${f.d}</div><div class="m">${f.w.slice(0,3)}</div></div><div style="flex:1"><span class="pill">${esc(s.track)}</span><h3>${esc(s.title)}</h3><p class="muted" style="margin:.2em 0">${f.w} ${s.time} · ${s.len} · Community room (also online)</p><p>${esc(s.desc)}</p>${booked?`<span class="pill done">✓ You're booked in</span> <button class="back" data-cancel="${s.id}">Cancel</button>`:`<button class="btn" data-book="${s.id}">Book my spot</button>`}</div></div>`}).join("");
+  document.querySelectorAll("[data-book]").forEach(b=>b.onclick=()=>book(b.dataset.book,true));
+  document.querySelectorAll("[data-cancel]").forEach(b=>b.onclick=()=>book(b.dataset.cancel,false));
+}
+function renderVideos(){
+  const play='<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#C99A2E"/><path d="M10 7.5v9l7-4.5z" fill="#111"/></svg>';
+  $("#vidList").innerHTML=VIDEOS.map(v=>`<a class="card vid" href="${v.u}" target="_blank" rel="noopener" style="text-decoration:none;color:var(--ink)"><div class="thumb">${play}</div><div><h3>${esc(v.t)}</h3><p class="muted" style="margin:0">${esc(v.s)}</p><p style="margin:.3em 0 0;font-weight:400">${esc(v.d)}</p></div></a>`).join("")+
+  `<div class="card"><h3>🎬 Golden Shield video lessons</h3><p>Short videos recorded by our own trainers for each lesson in this app are coming soon.</p></div>`;
+}
+function renderPhones(){
+  $("#phones").innerHTML=PHONES.map(p=>`<div class="card phone"><div><b>${esc(p.n)}</b>${p.d?`<p class="muted" style="margin:.2em 0 0">${esc(p.d)}</p>`:""}</div>${p.url?`<a class="btn secondary" href="${p.url}" target="_blank" rel="noopener">${esc(p.num)}</a>`:`<a class="btn ${p.num==="000"?"red":""}" href="tel:${p.tel}"><span class="num">${p.num}</span></a>`}</div>`).join("");
+}
+let chosenTopic=null;
+function renderTopics(){
+  $("#helpTopics").innerHTML=TOPICS.map(([k,e,t])=>`<button type="button" class="choice" data-k="${k}" aria-pressed="${chosenTopic===k}"><span class="e">${e}</span>${esc(t)}</button>`).join("");
+  document.querySelectorAll(".choice").forEach(b=>b.onclick=()=>{chosenTopic=b.dataset.k;renderTopics()});
+}
+
+/* ---------- ROUTER ---------- */
+const VIEWS=["home","learn","ai","lesson","practice","check","sessions","videos","help","staff"];
+function route(){
+  let h=(location.hash||"#home").slice(1); let v=h, arg=null;
+  if(h.startsWith("lesson-")){v="lesson";arg=h.slice(7)}
+  if(!VIEWS.includes(v)) v="home";
+  document.querySelectorAll(".view").forEach(s=>s.classList.toggle("on",s.id==="v-"+v));
+  const navKey = v==="lesson" ? (LESSONS.find(l=>l.id===arg)?.track==="ai"?"ai":"learn") : v==="practice"?"ai":v;
+  document.querySelectorAll("nav.bar a").forEach(a=>a.classList.toggle("on",a.dataset.nav===navKey&&navKey!=="help"));
+  if(v==="lesson") renderLesson(arg);
+  if(v==="staff") loadStaff();
+  try{speechSynthesis.cancel()}catch(e){}
+  window.scrollTo(0,0);
+}
+window.addEventListener("hashchange",route);
+
+/* ---------- SERVER API ---------- */
+const api = async (path, opts={}) => { const r = await fetch(path, {headers:{'Content-Type':'application/json',...(opts.headers||{})},...opts}); if(!r.ok) throw new Error(r.status); return r.json(); };
+let uid = LS.get("uid",null); if(!uid){ uid = (crypto.randomUUID ? crypto.randomUUID() : 'u'+Date.now()+Math.random().toString(36).slice(2)); LS.set("uid",uid); }
+let aiOn=false;
+api('/api/config').then(c=>{ aiOn=!!c.ai; if(aiOn) $("#imgWrap").style.display="block"; else $("#chatNote").textContent="The AI helper isn't switched on yet. You can still read all the AI lessons."; }).catch(()=>{});
+
+/* ---------- HELP REQUESTS ---------- */
+let myReqData={items:[]};
+async function loadMine(){ try{ myReqData = await api('/api/requests/mine?uid='+encodeURIComponent(uid)); renderMyReqs(); }catch(e){} }
+loadMine(); setInterval(()=>{ if(location.hash==='#help') loadMine(); }, 30000);
+api('/api/bookings/mine?uid='+encodeURIComponent(uid)).then(b=>{ if(b&&b.sessions){ myBookings=b.sessions; LS.set("bookings",myBookings); renderSessions(); } }).catch(()=>{});
+const STATUS={new:["Received","pill"],progress:["We're working on it","pill"],done:["Sorted ✓","pill done"]};
+function renderMyReqs(){
+  const items=(myReqData.items||[]).slice().reverse();
+  if(!items.length){$("#myReqs").innerHTML="";return}
+  $("#myReqs").innerHTML=`<h2>My help requests</h2>`+items.map(r=>{const st=STATUS[r.status]||STATUS.new;const t=TOPICS.find(x=>x[0]===r.topic);return `<div class="card"><span class="${st[1]}">${st[0]}</span><h3 style="margin-top:8px">${t?t[1]+" "+esc(t[2]):"Help request"}</h3><p class="muted" style="margin:0">Sent ${new Date(r.created).toLocaleString("en-AU",{weekday:"short",day:"numeric",month:"short",hour:"numeric",minute:"2-digit"})}</p>${r.reply?`<p><b>Our reply:</b> ${esc(r.reply)}</p>`:""}</div>`}).join("");
+}
+$("#helpForm").addEventListener("submit",async e=>{
+  e.preventDefault();
+  const name=$("#hName").value.trim();
+  if(!chosenTopic){toast("Please tap what you need help with.");return}
+  if(!name){toast("Please type your name.");$("#hName").focus();return}
+  const req={topic:chosenTopic,name,room:$("#hRoom").value.trim(),phone:$("#hPhone").value.trim(),how:$("#hHow").value,urgency:$("#hUrg").value,message:$("#hMsg").value.trim().slice(0,2000)};
+  const btn=$("#hSubmit"); btn.disabled=true; btn.textContent="Sending…";
+  let sent=false; try{ await api('/api/requests',{method:'POST',body:JSON.stringify({uid,...req})}); sent=true; }catch(err){}
+  btn.disabled=false; btn.textContent="Send my help request";
+  if(sent){
+    $("#hNote").innerHTML="✅ <b>Thank you, "+esc(name)+".</b> Your request has been sent. Someone from our team will contact you "+(req.urgency==="urgent"?"today.":"soon.")+(req.topic==="scammed"?" If money has left your account, please also call your bank now.":"");
+    toast("Help request sent ✓"); $("#hMsg").value=""; chosenTopic=null; renderTopics(); loadMine();
+  } else {
+    $("#hNote").innerHTML="⚠️ We couldn't send this online right now. <b>Please call us on 1300 737 562</b> and we'll help straight away.";
+  }
+});
+
+/* ---------- BOOKINGS ---------- */
+async function book(id,on){
+  const s=SESSIONS.find(x=>x.id===id); const next={...myBookings};
+  if(on) next[id]={booked:new Date().toISOString(),title:s.title,date:s.date}; else delete next[id];
+  myBookings=next; LS.set("bookings",next); renderSessions();
+  try{ await api('/api/bookings',{method:'POST',body:JSON.stringify({uid,name:$("#hName").value.trim()||LS.get("name",""),sessions:next})}); }catch(e){}
+  toast(on?`You're booked in for ${s.title} 🎉`:"Booking cancelled");
+}
+
+/* ---------- SCAM CHECKER ---------- */
+function ruleCheck(t){
+  const x=t.toLowerCase(); const r=[];
+  if(/https?:\/\/|www\.|\.com|\.au\/|bit\.ly|tinyurl/.test(x)) r.push("It contains a link. Real companies rarely ask you to tap a link to pay or verify.");
+  if(/urgent|immediately|within 24|today only|suspend|locked|final notice|act now|arrest|warrant/.test(x)) r.push("It tries to rush or scare you.");
+  if(/gift card|itunes|google play card|bitcoin|crypto|western union|wire/.test(x)) r.push("It asks for payment in a way scammers love (gift cards or crypto).");
+  if(/code|pin|password|one-time|otp|verify your|confirm your details|login/.test(x)) r.push("It asks for codes, passwords or to 'verify' your details.");
+  if(/hi mum|hi mom|hi dad|new number|lost my phone/.test(x)) r.push("It looks like a 'Hi Mum' family impersonation message.");
+  if(/won|winner|prize|lottery|refund|rebate|guaranteed|investment|return/.test(x)) r.push("It promises a prize, refund or money that seems too good to be true.");
+  if(/remote|anydesk|teamviewer|virus|microsoft|tech support/.test(x)) r.push("It mentions fixing your computer or remote access — a common tech-support scam.");
+  const verdict = r.length>=2?"likely_scam":r.length===1?"suspicious":"unsure";
+  return {verdict,headline: verdict==="likely_scam"?"This looks like a scam":verdict==="suspicious"?"Be careful — this looks suspicious":"We couldn't find obvious warning signs",reasons:r.length?r:["No common warning signs were found — but scammers keep changing their tricks."],whatToDo:["Don't tap links or call numbers in the message.","Contact the company using a number you find yourself.","If unsure, press I Need Help and we'll check it with you."]};
+}
+function showVerdict(v,viaAI){
+  const cls=v.verdict==="likely_scam"?"bad":v.verdict==="looks_ok"?"ok":"warn";
+  const ic=cls==="bad"?"🚫":cls==="ok"?"✅":"⚠️";
+  $("#chkOut").innerHTML=`<div class="verdict ${cls}"><h2>${ic} ${esc(v.headline)}</h2><h3>Why</h3><ul>${(v.reasons||[]).map(r=>`<li>${esc(r)}</li>`).join("")}</ul><h3>What to do</h3><ul>${(v.whatToDo||[]).map(r=>`<li>${esc(r)}</li>`).join("")}</ul><div class="row"><button class="btn secondary" id="vRead">🔊 Read it to me</button><a class="btn" href="#help">Ask a person to check</a></div><p class="muted" style="margin-top:10px">${viaAI?"Checked by AI.":"Checked using common warning signs."} Guidance only — when in doubt, don't click and ask someone.</p></div>`;
+  $("#vRead").onclick=()=>speak([v.headline,...(v.reasons||[]),"What to do.",...(v.whatToDo||[])].join(". "));
+}
+$("#chkClear").onclick=()=>{$("#chkText").value="";$("#chkOut").innerHTML="";const f=$("#chkImg");if(f)f.value=""};
+const toB64 = f => new Promise((res,rej)=>{const r=new FileReader(); r.onload=()=>res(String(r.result).split(',')[1]); r.onerror=rej; r.readAsDataURL(f);});
+$("#chkBtn").onclick=async()=>{
+  const t=$("#chkText").value.trim(); const file=$("#chkImg")&&$("#chkImg").files[0];
+  if(!t&&!file){toast("Paste a message or add a screenshot first.");return}
+  const btn=$("#chkBtn"); btn.disabled=true; btn.textContent="Checking…";
+  $("#chkOut").innerHTML=`<div class="card">🔍 Having a careful look…</div>`;
+  let result=null;
+  if(aiOn){ try{ const body={text:t}; if(file&&file.size<4.5e6){ body.image=await toB64(file); body.mediaType=file.type||'image/png'; }
+      const r=await api('/api/check',{method:'POST',body:JSON.stringify(body)}); if(r&&r.verdict){ result=r; showVerdict(r,true);} }catch(e){} }
+  if(!result){ if(!t){$("#chkOut").innerHTML=`<div class="card">We couldn't read the screenshot right now. Please paste the words instead, or press <a href="#help">I Need Help</a>.</div>`} else showVerdict(ruleCheck(t),false) }
+  btn.disabled=false; btn.textContent="Check it for me";
+};
+
+/* ---------- AI PRACTICE ---------- */
+const STARTERS=["What is AI, in simple words?","Help me write a birthday message for my granddaughter","How do I make a video call?","Give me an easy recipe with eggs and spinach"];
+let convo=[];
+function renderChat(){ $("#chat").innerHTML=convo.map(m=>`<div class="msg ${m.role==="user"?"me":"ai"}">${esc(m.content)}</div>`).join(""); $("#chat").scrollTop=1e6 }
+$("#starters").innerHTML=STARTERS.map(s=>`<button class="btn secondary" style="min-height:48px;font-size:.85rem;padding:0 14px" data-s="${esc(s)}">${esc(s)}</button>`).join("");
+document.querySelectorAll("[data-s]").forEach(b=>b.onclick=()=>{$("#chatIn").value=b.dataset.s;sendChat()});
+$("#chatSend").onclick=sendChat;
+async function sendChat(){
+  const q=$("#chatIn").value.trim(); if(!q) return;
+  if(!aiOn){toast("The AI helper isn't switched on yet.");return}
+  if(/\b\d{4}[ -]?\d{4}[ -]?\d{4}[ -]?\d{4}\b|\b\d{10}\b|password/i.test(q)){ toast("That looks like private information. Please don't share it with AI."); }
+  convo.push({role:"user",content:q}); $("#chatIn").value=""; convo.push({role:"assistant",content:"…"}); renderChat();
+  try{ const r=await api('/api/chat',{method:'POST',body:JSON.stringify({messages:convo.slice(0,-1).slice(-12)})}); convo[convo.length-1].content=r.text||"Sorry, I couldn't answer just now."; }
+  catch(e){ convo[convo.length-1].content= String(e.message)==='429' ? "I need a little rest — please try again in a minute." : "Sorry, I couldn't answer just now. Please try again later."; }
+  renderChat();
+}
+
+/* ---------- STAFF ---------- */
+let staffKey = (()=>{ try{ return sessionStorage.getItem('gs_staff')||'' }catch(e){ return '' } })();
+async function loadStaff(){
+  const body=$("#staffBody");
+  if(!staffKey){
+    body.innerHTML=`<div class="card"><form id="staffLogin"><label for="sk">Staff password</label><input type="text" id="sk" autocomplete="current-password" style="-webkit-text-security:disc"><div style="margin-top:12px"><button class="btn" type="submit">Open dashboard</button></div><p id="skNote" class="muted"></p></form></div>`;
+    $("#staffLogin").onsubmit=async e=>{ e.preventDefault(); staffKey=$("#sk").value.trim(); try{ await staffDraw(); try{sessionStorage.setItem('gs_staff',staffKey)}catch(_){} }catch(err){ staffKey=''; $("#skNote").textContent="That password didn't work."; } };
+    return;
+  }
+  try{ await staffDraw(); }catch(e){ staffKey=''; try{sessionStorage.removeItem('gs_staff')}catch(_){} loadStaff(); }
+}
+async function staffDraw(){
+  const body=$("#staffBody");
+  const d=await api('/api/staff/overview',{headers:{'x-staff-key':staffKey}});
+  const all=d.requests; const counts=d.bookings;
+  all.sort((a,b)=>(a.status==="done")-(b.status==="done")||(b.urgency==="urgent")-(a.urgency==="urgent")||b.created.localeCompare(a.created));
+  const open=all.filter(r=>r.status!=="done").length, urgent=all.filter(r=>r.status!=="done"&&r.urgency==="urgent").length;
+  body.innerHTML=`<div class="grid"><div class="card"><h3>Open requests</h3><p style="font-size:2rem;margin:0"><b>${open}</b></p></div><div class="card"><h3>Urgent</h3><p style="font-size:2rem;margin:0;color:var(--bad)"><b>${urgent}</b></p></div></div>
+  <div class="row"><button class="btn secondary" id="staffRefresh">Refresh</button></div>
+  <div class="card" style="overflow-x:auto"><h2 style="margin-top:0">Help requests</h2>${all.length?`<table><tr><th>Who</th><th>Need</th><th>Details</th><th>Status</th></tr>${all.map(r=>{const t=TOPICS.find(x=>x[0]===r.topic);return `<tr><td><b>${esc(r.name)}</b><br>${esc(r.room)}<br>${esc(r.phone)}</td><td>${t?t[1]+" "+esc(t[2]):""}<br><span class="pill" style="${r.urgency==="urgent"?"background:var(--bad-soft);color:var(--bad)":""}">${esc(r.urgency)}</span><br><small>${esc(r.how)}</small></td><td>${esc(r.message)}<br><small class="muted">${new Date(r.created).toLocaleString("en-AU")}</small></td><td><select data-u="${esc(r.uid)}" data-r="${esc(r.id)}" style="min-height:44px;padding:6px"><option value="new"${r.status==="new"?" selected":""}>New</option><option value="progress"${r.status==="progress"?" selected":""}>In progress</option><option value="done"${r.status==="done"?" selected":""}>Done</option></select></td></tr>`}).join("")}</table>`:`<p class="muted">No help requests yet.</p>`}</div>
+  <div class="card"><h2 style="margin-top:0">Session bookings</h2><table>${SESSIONS.map(s=>`<tr><td><b>${esc(s.title)}</b><br><small>${fmtDate(s.date).full} ${s.time}</small></td><td>${(counts[s.id]||[]).length} booked<br><small>${esc((counts[s.id]||[]).join(", "))}</small></td></tr>`).join("")}</table></div>`;
+  $("#staffRefresh").onclick=()=>staffDraw().catch(()=>toast("Couldn't refresh"));
+  body.querySelectorAll("select[data-u]").forEach(sel=>sel.onchange=async()=>{
+    try{ await api('/api/staff/requests',{method:'PATCH',headers:{'x-staff-key':staffKey},body:JSON.stringify({uid:sel.dataset.u,id:sel.dataset.r,status:sel.value})}); toast("Status updated"); }catch(e){ toast("Couldn't update — please try again"); }
+  });
+}
+
+/* ---------- START ---------- */
+const hr=new Date().getHours();
+$("#greet").textContent=(hr<12?"Good morning":hr<17?"Good afternoon":"Good evening")+" 👋";
+$("#hName").addEventListener("change",()=>LS.set("name",$("#hName").value.trim()));
+$("#hName").value=LS.get("name","");
+applyDisplay(); renderLists(); renderSessions(); renderVideos(); renderPhones(); renderTopics(); route();
+</script>
+</body>
+</html>
