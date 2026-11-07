@@ -7,7 +7,10 @@ const crypto = require('crypto');
 
 const PORT = process.env.PORT || 3000;
 const STAFF_PASSWORD = process.env.STAFF_PASSWORD || '';
-const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY || '';
+// Find the AI key even if the variable name has stray spaces or different case.
+const keyEnvName = Object.keys(process.env).find((k) => k.trim().toUpperCase() === 'ANTHROPIC_API_KEY')
+  || Object.keys(process.env).find((k) => /ANTHROPIC|CLAUDE/i.test(k) && /KEY/i.test(k));
+const ANTHROPIC_API_KEY = keyEnvName ? String(process.env[keyEnvName]).trim() : '';
 const MODEL_CHECK = process.env.MODEL_CHECK || 'claude-sonnet-5-5';
 const MODEL_CHAT = process.env.MODEL_CHAT || 'claude-haiku-5-5';
 const DATA_DIR = process.env.DATA_DIR || path.join(__dirname, 'data');
@@ -80,6 +83,8 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use('/api', (req, res, next) => { res.set('Cache-Control', 'no-store'); next(); });
+app.set('etag', false);
 app.get('/api/config', (req, res) => res.json({ ai: !!ANTHROPIC_API_KEY }));
 app.get('/healthz', (req, res) => res.send('ok'));
 
@@ -177,4 +182,11 @@ app.post('/api/chat', limit(30, 10 * 60e3), async (req, res) => {
 app.use(express.static(path.join(__dirname, 'public'), { extensions: ['html'], maxAge: '5m' }));
 app.get('*', (req, res) => res.sendFile(path.join(__dirname, 'public', 'index.html')));
 
-app.listen(PORT, () => console.log('Golden Shield listening on ' + PORT));
+app.listen(PORT, () => {
+  console.log('Golden Shield listening on ' + PORT);
+  const looksRight = ANTHROPIC_API_KEY.startsWith('sk-ant-');
+  console.log(ANTHROPIC_API_KEY
+    ? `AI: ON (key found in variable "${keyEnvName}", ${looksRight ? 'format looks right' : 'WARNING: value does not start with sk-ant-'})`
+    : 'AI: OFF (no ANTHROPIC_API_KEY variable found). Variable names set: ' + Object.keys(process.env).filter((k) => !/^(PATH|HOME|HOSTNAME|PWD|SHLVL|_|NODE_|npm_|RENDER|TERM|LANG|PORT|IS_PULL|WEB_CONCURRENCY)/i.test(k)).join(', '));
+  console.log('Staff dashboard: ' + (STAFF_PASSWORD ? 'password set' : 'NO PASSWORD SET'));
+});
