@@ -367,5 +367,10 @@ app.listen(PORT, () => {
     : 'AI: OFF (no ANTHROPIC_API_KEY variable found)');
   console.log('Staff dashboard: ' + (STAFF_PASSWORD ? 'password set' : 'NO PASSWORD SET'));
   console.log('Trial password: ' + (env('TRIAL_PASSWORD') ? 'set from TRIAL_PASSWORD' : 'using the default'));
+  if (transporter && !graphReady() && !RESEND_API_KEY) {
+    console.log('Email login: ' + (SMTP_USER ? 'checking ' + SMTP_USER + ' ...' : 'NO SMTP_USER SET'));
+    transporter.verify().then(() => console.log('Email login: OK, mail server accepted the login'))
+      .catch((e) => console.log('Email login: FAILED - ' + String(e && e.message || e).slice(0, 300)));
+  }
   console.log('Email: ' + mailMethod() + ' -> ' + NOTIFY_TO.join(', ') + (mailReady() ? '' : ' (NOT SENDING: set MS_TENANT_ID/MS_CLIENT_ID/MS_CLIENT_SECRET/MS_SENDER, or RESEND_API_KEY)'));
 });
