@@ -472,7 +472,7 @@ body.locked{overflow:hidden}
  <div class="ack"><span class="dots" aria-hidden="true"></span><p><b>Acknowledgement of Country</b>Code Black Group acknowledges the Traditional Custodians of the lands on which we live, work and learn, including the Wurundjeri Woi-wurrung and Bunurong peoples of the Kulin Nation, where Golden Shield was created. We pay our respects to their Elders past and present, and extend that respect to all Aboriginal and Torres Strait Islander peoples. Sovereignty was never ceded.</p></div>
  <p>Golden Shield is delivered by Code Black Group Global Pty Ltd · 1300 737 562 · codeblackgroup.com.au</p>
  <p>General information only. In an emergency call 000. · <a href="#staff">Staff</a></p>
- <p>© 2026 Code Black Group Global Pty Ltd. All rights reserved. Golden Shield is confidential and provided for evaluation under the trial terms. Copying, reverse-engineering or entering any part of it into an AI tool is not permitted.</p>
+ <p>© 2026 Code Black Group Global Pty Ltd. All rights reserved. Golden Shield is confidential and provided for evaluation under the trial terms. Copying, reproducing or reverse-engineering any part of it, by any means, is not permitted.</p>
 </footer>
 
 <nav class="tabs" aria-label="Main">
@@ -524,16 +524,15 @@ body.locked{overflow:hidden}
     <ol>
      <li>Golden Shield, including its design, lessons, written content, AI instructions and code, is owned by Code Black Group Global Pty Ltd (ABN 62 315 213 466) and is confidential.</li>
      <li>You may use Golden Shield only to evaluate it for your organisation during the trial.</li>
-     <li>You must not copy, reproduce, distribute, modify, reverse-engineer, decompile or scrape any part of Golden Shield, or create anything based on it.</li>
-     <li>You must not enter, paste or upload any part of Golden Shield (including its code, text, screens or screenshots) into any AI tool, model or service, or help anyone else to do so.</li>
+     <li>You must not copy, reproduce, distribute, modify, adapt, reverse-engineer, decompile or scrape any part of Golden Shield (including its design, text, screens and code), by any manual or automated means, or create anything based on it, or help anyone else to do so.</li>
      <li>You must not share the trial password or your access with anyone outside your organisation without our written consent.</li>
      <li>We may end your access at any time, and access ends when the trial ends. If we ask, you will delete any Golden Shield material you hold.</li>
      <li>We use the details you enter to run the trial and contact you about it.</li>
      <li>These terms are governed by the laws of Victoria, Australia.</li>
     </ol>
-    <p class="tnote">Trial terms version 1 · 20 November 2026</p>
+    <p class="tnote">Trial terms version 2 · 20 November 2026</p>
    </details>
-   <label class="check"><input type="checkbox" id="gTerms"><span>I have read and agree to the <b>trial terms</b>, including keeping Golden Shield confidential and not copying it or putting it into any AI tool.</span></label>
+   <label class="check"><input type="checkbox" id="gTerms"><span>I have read and agree to the <b>trial terms</b>, including keeping Golden Shield confidential and not copying it.</span></label>
    <label class="check"><input type="checkbox" id="gOk"><span>I'm happy for Code Black Group to contact me about this trial.</span></label>
    <p class="err" id="gErr" aria-live="polite"></p>
    <button class="btn wide" type="submit" id="gGo">Start my trial <svg class="i"><use href="#i-right"/></svg></button>
@@ -988,7 +987,7 @@ async function staffDraw(){
 /* ---------- TRIAL GATE ---------- */
 const PROVENANCE="GS-CBG-WATTLE-7Q4K-2611 · the shield remembers its maker · (c) Code Black Group Global Pty Ltd";
 document.body.dataset.gsMark="7Q4K-WATTLE";
-const TERMS_VERSION="1 (2026-11-20)";
+const TERMS_VERSION="2 (2026-11-20)";
 function unlock(){ $("#gate").hidden=true; document.body.classList.remove("locked"); }
 // Password is needed for every new visit: the pass lasts only for this browser tab.
 try{ localStorage.removeItem("gs_trial") }catch(e){}
