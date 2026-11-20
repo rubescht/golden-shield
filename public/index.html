@@ -1,360 +1,611 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en-AU">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Golden Shield – Staying Safe Online</title>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 10 10%22%3E%3Ccircle cx=%225%22 cy=%225%22 r=%225%22 fill=%22%23121117%22/%3E%3C/svg%3E">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#16151B">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 10 10%22%3E%3Ccircle cx=%225%22 cy=%225%22 r=%225%22 fill=%22%23C99A2E%22/%3E%3C/svg%3E">
+<title>Golden Shield</title>
+<!-- Golden Shield (c) 2026 Code Black Group Global Pty Ltd, ABN 62 315 213 466. All rights reserved. Confidential trial build. Provenance mark: GS-CBG-WATTLE-7Q4K-2611 "the shield remembers its maker" -->
+<meta name="author" content="Code Black Group Global Pty Ltd">
+<meta name="copyright" content="(c) 2026 Code Black Group Global Pty Ltd. All rights reserved.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Poppins:wght@500;600;700&display=swap">
 <style>
+/* Layout: one calm column (max 760px), sticky brand bar on top, five-tab bar at the bottom; big touch targets, few borders, soft surfaces */
 :root{
-  --bg:#FBF8F4; --card:#FFFFFF; --ink:#121117; --muted:#4A4A4A; --line:#E4DCC8;
-  --gold:#C99A2E; --gold-ink:#7A5A12; --gold-soft:#F6EBCF; --black:#121117;
-  --good:#1F6B3A; --good-soft:#E3F2E8; --warn:#8A5A00; --warn-soft:#FFF1CC; --bad:#A3241B; --bad-soft:#FBE3E0;
-  --radius:18px; --fs:20px;
+  --bg:#F4F3EF; --surface:#FFFFFF; --surface-2:#ECEAE3; --ink:#16151B; --muted:#55525C; --line:#E0DCD1;
+  --brand:#16151B; --on-brand:#FFFFFF; --on-brand-muted:#C9C5BC;
+  --gold:#C99A2E; --gold-ink:#7A5A12; --gold-soft:#F6ECD2; --on-gold:#16151B;
+  --good:#1E6B3B; --good-soft:#E2F1E7; --warn:#8A5A00; --warn-soft:#FDF0CF;
+  --bad:#B3261E; --bad-soft:#FBE4E1; --danger:#B3261E; --on-danger:#FFFFFF;
+  --shadow:0 1px 2px rgba(22,21,27,.05),0 8px 24px rgba(22,21,27,.06);
+  --f-display:Poppins,"Segoe UI",system-ui,sans-serif;
+  --f-body:"Atkinson Hyperlegible",Verdana,"Segoe UI",system-ui,sans-serif;
+  --fs:21px; --r:22px; --r-sm:14px;
 }
-html{font-size:var(--fs)}
-body.hc{--bg:#000;--card:#000;--ink:#FFF;--muted:#FFF;--line:#FFD400;--gold:#FFD400;--gold-ink:#FFD400;--gold-soft:#1a1a1a;--good-soft:#002b12;--warn-soft:#2b2000;--bad-soft:#2b0000;--good:#7CFFA8;--warn:#FFD400;--bad:#FF8A80}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#121116; --surface:#1C1B22; --surface-2:#27252E; --ink:#F3F1EC; --muted:#B7B3BE; --line:#35323D;
+  --brand:#0A090D; --on-brand:#FFFFFF; --on-brand-muted:#C9C5BC;
+  --gold:#D9AC45; --gold-ink:#E8C470; --gold-soft:#2F2816; --on-gold:#16151B;
+  --good:#86D7A0; --good-soft:#15291C; --warn:#F0C254; --warn-soft:#2E2510;
+  --bad:#FF8F85; --bad-soft:#3A1715; --danger:#C2342B; --on-danger:#FFFFFF;
+  --shadow:0 0 0 1px #35323D; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#121116; --surface:#1C1B22; --surface-2:#27252E; --ink:#F3F1EC; --muted:#B7B3BE; --line:#35323D;
+  --brand:#0A090D; --on-brand:#FFFFFF; --on-brand-muted:#C9C5BC;
+  --gold:#D9AC45; --gold-ink:#E8C470; --gold-soft:#2F2816; --on-gold:#16151B;
+  --good:#86D7A0; --good-soft:#15291C; --warn:#F0C254; --warn-soft:#2E2510;
+  --bad:#FF8F85; --bad-soft:#3A1715; --danger:#C2342B; --on-danger:#FFFFFF;
+  --shadow:0 0 0 1px #35323D; color-scheme:dark}
+body.hc{--bg:#000;--surface:#000;--surface-2:#111;--ink:#FFF;--muted:#FFF;--line:#FFD400;--brand:#000;--on-brand-muted:#FFF;
+  --gold:#FFD400;--gold-ink:#FFD400;--gold-soft:#1A1A1A;--good:#7CFFA8;--good-soft:#002B12;--warn:#FFD400;--warn-soft:#2B2000;
+  --bad:#FF8A80;--bad-soft:#2B0000;--danger:#C00000;--shadow:0 0 0 2px #FFD400;color-scheme:dark}
+
+body{margin:0} img{max-width:100%} [hidden]{display:none!important}
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{font-size:var(--fs);-webkit-text-size-adjust:100%}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:"Source Sans 3",system-ui,sans-serif;line-height:1.55;padding-bottom:110px}
-a{color:var(--gold-ink);font-weight:700}
-p a,li a{display:inline-block;padding:10px 2px;margin:-10px 0}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:1rem;line-height:1.55;padding-bottom:calc(6rem + env(safe-area-inset-bottom,0px))}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--brand)}
+h1,h2,h3{font-family:var(--f-display);line-height:1.2;text-wrap:balance;overflow-wrap:break-word;margin:0}
+h1{font-size:1.65rem;font-weight:700;letter-spacing:-.01em}
+h2{font-size:1.2rem;font-weight:600}
+h3{font-size:1.02rem;font-weight:600}
+p{margin:0;overflow-wrap:break-word}
+a{color:var(--gold-ink)}
 button,input,select,textarea{font:inherit;color:inherit}
-:focus-visible{outline:4px solid var(--gold);outline-offset:3px}
-header{background:var(--black);color:#fff;padding:14px 18px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:5;border-bottom:4px solid var(--gold)}
-header .brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:#fff;flex:1 1 auto;min-width:0}
-header .brand>span{min-width:0;font-size:16px;line-height:1.15}
-header .brand b{display:block}
-@media (max-width:360px){header .brand small{display:none}}
-header .brand b{font-size:20px;letter-spacing:.3px;line-height:1.15}
-header .brand small{display:block;font-size:.7rem;color:#E9D49B;font-weight:400}
-.tools{display:flex;gap:6px}
-.tools{flex:none}
-.tbtn{font-size:16px;background:#222;border:2px solid #555;color:#fff;border-radius:12px;min-width:48px;height:48px;padding:0 10px;cursor:pointer;font-weight:700}
-.tbtn[aria-pressed="true"]{background:var(--gold);color:#111;border-color:var(--gold)}
-main{max-width:860px;margin:0 auto;padding:20px 16px}
-h1,h2,h3,.btn,nav.bar a,header .brand b{font-family:Poppins,system-ui,sans-serif}
-h1{font-size:1.7rem;line-height:1.2;margin:.3em 0 .4em}
-h2{font-size:1.3rem;margin:1.2em 0 .5em}
-h3{font-size:1.1rem;margin:.2em 0 .3em}
-p{margin:.4em 0 .8em}
+:focus-visible{outline:4px solid var(--gold);outline-offset:3px;border-radius:8px}
+.i{width:1.35em;height:1.35em;flex:none;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;vertical-align:middle}
+.wrap{max-width:760px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 .muted{color:var(--muted)}
+.lead{font-size:1.05rem;color:var(--muted)}
+.eyebrow{font-family:var(--f-display);font-size:.72rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-ink)}
+.stack{display:flex;flex-direction:column;gap:1rem}
 .view{display:none}
-.view.on{display:block}
-.card{background:var(--card);border:2px solid var(--line);border-radius:var(--radius);padding:18px;margin:12px 0}
-.hero{background:var(--black);color:#fff;border-radius:var(--radius);padding:22px;border:3px solid var(--gold)}
-.hero h1{color:#fff}
-.hero p{color:#EEE}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px}
-.tile{display:flex;gap:14px;align-items:center;text-align:left;background:var(--card);border:2px solid var(--line);border-radius:var(--radius);padding:18px;cursor:pointer;min-height:96px;text-decoration:none;color:var(--ink);width:100%}
-.tile:hover{border-color:var(--gold)}
-.tile .ic{font-size:2rem;width:58px;height:58px;flex:none;display:grid;place-items:center;background:var(--gold-soft);border-radius:14px}
-.tile b{display:block;font-size:1.05rem}
-.tile span{font-size:.85rem;color:var(--muted)}
-.tile.help{background:var(--bad);color:#fff;border-color:var(--bad)}
-.tile.help span{color:#fff}
-.tile.help .ic{background:#fff2}
-.btn{max-width:100%;white-space:normal;overflow-wrap:anywhere;text-align:center;display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:58px;padding:0 24px;border-radius:14px;border:3px solid var(--black);background:var(--gold);color:#111;font-weight:700;font-size:1rem;cursor:pointer;text-decoration:none}
-body.hc .btn{border-color:var(--gold)}
-.btn.secondary{background:var(--card);color:var(--ink)}
-.btn.red{background:var(--bad);color:#fff;border-color:var(--bad)}
+.view.on{display:flex;flex-direction:column;gap:1.1rem}
+
+/* Header */
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:8;background:var(--brand);color:var(--on-brand)}
+header.top .wrap{display:flex;align-items:center;gap:12px;padding-block:10px}
+.brand{display:flex;align-items:center;gap:10px;color:var(--on-brand);text-decoration:none;flex:1;min-width:0}
+.brand svg.mark{width:38px;height:38px;color:var(--gold);flex:none}
+.brand b{display:block;font-family:var(--f-display);font-size:1.02rem;font-weight:700;line-height:1.1}
+.brand small{display:block;font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:var(--on-brand-muted);line-height:1.2}
+.setbtn{display:flex;align-items:center;gap:8px;min-height:52px;padding:0 16px;border-radius:999px;border:2px solid var(--gold);background:transparent;color:var(--on-brand);font-family:var(--f-display);font-weight:600;font-size:.85rem;cursor:pointer}
+.setbtn .aa{font-size:1.1rem;color:var(--gold)}
+@media (max-width:420px){.setbtn .lbl{display:none}.brand small{display:none}}
+
+main{padding-block:1.4rem 1rem}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:60px;padding:0 26px;border-radius:999px;border:none;background:var(--gold);color:var(--on-gold);font-family:var(--f-display);font-weight:600;font-size:1rem;cursor:pointer;text-decoration:none;text-align:center;max-width:100%}
+.btn:hover{filter:brightness(1.05)}
+.btn.ghost{background:var(--surface);color:var(--ink);box-shadow:inset 0 0 0 2px var(--line)}
+.btn.danger{background:var(--danger);color:var(--on-danger)}
 .btn.wide{width:100%}
-.btn[disabled]{opacity:.55;cursor:wait}
-.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-.back{background:none;border:none;color:var(--gold-ink);font-weight:700;font-size:1rem;cursor:pointer;padding:8px 0;min-height:48px}
-.pill{display:inline-block;padding:3px 14px;font-family:Poppins,sans-serif;letter-spacing:.03em;border-radius:999px;font-size:.78rem;font-weight:700;background:var(--gold-soft);color:var(--gold-ink);border:1px solid var(--line)}
-.pill.done{background:var(--good-soft);color:var(--good)}
-.list{list-style:none;padding:0;margin:0}
-.list li{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid var(--line)}
-.list li:last-child{border-bottom:none}
-.list .n{flex:none;width:36px;height:36px;border-radius:50%;background:var(--gold);color:#111;font-weight:700;display:grid;place-items:center}
-.rule{background:var(--gold-soft);border-left:8px solid var(--gold);border-radius:12px;padding:14px 16px;font-size:1.05rem}
-.quiz button.opt{display:block;width:100%;text-align:left;margin:8px 0;padding:14px 16px;min-height:58px;border-radius:14px;border:2px solid var(--line);background:var(--card);cursor:pointer;font-size:1rem}
-.quiz button.opt.right{background:var(--good-soft);border-color:var(--good)}
-.quiz button.opt.wrong{background:var(--bad-soft);border-color:var(--bad)}
-.feedback{font-weight:700;margin-top:8px}
-label{display:block;font-weight:700;margin:14px 0 6px}
-input[type=text],input[type=tel],select,textarea{width:100%;padding:14px;border:2px solid #888;border-radius:12px;background:var(--card);font-size:1rem;min-height:56px}
-textarea{min-height:140px}
-.choices{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px}
-.choice{display:flex;align-items:center;gap:10px;padding:14px;border:2px solid var(--line);border-radius:14px;background:var(--card);cursor:pointer;min-height:64px;font-size:.95rem;text-align:left}
-.choice[aria-pressed="true"]{border-color:var(--gold);background:var(--gold-soft);box-shadow:0 0 0 2px var(--gold) inset}
-.choice .e{font-size:1.5rem}
-.verdict{border-radius:var(--radius);padding:18px;border:3px solid}
-.verdict.bad{background:var(--bad-soft);border-color:var(--bad)}
-.verdict.warn{background:var(--warn-soft);border-color:var(--warn)}
-.verdict.ok{background:var(--good-soft);border-color:var(--good)}
-.verdict h2{margin-top:0}
-.phone{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap}
-.phone .num{font-size:1.3rem;font-weight:700;letter-spacing:.5px}
-.session{display:flex;gap:14px}
-.date{flex:none;width:76px;text-align:center;background:var(--black);color:#fff;border-radius:14px;padding:8px 4px;border:2px solid var(--gold)}
-.date .d{font-size:1.6rem;font-weight:700;line-height:1}
-.date .m{font-size:.75rem;color:#E9D49B;text-transform:uppercase}
-.vid{display:flex;gap:14px;align-items:center}
-.vid>div,.phone>div,.tile>div{min-width:0}
-h1,h2,h3,p,li,td{overflow-wrap:break-word}
-.thumb{flex:none;width:96px;height:72px;border-radius:12px;background:linear-gradient(135deg,#111,#3a2c08);display:grid;place-items:center;border:2px solid var(--gold)}
-.thumb svg{width:34px;height:34px}
-.chat{display:flex;flex-direction:column;gap:10px;max-height:460px;overflow:auto;padding:4px}
-.msg{padding:12px 16px;border-radius:16px;max-width:88%;white-space:pre-wrap}
-.msg.me{align-self:flex-end;background:var(--gold-soft);border:2px solid var(--gold)}
-.msg.ai{align-self:flex-start;background:var(--card);border:2px solid var(--line)}
-.progress{height:16px;background:var(--line);border-radius:999px;overflow:hidden}
-.progress i{display:block;height:100%;background:var(--gold);width:0}
-nav.bar{position:fixed;bottom:0;left:0;right:0;background:var(--black);border-top:4px solid var(--gold);display:flex;justify-content:space-around;padding:6px 4px calc(6px + env(safe-area-inset-bottom));z-index:6}
-nav.bar a{flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:center;gap:2px;color:#ddd;text-decoration:none;font-size:14px;padding:6px 2px;border-radius:12px;min-height:64px;justify-content:center;font-weight:700}
-nav.bar a .e{font-size:26px;line-height:1}
-nav.bar a.on{color:#111;background:var(--gold)}
-nav.bar a.sos{color:#fff;background:var(--bad)}
-.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:100px;background:var(--black);color:#fff;border:3px solid var(--gold);padding:14px 20px;border-radius:14px;z-index:9;display:none;max-width:90%}
-footer{max-width:860px;margin:30px auto 0;padding:0 16px;color:var(--muted);font-size:.8rem}
-table{width:100%;border-collapse:collapse;font-size:.85rem}
-th,td{text-align:left;padding:8px;border-bottom:1px solid var(--line);vertical-align:top}
-.sr{position:absolute;left:-9999px}
-.cbgmark{width:40px;height:40px;color:#fff;flex:none}
-header .brand small{font-size:13px;line-height:1.2;letter-spacing:.08em;text-transform:uppercase;font-family:Poppins,sans-serif;font-weight:300}
-.byline{display:flex;align-items:center;gap:10px;margin-top:14px;padding-top:14px;border-top:1px solid #444;color:#ddd;font-family:Poppins,sans-serif;font-size:.75rem;letter-spacing:.12em;text-transform:uppercase}
-.byline .cbgmark{width:28px;height:28px}
-.brandfoot{display:flex;gap:14px;align-items:center;background:var(--black);color:#fff;border-radius:var(--radius);padding:18px;margin-bottom:12px}
-.brandfoot .cbgmark{width:52px;height:52px}
-.brandfoot b{font-family:Poppins,sans-serif;letter-spacing:.12em;display:block}
-.brandfoot span{font-family:Poppins,sans-serif;font-weight:300;font-size:.8rem;color:#E9D49B}
-.divs{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
-.divs i{font-style:normal;font-size:.72rem;border:1px solid #555;border-radius:999px;padding:2px 10px;color:#ddd}
-@media (max-width:520px){header{padding:10px 12px;gap:8px} header .brand b{font-size:16px} .tbtn{min-width:44px;height:44px;padding:0 6px;font-size:15px} .cbgmark{width:34px;height:34px} header .brand small{font-size:12px} h1{font-size:1.45rem}}
+.btn[disabled]{opacity:.6;cursor:wait}
+.btns{display:flex;gap:10px;flex-wrap:wrap}
+.back{align-self:flex-start;display:inline-flex;align-items:center;gap:8px;min-height:52px;padding:0 18px 0 12px;margin-left:-6px;border:none;border-radius:999px;background:var(--surface-2);color:var(--ink);font-weight:700;font-size:.95rem;cursor:pointer;text-decoration:none}
+
+/* Cards */
+.card{background:var(--surface);border-radius:var(--r);padding:1.2rem;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:.7rem;min-width:0}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:999px;font-size:.75rem;font-weight:700;background:var(--gold-soft);color:var(--gold-ink);white-space:nowrap;align-self:flex-start}
+.chip.good{background:var(--good-soft);color:var(--good)}
+.chip.bad{background:var(--bad-soft);color:var(--bad)}
+
+/* Home */
+.hello{display:flex;flex-direction:column;gap:.3rem}
+.feature{display:flex;flex-direction:column;gap:1rem;padding:1.4rem;border-radius:var(--r);background:var(--brand);color:var(--on-brand);text-decoration:none;box-shadow:inset 0 0 0 2px var(--gold)}
+.feature .fhead{display:flex;gap:14px;align-items:flex-start}
+.feature .fic{width:3.2rem;height:3.2rem;border-radius:16px;background:var(--gold);color:var(--on-gold);display:grid;place-items:center;flex:none}
+.feature .fic .i{width:1.6rem;height:1.6rem}
+.feature h2{font-size:1.3rem;color:var(--on-brand)}
+.feature p{color:var(--on-brand-muted);margin-top:.25rem}
+.feature .btn{align-self:flex-start}
+.helpcard{display:flex;align-items:center;gap:14px;padding:1.1rem 1.2rem;border-radius:var(--r);background:var(--danger);color:var(--on-danger);text-decoration:none;min-height:88px}
+.helpcard .hic{width:3rem;height:3rem;border-radius:50%;background:rgba(255,255,255,.18);display:grid;place-items:center;flex:none}
+.helpcard div{flex:1;min-width:0}
+.helpcard b{font-family:var(--f-display);font-size:1.15rem;display:block}
+.helpcard span{font-size:.9rem;opacity:.95}
+.cont{flex-direction:row;align-items:center;gap:1rem;text-decoration:none;color:var(--ink)}
+.ring{width:4.2rem;height:4.2rem;flex:none;position:relative}
+.ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.ring circle{fill:none;stroke-width:7}
+.ring .trk{stroke:var(--surface-2)}
+.ring .val{stroke:var(--gold);stroke-linecap:round;transition:stroke-dashoffset .5s}
+.ring b{position:absolute;inset:0;display:grid;place-items:center;font-family:var(--f-display);font-size:.85rem;font-variant-numeric:tabular-nums}
+.cont .cbody{flex:1;min-width:0;display:flex;flex-direction:column;gap:.2rem}
+.cont .cbody span{color:var(--muted);font-size:.88rem}
+.cont>.i{color:var(--muted)}
+.sec{margin-top:.4rem}
+.tiles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.tile{display:flex;flex-direction:column;gap:.7rem;padding:1.1rem;border-radius:var(--r);background:var(--surface);box-shadow:var(--shadow);text-decoration:none;color:var(--ink);min-height:9rem;min-width:0}
+.tile .tic{width:3rem;height:3rem}
+.tile b{font-family:var(--f-display);font-weight:600;font-size:1rem;line-height:1.25}
+.tile span{font-size:.85rem;color:var(--muted)}
+.tile:hover,.rowlink:hover{box-shadow:var(--shadow),inset 0 0 0 2px var(--gold)}
+@media (max-width:380px){.tiles{grid-template-columns:1fr}.tile{min-height:0}}
+.tic{width:2.8rem;height:2.8rem;border-radius:14px;background:var(--gold-soft);color:var(--gold-ink);display:grid;place-items:center;flex:none}
+.tic.is-done{background:var(--good-soft);color:var(--good)}
+.rule3{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;counter-reset:r}
+.rule3 li{background:var(--surface);border-radius:var(--r);padding:1rem;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:.35rem;counter-increment:r;min-width:0}
+.rule3 li::before{content:counter(r);width:2rem;height:2rem;border-radius:50%;background:var(--gold);color:var(--on-gold);font-family:var(--f-display);font-weight:700;display:grid;place-items:center;font-size:.9rem}
+.rule3 b{font-family:var(--f-display);font-size:1.05rem;text-transform:uppercase;letter-spacing:.06em}
+.rule3 span{font-size:.88rem;color:var(--muted)}
+@media (max-width:560px){.rule3{grid-template-columns:1fr}.rule3 li{flex-direction:row;align-items:center;flex-wrap:wrap;gap:.3rem .8rem}.rule3 span{flex-basis:100%}}
+
+/* Learn */
+.seg{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:6px;background:var(--surface-2);border-radius:999px}
+.seg a{display:flex;align-items:center;justify-content:center;gap:8px;min-height:54px;border-radius:999px;text-decoration:none;color:var(--ink);font-family:var(--f-display);font-weight:600;font-size:.92rem;text-align:center;padding:0 10px}
+.seg a[aria-selected="true"]{background:var(--surface);box-shadow:var(--shadow)}
+.listcard{background:var(--surface);border-radius:var(--r);box-shadow:var(--shadow);overflow:hidden}
+.rowlink{display:flex;align-items:center;gap:14px;padding:1rem 1.1rem;text-decoration:none;color:var(--ink);min-height:84px;border-top:1px solid var(--line)}
+.rowlink:first-child{border-top:none}
+.rowlink .rb{flex:1;min-width:0;display:flex;flex-direction:column;gap:.15rem}
+.rowlink b{font-family:var(--f-display);font-weight:600;font-size:1rem;line-height:1.25}
+.rowlink .rb span{font-size:.85rem;color:var(--muted)}
+.rowlink>.i{color:var(--muted)}
+@media (max-width:480px){.rowlink .chip.time{display:none}.rowlink .rb span{display:none}}
+.listcard.solo .rowlink{border-top:none}
+.trackprog{display:flex;align-items:center;gap:12px;font-size:.9rem;color:var(--muted)}
+.bar{flex:1;height:12px;border-radius:999px;background:var(--surface-2);overflow:hidden}
+.bar i{display:block;height:100%;background:var(--gold);border-radius:999px;width:0;transition:width .5s}
+
+/* Lesson */
+.signs,.dos{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:.8rem}
+.signs li,.dos li{display:flex;gap:12px;align-items:flex-start}
+.signs li::before{content:"";width:.6rem;height:.6rem;border-radius:50%;background:var(--gold);margin-top:.55rem;flex:none}
+.dos li .i{color:var(--good);margin-top:.1rem}
+.panel-do{background:var(--good-soft);box-shadow:none}
+.panel-do h2{color:var(--good)}
+.opts{display:flex;flex-direction:column;gap:10px}
+.opt{display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:12px 14px;min-height:64px;border-radius:var(--r-sm);border:2px solid var(--line);background:var(--surface);cursor:pointer;font-size:1rem}
+.opt .L{width:2.1rem;height:2.1rem;border-radius:50%;background:var(--surface-2);display:grid;place-items:center;font-family:var(--f-display);font-weight:700;font-size:.85rem;flex:none}
+.opt.right{border-color:var(--good);background:var(--good-soft)}
+.opt.right .L{background:var(--good);color:var(--surface)}
+.opt.wrong{border-color:var(--bad);background:var(--bad-soft)}
+.fb{font-weight:700}
+.fb:empty{display:none}
+
+/* Forms */
+label,.lab{display:block;font-weight:700;margin-bottom:6px}
+.field{display:flex;flex-direction:column}
+input[type=text],input[type=tel],select,textarea{width:100%;padding:14px 16px;border:2px solid var(--line);border-radius:var(--r-sm);background:var(--surface);min-height:58px;font-size:1rem}
+input:focus,select:focus,textarea:focus{border-color:var(--gold);outline:none;box-shadow:0 0 0 3px var(--gold-soft)}
+textarea{min-height:140px;resize:vertical}
+.choices{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,13rem),1fr));gap:10px}
+.choice{display:flex;align-items:center;gap:12px;padding:12px 14px;border:2px solid var(--line);border-radius:var(--r-sm);background:var(--surface);cursor:pointer;min-height:64px;font-size:.95rem;text-align:left}
+.choice .i{color:var(--gold-ink)}
+.choice[aria-pressed="true"]{border-color:var(--gold);background:var(--gold-soft);box-shadow:inset 0 0 0 2px var(--gold)}
+.examples{display:flex;flex-wrap:wrap;gap:8px}
+.ex{min-height:48px;padding:0 16px;border-radius:999px;border:2px dashed var(--line);background:transparent;cursor:pointer;font-size:.88rem;font-weight:700;color:var(--ink)}
+
+/* Verdict */
+.verdict{border-radius:var(--r);padding:1.3rem;display:flex;flex-direction:column;gap:.8rem}
+.verdict.bad{background:var(--bad-soft)} .verdict.bad h2{color:var(--bad)}
+.verdict.warn{background:var(--warn-soft)} .verdict.warn h2{color:var(--warn)}
+.verdict.ok{background:var(--good-soft)} .verdict.ok h2{color:var(--good)}
+.verdict h2{display:flex;gap:10px;align-items:center;font-size:1.3rem}
+.verdict ul{margin:0;padding-left:1.2em;display:flex;flex-direction:column;gap:.35rem}
+.verdict h3{margin-top:.2rem}
+
+/* Sessions, videos, phones */
+.sess{flex-direction:row;gap:1rem;align-items:flex-start}
+.date{flex:none;width:4.4rem;text-align:center;background:var(--brand);color:var(--on-brand);border-radius:16px;padding:.55rem .2rem;font-family:var(--f-display)}
+.date .m{font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--gold)}
+.date .d{font-size:1.6rem;font-weight:700;line-height:1.1}
+.sess .sb{flex:1;min-width:0;display:flex;flex-direction:column;gap:.5rem}
+.meta{display:flex;flex-wrap:wrap;gap:.3rem 1rem;font-size:.88rem;color:var(--muted)}
+.meta span{display:inline-flex;align-items:center;gap:6px}
+.meta .i{width:1.1em;height:1.1em}
+.next-tag{background:var(--gold);color:var(--on-gold)}
+.vid{flex-direction:row;align-items:center;gap:1rem;text-decoration:none;color:var(--ink)}
+.vid .tic{width:3.2rem;height:3.2rem;border-radius:50%;background:var(--brand);color:var(--gold)}
+.vid .vb{flex:1;min-width:0;display:flex;flex-direction:column;gap:.2rem}
+.vid .vb small{color:var(--gold-ink);font-weight:700;font-size:.78rem}
+.vid .vb span{font-size:.88rem;color:var(--muted)}
+.vid>.i{color:var(--muted)}
+.phone{flex-direction:row;align-items:center;flex-wrap:wrap;gap:.8rem 1rem}
+.phone .pb{flex:1 1 14rem;min-width:0;display:flex;flex-direction:column;gap:.15rem}
+.phone .num{font-family:var(--f-display);font-size:1.3rem;font-weight:700;letter-spacing:.02em;user-select:all;font-variant-numeric:tabular-nums}
+.phone .pb span{font-size:.88rem;color:var(--muted)}
+.urgent{background:var(--bad-soft);box-shadow:none}
+.urgent h2{color:var(--bad)}
+
+/* Chat */
+.chat{display:flex;flex-direction:column;gap:10px;max-height:460px;overflow:auto}
+.chat:empty{display:none}
+.msg{padding:12px 16px;border-radius:18px;max-width:88%;white-space:pre-wrap;overflow-wrap:break-word}
+.msg.me{align-self:flex-end;background:var(--gold-soft);border-bottom-right-radius:6px}
+.msg.ai{align-self:flex-start;background:var(--surface-2);border-bottom-left-radius:6px}
+.starters{display:flex;flex-direction:column;gap:8px}
+.starter{display:flex;align-items:center;gap:10px;text-align:left;min-height:54px;padding:8px 14px;border-radius:var(--r-sm);border:2px solid var(--line);background:var(--surface);cursor:pointer;font-size:.92rem}
+.starter .i{color:var(--gold-ink)}
+.note{padding:1rem 1.1rem;border-radius:var(--r-sm);background:var(--gold-soft);display:flex;gap:12px;align-items:flex-start}
+.note .i{color:var(--gold-ink);margin-top:.1rem}
+
+/* Bottom nav */
+nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:8;background:var(--surface);box-shadow:0 -1px 0 var(--line),0 -6px 20px rgba(0,0,0,.06);padding-bottom:env(safe-area-inset-bottom,0px)}
+nav.tabs .wrap{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:4px;padding-block:6px}
+nav.tabs a{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;min-height:64px;border-radius:16px;text-decoration:none;color:var(--muted);font-size:.7rem;font-weight:700;text-align:center;padding:0 2px}
+nav.tabs a .i{width:1.6rem;height:1.6rem}
+nav.tabs a.on{color:var(--gold-ink);background:var(--gold-soft)}
+nav.tabs a.sos{color:var(--on-danger);background:var(--danger)}
+
+/* Settings sheet */
+.sheet{position:fixed;inset:0;z-index:20;background:rgba(10,9,13,.55);display:flex;align-items:flex-end;justify-content:center}
+.sheet .panel{background:var(--surface);color:var(--ink);width:100%;max-width:560px;border-radius:26px 26px 0 0;padding:1.4rem max(16px,env(safe-area-inset-right,0px)) calc(1.4rem + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));display:flex;flex-direction:column;gap:1rem}
+.sheet .phead{display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.iconbtn{width:52px;height:52px;border-radius:50%;border:none;background:var(--surface-2);cursor:pointer;display:grid;place-items:center}
+.sizes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.sizes button{min-height:80px;border-radius:var(--r-sm);border:2px solid var(--line);background:var(--surface);cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-size:.78rem;font-weight:700}
+.sizes button b{font-family:var(--f-display)}
+.sizes button[aria-pressed="true"],.toggle[aria-pressed="true"]{border-color:var(--gold);background:var(--gold-soft)}
+.toggle{display:flex;align-items:center;gap:12px;min-height:64px;padding:0 16px;border-radius:var(--r-sm);border:2px solid var(--line);background:var(--surface);cursor:pointer;font-weight:700;text-align:left}
+.toggle .sw{margin-left:auto;width:3.2rem;height:1.8rem;border-radius:999px;background:var(--surface-2);position:relative;flex:none}
+.toggle .sw::after{content:"";position:absolute;top:.2rem;left:.2rem;width:1.4rem;height:1.4rem;border-radius:50%;background:var(--muted);transition:transform .2s}
+.toggle[aria-pressed="true"] .sw{background:var(--gold)}
+.toggle[aria-pressed="true"] .sw::after{transform:translateX(1.4rem);background:var(--on-gold)}
+
+/* Footer, toast, staff */
+footer{padding-block:2rem 1rem;display:flex;flex-direction:column;gap:.6rem;font-size:.8rem;color:var(--muted)}
+.brandfoot{display:flex;gap:14px;align-items:center;background:var(--brand);color:var(--on-brand);border-radius:var(--r);padding:1.1rem}
+.brandfoot svg.mark{width:46px;height:46px;color:var(--gold);flex:none}
+.brandfoot b{font-family:var(--f-display);letter-spacing:.12em;display:block;font-size:.9rem}
+.brandfoot span{font-size:.78rem;color:var(--on-brand-muted)}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(6rem + env(safe-area-inset-bottom,0px));background:var(--brand);color:var(--on-brand);box-shadow:inset 0 0 0 2px var(--gold);padding:14px 22px;border-radius:18px;z-index:30;width:max-content;max-width:min(420px,calc(100% - 32px));font-weight:700;text-align:center}
+.statgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.statgrid .big{font-family:var(--f-display);font-size:2rem;font-weight:700;font-variant-numeric:tabular-nums}
+.tablewrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:.82rem;min-width:520px}
+th,td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+/* Trial gate */
+.gate{position:fixed;inset:0;z-index:40;background:var(--bg);overflow-y:auto;padding-block:calc(env(safe-area-inset-top,0px) + 1.5rem) calc(env(safe-area-inset-bottom,0px) + 2rem)}
+body.locked{overflow:hidden}
+.gate .ginner{max-width:560px;margin:0 auto;display:flex;flex-direction:column;gap:1.1rem}
+.gate .gbrand{display:flex;align-items:center;gap:12px;background:var(--brand);color:var(--on-brand);border-radius:var(--r);padding:1.2rem}
+.gate .gbrand svg.mark{width:52px;height:52px;color:var(--gold);flex:none}
+.gate .gbrand b{font-family:var(--f-display);font-size:1.25rem;display:block}
+.gate .gbrand small{color:var(--on-brand-muted);font-size:.78rem;letter-spacing:.1em;text-transform:uppercase}
+.gate .two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem}
+@media (max-width:520px){.gate .two{grid-template-columns:1fr}}
+.check{display:flex;gap:12px;align-items:flex-start;font-weight:400;cursor:pointer}
+.check input{width:1.5rem;height:1.5rem;margin-top:.1rem;accent-color:var(--gold);flex:none}
+.terms{border:2px solid var(--line);border-radius:var(--r-sm);background:var(--surface-2)}
+.terms summary{cursor:pointer;min-height:52px;display:flex;align-items:center;padding:0 14px;font-weight:700;color:var(--gold-ink)}
+.terms ol{margin:0;padding:0 16px 14px 34px;font-size:.82rem;line-height:1.55;display:flex;flex-direction:column;gap:.4rem}
+.terms .tnote{padding:0 16px 14px;font-size:.75rem;color:var(--muted)}
+.err{color:var(--bad);font-weight:700}
+.err:empty{display:none}
+.sheet .panel{max-height:92vh;overflow-y:auto}
+.vlist{display:flex;flex-direction:column;gap:8px}
+.vopt{display:flex;flex-direction:column;align-items:flex-start;gap:2px;text-align:left;min-height:60px;padding:10px 14px;border-radius:var(--r-sm);border:2px solid var(--line);background:var(--surface);cursor:pointer}
+.vopt span{font-size:.78rem;color:var(--muted)}
+.vopt[aria-pressed="true"]{border-color:var(--gold);background:var(--gold-soft)}
+.vnote{font-size:.8rem;color:var(--muted);background:var(--surface-2);border-radius:var(--r-sm);padding:10px 12px}
+.readbar{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(5.6rem + env(safe-area-inset-bottom,0px));z-index:25;display:flex;align-items:center;gap:10px;padding:8px 8px 8px 12px;border-radius:999px;background:var(--brand);color:var(--on-brand);box-shadow:inset 0 0 0 2px var(--gold),0 8px 24px rgba(0,0,0,.2);max-width:calc(100% - 32px)}
+.readbar b{font-size:.85rem;white-space:nowrap}
+.readbar .pulse{width:2.2rem;height:2.2rem;border-radius:50%;background:var(--gold);color:var(--on-gold);display:grid;place-items:center;animation:pl 1.4s ease-in-out infinite}
+@keyframes pl{50%{transform:scale(1.1)}}
+.readbar button{min-height:46px;padding:0 16px;border-radius:999px;border:2px solid var(--gold);background:transparent;color:var(--on-brand);font-weight:700;cursor:pointer;font-size:.85rem}
+.readbar button.stop{background:var(--gold);color:var(--on-gold)}
+@media (max-width:380px){.readbar b{display:none}}
+.ack{background:var(--surface);border-radius:var(--r);padding:1.1rem 1.2rem;box-shadow:var(--shadow);display:flex;gap:14px;align-items:flex-start;color:var(--ink);font-size:.85rem;line-height:1.6}
+.ack .dots{flex:none;width:2.4rem;height:2.4rem;border-radius:50%;background:radial-gradient(circle at 50% 50%,var(--gold) 0 22%,transparent 23%),radial-gradient(circle at 50% 50%,transparent 0 40%,var(--gold-ink) 41% 47%,transparent 48%),var(--gold-soft)}
+.ack b{font-family:var(--f-display);display:block;font-size:.9rem;margin-bottom:.2rem}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
+
 </head>
 <body>
-<header>
-  <a class="brand" href="#home" aria-label="Golden Shield by Code Black Group, home"><svg class="cbgmark" viewBox="0 0 102.514 102.514" aria-hidden="true"><path fill="currentColor" transform="matrix(1,0,0,-1,60.90541,18.044983)" d="M0 0H-24.735V-11.17C-33.375-14.901-39.438-23.501-39.438-33.494-39.438-43.486-33.376-52.085-24.735-55.816V-66.423H0C5.38-66.423 10.438-64.328 14.242-60.524 18.046-56.72 20.141-51.662 20.141-46.282 20.141-41.475 18.409-36.836 15.321-33.211 18.409-29.587 20.141-24.948 20.141-20.141 20.141-9.035 11.106 0 0 0M10.13-35.078C13.291-37.939 15.105-42.023 15.105-46.282 15.105-50.317 13.533-54.11 10.681-56.963 7.828-59.816 4.034-61.387 0-61.387H-19.698V-57.362C-18.217-57.645-16.69-57.798-15.127-57.798L0-57.76C6.207-57.76 11.257-52.709 11.257-46.502 11.257-40.295 6.207-35.245 0-35.245H-24.735V-45.633C-23.251-46.81-21.549-47.721-19.698-48.294V-40.282L0-40.281C3.43-40.281 6.221-43.072 6.221-46.502 6.221-49.932 3.43-52.723-.007-52.723L-15.133-52.762C-25.758-52.762-34.402-44.118-34.402-33.494-34.401-22.869-25.758-14.226-15.12-14.226L0-14.144C3.308-14.144 5.999-16.835 5.999-20.143 5.999-23.451 3.308-26.142 0-26.142H-19.698V-18.695C-21.548-19.267-23.251-20.175-24.735-21.35V-31.179L0-31.178C6.085-31.178 11.035-26.228 11.035-20.143 11.035-14.058 6.085-9.107-.014-9.108L-15.133-9.189C-16.694-9.189-18.219-9.343-19.698-9.625V-5.037L0-5.036C8.329-5.036 15.105-11.812 15.105-20.141 15.105-24.4 13.291-28.483 10.13-31.344L8.066-33.211Z"/><path fill="currentColor" transform="matrix(1,0,0,-1,51.25702,.99993899)" d="M0 0C-27.712 0-50.257-22.546-50.257-50.257-50.257-77.969-27.712-100.514 0-100.513 27.712-100.513 50.256-77.968 50.257-50.256 50.257-22.545 27.712 0 0 0M0-95.477C-24.935-95.477-45.221-75.192-45.221-50.257-45.221-25.323-24.934-5.037 0-5.036 24.934-5.036 45.221-25.322 45.22-50.256 45.22-75.191 24.934-95.477 0-95.477"/></svg><span><b>Golden Shield</b><small>by Code Black Group</small></span></a>
-  <div class="tools" role="group" aria-label="Display settings">
-    <button class="tbtn" id="fsDown" aria-label="Smaller text">A−</button>
-    <button class="tbtn" id="fsUp" aria-label="Bigger text">A+</button>
-    <button class="tbtn" id="hcBtn" aria-pressed="false" aria-label="High contrast" style="font-size:1.4rem;line-height:1">◑</button>
-  </div>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+ <defs>
+  <symbol id="cbg" viewBox="0 0 102.514 102.514"><path fill="currentColor" transform="matrix(1,0,0,-1,60.90541,18.044983)" d="M0 0H-24.735V-11.17C-33.375-14.901-39.438-23.501-39.438-33.494-39.438-43.486-33.376-52.085-24.735-55.816V-66.423H0C5.38-66.423 10.438-64.328 14.242-60.524 18.046-56.72 20.141-51.662 20.141-46.282 20.141-41.475 18.409-36.836 15.321-33.211 18.409-29.587 20.141-24.948 20.141-20.141 20.141-9.035 11.106 0 0 0M10.13-35.078C13.291-37.939 15.105-42.023 15.105-46.282 15.105-50.317 13.533-54.11 10.681-56.963 7.828-59.816 4.034-61.387 0-61.387H-19.698V-57.362C-18.217-57.645-16.69-57.798-15.127-57.798L0-57.76C6.207-57.76 11.257-52.709 11.257-46.502 11.257-40.295 6.207-35.245 0-35.245H-24.735V-45.633C-23.251-46.81-21.549-47.721-19.698-48.294V-40.282L0-40.281C3.43-40.281 6.221-43.072 6.221-46.502 6.221-49.932 3.43-52.723-.007-52.723L-15.133-52.762C-25.758-52.762-34.402-44.118-34.402-33.494-34.401-22.869-25.758-14.226-15.12-14.226L0-14.144C3.308-14.144 5.999-16.835 5.999-20.143 5.999-23.451 3.308-26.142 0-26.142H-19.698V-18.695C-21.548-19.267-23.251-20.175-24.735-21.35V-31.179L0-31.178C6.085-31.178 11.035-26.228 11.035-20.143 11.035-14.058 6.085-9.107-.014-9.108L-15.133-9.189C-16.694-9.189-18.219-9.343-19.698-9.625V-5.037L0-5.036C8.329-5.036 15.105-11.812 15.105-20.141 15.105-24.4 13.291-28.483 10.13-31.344L8.066-33.211Z"/><path fill="currentColor" transform="matrix(1,0,0,-1,51.25702,.99993899)" d="M0 0C-27.712 0-50.257-22.546-50.257-50.257-50.257-77.969-27.712-100.514 0-100.513 27.712-100.513 50.256-77.968 50.257-50.256 50.257-22.545 27.712 0 0 0M0-95.477C-24.935-95.477-45.221-75.192-45.221-50.257-45.221-25.323-24.934-5.037 0-5.036 24.934-5.036 45.221-25.322 45.22-50.256 45.22-75.191 24.934-95.477 0-95.477"/></symbol>
+  <symbol id="i-home" viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V20h14V9.5"/><path d="M10 20v-6h4v6"/></symbol>
+  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3 4 6v6c0 4.5 3.4 8.2 8 9 4.6-.8 8-4.5 8-9V6z"/><path d="m9 12 2 2 4-4"/></symbol>
+  <symbol id="i-sparkle" viewBox="0 0 24 24"><path d="M12 3c.6 4.5 1.9 6.4 6 7-4.1.6-5.4 2.5-6 7-.6-4.5-1.9-6.4-6-7 4.1-.6 5.4-2.5 6-7z"/><path d="M19 15c.3 2 .9 2.7 2.5 3-1.6.3-2.2 1-2.5 3-.3-2-.9-2.7-2.5-3 1.6-.3 2.2-1 2.5-3z"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></symbol>
+  <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></symbol>
+  <symbol id="i-play" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M10 8.5v7l6-3.5z"/></symbol>
+  <symbol id="i-lifebuoy" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3.5"/><path d="m5.6 5.6 4 4M14.4 14.4l4 4M18.4 5.6l-4 4M9.6 14.4l-4 4"/></symbol>
+  <symbol id="i-phone" viewBox="0 0 24 24"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></symbol>
+  <symbol id="i-flag" viewBox="0 0 24 24"><path d="M5 21V4M5 4h12l-2.5 4L17 12H5"/></symbol>
+  <symbol id="i-message" viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z"/><path d="M8 9.5h8M8 12.5h5"/></symbol>
+  <symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><circle cx="17" cy="9" r="2.5"/><path d="M16 14.2a5 5 0 0 1 5.5 5.8"/></symbol>
+  <symbol id="i-key" viewBox="0 0 24 24"><circle cx="8" cy="15" r="4"/><path d="m11 12 9-9M17 6l3 3M14 9l2 2"/></symbol>
+  <symbol id="i-bank" viewBox="0 0 24 24"><path d="M3 10 12 4l9 6M5 10v8M9.5 10v8M14.5 10v8M19 10v8M3 20h18"/></symbol>
+  <symbol id="i-heart" viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></symbol>
+  <symbol id="i-smartphone" viewBox="0 0 24 24"><rect x="7" y="2.5" width="10" height="19" rx="2"/><path d="M11 18h2"/></symbol>
+  <symbol id="i-bulb" viewBox="0 0 24 24"><path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-3.5 10.9V15h7v-1.1A6 6 0 0 0 12 3z"/></symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></symbol>
+  <symbol id="i-mask" viewBox="0 0 24 24"><path d="M4 5h16v6a8 8 0 0 1-16 0z"/><path d="M8.5 10h1M14.5 10h1M9.5 15c1.5-1 3.5-1 5 0"/></symbol>
+  <symbol id="i-chat" viewBox="0 0 24 24"><path d="M4 5h16v10H10l-4 4v-4H4z"/><path d="M8 10h8"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5"/></symbol>
+  <symbol id="i-speaker" viewBox="0 0 24 24"><path d="M4 9.5h3.5L12 5.5v13L7.5 14.5H4z"/><path d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11"/></symbol>
+  <symbol id="i-left" viewBox="0 0 24 24"><path d="M19 12H5M11 6l-6 6 6 6"/></symbol>
+  <symbol id="i-right" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+  <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s-6-5.5-6-11a6 6 0 0 1 12 0c0 5.5-6 11-6 11z"/><circle cx="12" cy="10" r="2.2"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+  <symbol id="i-video" viewBox="0 0 24 24"><rect x="3" y="6" width="13" height="12" rx="2"/><path d="m16 10 5-3v10l-5-3"/></symbol>
+  <symbol id="i-dots" viewBox="0 0 24 24"><circle cx="6" cy="12" r="1.2"/><circle cx="12" cy="12" r="1.2"/><circle cx="18" cy="12" r="1.2"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 3.5 2.5 20h19z"/><path d="M12 10v4M12 17.2v.1"/></symbol>
+  <symbol id="i-ok" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m8 12 3 3 5-6"/></symbol>
+  <symbol id="i-stop" viewBox="0 0 24 24"><path d="M8 3h8l5 5v8l-5 5H8l-5-5V8z"/><path d="M12 8v5M12 16v.1"/></symbol>
+  <symbol id="i-ext" viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5"/></symbol>
+  <symbol id="i-send" viewBox="0 0 24 24"><path d="M21 3 10 14M21 3l-7 18-4-7-7-4z"/></symbol>
+ </defs>
+</svg>
+
+<header class="top">
+ <div class="wrap">
+  <a class="brand" href="#home" aria-label="Golden Shield, home"><svg class="mark" aria-hidden="true"><use href="#cbg"/></svg><span><b>Golden Shield</b><small>by Code Black Group</small></span></a>
+  <button class="setbtn" id="setBtn" aria-haspopup="dialog"><span class="aa">Aa</span><span class="lbl">Text size</span></button>
+ </div>
 </header>
 
-<main id="app">
+<main class="wrap" id="app">
 
 <!-- HOME -->
 <section class="view" id="v-home">
-  <div class="hero">
-    <h1 id="greet">Welcome 👋</h1>
-    <p>Learn to spot scams, use AI with confidence, join a friendly class — and ask for help any time. Nothing here is a silly question.</p>
-    <div class="row"><a class="btn" href="#check">🔍 Is this a scam? Check a message</a></div>
-    <div class="byline"><svg class="cbgmark" viewBox="0 0 102.514 102.514" aria-hidden="true"><path fill="currentColor" transform="matrix(1,0,0,-1,60.90541,18.044983)" d="M0 0H-24.735V-11.17C-33.375-14.901-39.438-23.501-39.438-33.494-39.438-43.486-33.376-52.085-24.735-55.816V-66.423H0C5.38-66.423 10.438-64.328 14.242-60.524 18.046-56.72 20.141-51.662 20.141-46.282 20.141-41.475 18.409-36.836 15.321-33.211 18.409-29.587 20.141-24.948 20.141-20.141 20.141-9.035 11.106 0 0 0M10.13-35.078C13.291-37.939 15.105-42.023 15.105-46.282 15.105-50.317 13.533-54.11 10.681-56.963 7.828-59.816 4.034-61.387 0-61.387H-19.698V-57.362C-18.217-57.645-16.69-57.798-15.127-57.798L0-57.76C6.207-57.76 11.257-52.709 11.257-46.502 11.257-40.295 6.207-35.245 0-35.245H-24.735V-45.633C-23.251-46.81-21.549-47.721-19.698-48.294V-40.282L0-40.281C3.43-40.281 6.221-43.072 6.221-46.502 6.221-49.932 3.43-52.723-.007-52.723L-15.133-52.762C-25.758-52.762-34.402-44.118-34.402-33.494-34.401-22.869-25.758-14.226-15.12-14.226L0-14.144C3.308-14.144 5.999-16.835 5.999-20.143 5.999-23.451 3.308-26.142 0-26.142H-19.698V-18.695C-21.548-19.267-23.251-20.175-24.735-21.35V-31.179L0-31.178C6.085-31.178 11.035-26.228 11.035-20.143 11.035-14.058 6.085-9.107-.014-9.108L-15.133-9.189C-16.694-9.189-18.219-9.343-19.698-9.625V-5.037L0-5.036C8.329-5.036 15.105-11.812 15.105-20.141 15.105-24.4 13.291-28.483 10.13-31.344L8.066-33.211Z"/><path fill="currentColor" transform="matrix(1,0,0,-1,51.25702,.99993899)" d="M0 0C-27.712 0-50.257-22.546-50.257-50.257-50.257-77.969-27.712-100.514 0-100.513 27.712-100.513 50.256-77.968 50.257-50.256 50.257-22.545 27.712 0 0 0M0-95.477C-24.935-95.477-45.221-75.192-45.221-50.257-45.221-25.323-24.934-5.037 0-5.036 24.934-5.036 45.221-25.322 45.22-50.256 45.22-75.191 24.934-95.477 0-95.477"/></svg>Brought to you by Code Black Group</div>
-  </div>
-  <h2>What would you like to do?</h2>
-  <div class="grid">
-    <a class="tile" href="#learn"><div class="ic">🛡️</div><div><b>Stay Safe Online</b><span>Short, easy lessons on scams, passwords & banking</span></div></a>
-    <a class="tile" href="#ai"><div class="ic">🤖</div><div><b>AI Made Simple</b><span>What AI is, how it helps, and how to use it safely</span></div></a>
-    <a class="tile" href="#check"><div class="ic">🔍</div><div><b>Scam Checker</b><span>Paste a text or email and we'll tell you if it looks safe</span></div></a>
-    <a class="tile" href="#sessions"><div class="ic">📅</div><div><b>Classes & Sessions</b><span>Book a friendly awareness session</span></div></a>
-    <a class="tile" href="#videos"><div class="ic">▶️</div><div><b>Watch & Learn</b><span>Free trusted videos and courses</span></div></a>
-    <a class="tile help" href="#help"><div class="ic">🆘</div><div><b>I Need Help</b><span>Ask a real person to help you</span></div></a>
-  </div>
-  <div class="card">
-    <h3>Your progress</h3>
-    <div class="progress" aria-hidden="true"><i id="progBar"></i></div>
-    <p id="progText" class="muted">0 of 12 lessons done.</p>
-  </div>
-  <div class="rule"><b>The Golden Rule: STOP · CHECK · ASK.</b><br>If a message or call rushes you, asks for money, codes or passwords — stop, check with the real company using a number you find yourself, and ask someone you trust.</div>
+ <div class="hello">
+  <p class="eyebrow" id="today"></p>
+  <h1 id="greet">Welcome</h1>
+  <p class="lead">Nothing here is a silly question. Tap what you'd like to do.</p>
+ </div>
+ <a class="feature" href="#check">
+  <div class="fhead"><span class="fic"><svg class="i"><use href="#i-search"/></svg></span><div><h2>Got a strange text, email or call?</h2><p>Paste it in and we'll check it for scam warning signs in seconds.</p></div></div>
+  <span class="btn">Check a message <svg class="i"><use href="#i-right"/></svg></span>
+ </a>
+ <a class="helpcard" href="#help"><span class="hic"><svg class="i"><use href="#i-lifebuoy"/></svg></span><div><b>I need help</b><span>Ask a real person from our team</span></div><svg class="i"><use href="#i-chevron"/></svg></a>
+ <a class="card cont" id="continue" href="#learn"></a>
+ <h2 class="sec">Explore</h2>
+ <div class="tiles">
+  <a class="tile" href="#learn"><span class="tic"><svg class="i"><use href="#i-shield"/></svg></span><b>Stay safe online</b><span>Scams, passwords and banking</span></a>
+  <a class="tile" href="#ai"><span class="tic"><svg class="i"><use href="#i-sparkle"/></svg></span><b>AI made simple</b><span>What AI is and how to use it safely</span></a>
+  <a class="tile" href="#sessions"><span class="tic"><svg class="i"><use href="#i-calendar"/></svg></span><b>Classes</b><span>Book a friendly group session</span></a>
+  <a class="tile" href="#videos"><span class="tic"><svg class="i"><use href="#i-play"/></svg></span><b>Watch &amp; learn</b><span>Free trusted videos and courses</span></a>
+ </div>
+ <h2 class="sec">The Golden Rule</h2>
+ <ol class="rule3">
+  <li><b>Stop</b><span>Don't reply, tap, or pay when a message rushes you.</span></li>
+  <li><b>Check</b><span>Call the company on a number you find yourself.</span></li>
+  <li><b>Ask</b><span>Talk it over with family, staff, or our team.</span></li>
+ </ol>
 </section>
 
-<!-- LEARN -->
+<!-- LEARN (both tracks) -->
 <section class="view" id="v-learn">
-  <button class="back" onclick="go('home')">← Back</button>
-  <h1>🛡️ Stay Safe Online</h1>
-  <p class="muted">Each lesson takes about 3 minutes. Tap one to start. Use 🔊 to have it read aloud.</p>
-  <div id="cyberList"></div>
-</section>
-
-<!-- AI -->
-<section class="view" id="v-ai">
-  <button class="back" onclick="go('home')">← Back</button>
-  <h1>🤖 AI Made Simple</h1>
-  <p class="muted">No jargon. Learn what AI is, how it can make life a little easier, and the tricks scammers now use with it.</p>
-  <div id="aiList"></div>
-  <a class="tile" href="#practice" style="margin-top:12px"><div class="ic">💬</div><div><b>Practise talking to an AI helper</b><span>A safe place to try asking questions</span></div></a>
+ <a class="back" href="#home"><svg class="i"><use href="#i-left"/></svg> Home</a>
+ <div class="stack" style="gap:.4rem"><h1>Lessons</h1><p class="lead">Each lesson takes about 3 minutes, with a quick question at the end.</p></div>
+ <div class="seg" role="tablist" aria-label="Lesson topics">
+  <a href="#learn" id="tab-cyber" role="tab"><svg class="i"><use href="#i-shield"/></svg>Staying safe</a>
+  <a href="#ai" id="tab-ai" role="tab"><svg class="i"><use href="#i-sparkle"/></svg>AI made simple</a>
+ </div>
+ <div class="trackprog"><div class="bar"><i id="trackBar"></i></div><span id="trackText"></span></div>
+ <div class="listcard" id="lessonList"></div>
+ <div class="listcard solo" id="practiceLink" hidden><a class="rowlink" href="#practice"><span class="tic"><svg class="i"><use href="#i-chat"/></svg></span><span class="rb"><b>Practise with an AI helper</b><span>A safe place to try asking questions</span></span><svg class="i"><use href="#i-chevron"/></svg></a></div>
 </section>
 
 <!-- LESSON -->
-<section class="view" id="v-lesson">
-  <button class="back" id="lessonBack">← Back to lessons</button>
-  <div id="lessonBody"></div>
-</section>
+<section class="view" id="v-lesson"></section>
 
 <!-- PRACTICE -->
 <section class="view" id="v-practice">
-  <button class="back" onclick="go('ai')">← Back</button>
-  <h1>💬 Practise with an AI helper</h1>
-  <div class="rule">Never type passwords, bank details, your Medicare number or full address into any AI. AI can be wrong — check health and money matters with a real person.</div>
-  <div class="card">
-    <p class="muted">Try one of these, or type your own:</p>
-    <div class="row" id="starters"></div>
-    <div class="chat" id="chat" aria-live="polite" style="margin-top:12px"></div>
-    <label for="chatIn">Your question</label>
-    <textarea id="chatIn" style="min-height:90px" placeholder="e.g. How do I make a video call to my grandson?"></textarea>
-    <div class="row" style="margin-top:10px"><button class="btn" id="chatSend">Send</button></div>
-    <p id="chatNote" class="muted"></p>
-  </div>
+ <a class="back" href="#ai"><svg class="i"><use href="#i-left"/></svg> AI lessons</a>
+ <div class="stack" style="gap:.4rem"><h1>Practise with Goldie</h1><p class="lead">Goldie is a friendly AI helper. Ask anything, the way you'd ask a person.</p></div>
+ <div class="note"><svg class="i"><use href="#i-lock"/></svg><p><b>Goldie is locked to safe topics:</b> staying safe online, using your devices, AI, and small everyday writing help. Messages with personal details (card, Medicare, tax or bank numbers, passwords, addresses, phone numbers or emails) are stopped before they're sent. AI can be wrong, so check important things with a real person.</p></div>
+ <div class="card">
+  <div class="chat" id="chat" aria-live="polite"></div>
+  <div id="startWrap" class="stack" style="gap:.6rem"><p class="lab">Try one of these</p><div class="starters" id="starters"></div></div>
+  <div class="field"><label for="chatIn">Or type your own question</label><textarea id="chatIn" maxlength="500" style="min-height:96px" placeholder="e.g. How do I make a video call to my grandson?"></textarea></div>
+  <button class="btn wide" id="chatSend"><svg class="i"><use href="#i-send"/></svg> Send</button>
+  <p id="chatNote" class="muted"></p>
+ </div>
 </section>
 
 <!-- CHECK -->
 <section class="view" id="v-check">
-  <button class="back" onclick="go('home')">← Back</button>
-  <h1>🔍 Is this a scam?</h1>
-  <p>Copy and paste a text message, email or what someone said on the phone, and we'll check it for warning signs.</p>
-  <div class="card">
-    <label for="chkText">The message</label>
-    <textarea id="chkText" placeholder="e.g. AusPost: Your parcel is on hold. Pay $2.99 to redeliver: http://..."></textarea>
-    <div id="imgWrap" style="display:none">
-      <label for="chkImg">Or add a screenshot (optional)</label>
-      <input type="file" id="chkImg" accept="image/*">
-    </div>
-    <div class="row" style="margin-top:14px"><button class="btn" id="chkBtn">Check it for me</button><button class="btn secondary" id="chkClear">Clear</button></div>
-  </div>
-  <div id="chkOut" aria-live="polite"></div>
-  <p class="muted">This checker gives guidance only. If you've already paid money or shared details, go to <a href="#help">I Need Help</a> straight away.</p>
+ <a class="back" href="#home"><svg class="i"><use href="#i-left"/></svg> Home</a>
+ <div class="stack" style="gap:.4rem"><h1>Is this a scam?</h1><p class="lead">Copy and paste a text, an email, or what someone said on the phone.</p></div>
+ <div class="card">
+  <div class="field"><label for="chkText">The message</label><textarea id="chkText" placeholder="Paste or type the message here"></textarea></div>
+  <div class="stack" style="gap:.5rem"><p class="lab" style="margin:0">Not sure how? Try an example</p><div class="examples" id="examples"></div></div>
+  <div class="field" id="imgWrap" hidden><label for="chkImg">Or add a screenshot (optional)</label><input type="file" id="chkImg" accept="image/*"></div>
+  <div class="btns"><button class="btn" id="chkBtn" style="flex:1"><svg class="i"><use href="#i-search"/></svg> Check it for me</button><button class="btn ghost" id="chkClear">Clear</button></div>
+ </div>
+ <div id="chkOut" aria-live="polite"></div>
+ <p class="muted">Card, Medicare, tax and bank numbers, passwords and street addresses are removed before a message is checked. Guidance only. If you've already paid money or shared details, go to <a href="#help">I need help</a> straight away.</p>
 </section>
 
 <!-- SESSIONS -->
 <section class="view" id="v-sessions">
-  <button class="back" onclick="go('home')">← Back</button>
-  <h1>📅 Classes & Sessions</h1>
-  <p class="muted">Friendly, small-group sessions run by Code Black Group trainers. Morning tea included. Bring your phone or tablet if you have one.</p>
-  <div id="sessList"></div>
-  <div class="card"><h3>Prefer one-on-one?</h3><p>Ask for a personal visit and we'll sit with you at your own pace.</p><a class="btn secondary" href="#help">Request a one-on-one</a></div>
+ <a class="back" href="#home"><svg class="i"><use href="#i-left"/></svg> Home</a>
+ <div class="stack" style="gap:.4rem"><h1>Classes</h1><p class="lead">Small, friendly groups run by Code Black Group trainers. Morning tea included. Bring your phone or tablet if you have one.</p></div>
+ <div class="stack" id="sessList"></div>
+ <div class="card"><h3>Prefer one-on-one?</h3><p class="muted">We'll sit with you at your own pace, in person or by video.</p><a class="btn ghost" href="#help">Ask for a one-on-one</a></div>
 </section>
 
 <!-- VIDEOS -->
 <section class="view" id="v-videos">
-  <button class="back" onclick="go('home')">← Back</button>
-  <h1>▶️ Watch & Learn</h1>
-  <p class="muted">Free, trusted courses and videos from Australian Government services. They open in a new window.</p>
-  <div id="vidList"></div>
+ <a class="back" href="#home"><svg class="i"><use href="#i-left"/></svg> Home</a>
+ <div class="stack" style="gap:.4rem"><h1>Watch &amp; learn</h1><p class="lead">Free, trusted courses from Australian Government services. Each one opens in a new window.</p></div>
+ <div class="stack" id="vidList"></div>
 </section>
 
 <!-- HELP -->
 <section class="view" id="v-help">
-  <button class="back" onclick="go('home')">← Back</button>
-  <h1>🆘 I Need Help</h1>
-  <div class="verdict bad">
-    <h2>Already lost money or shared bank details?</h2>
-    <p><b>Call your bank right now</b> — use the number on the back of your card. They may be able to stop the payment.</p>
-  </div>
-  <div class="card">
-    <h2 style="margin-top:0">Ask us to help you</h2>
-    <form id="helpForm">
-      <label>What do you need help with?</label>
-      <div class="choices" id="helpTopics"></div>
-      <label for="hName">Your name</label>
-      <input type="text" id="hName" autocomplete="name" required>
-      <label for="hRoom">Room number or where you live</label>
-      <input type="text" id="hRoom" placeholder="e.g. Room 12, or 'at home'">
-      <label for="hPhone">Best phone number to call you</label>
-      <input type="tel" id="hPhone" autocomplete="tel">
-      <label for="hHow">How would you like help?</label>
-      <select id="hHow"><option>Phone call</option><option>Come and see me in person</option><option>Video call</option><option>Contact my family member</option></select>
-      <label for="hUrg">How soon?</label>
-      <select id="hUrg"><option value="urgent">Urgent — today please</option><option value="soon" selected>In the next few days</option><option value="whenever">Whenever suits</option></select>
-      <label for="hMsg">Tell us a little more (optional)</label>
-      <textarea id="hMsg" placeholder="e.g. I got a call saying my computer has a virus"></textarea>
-      <div style="margin-top:16px"><button class="btn red wide" type="submit" id="hSubmit">Send my help request</button></div>
-      <p id="hNote" class="muted"></p>
-    </form>
-  </div>
-  <div id="myReqs"></div>
-  <h2>Phone numbers you can trust</h2>
-  <div id="phones"></div>
+ <a class="back" href="#home"><svg class="i"><use href="#i-left"/></svg> Home</a>
+ <h1>I need help</h1>
+ <div class="card urgent"><h2>Lost money or shared bank details?</h2><p><b>Call your bank right now</b> on the number on the back of your card. They may be able to stop the payment.</p></div>
+ <div class="card phone"><div class="pb"><b>Call our team</b><span class="num">1300 737 562</span><span>Code Black Group · scams, devices and AI questions</span></div><a class="btn" href="tel:1300737562"><svg class="i"><use href="#i-phone"/></svg> Call</a></div>
+ <form id="helpForm" class="card" style="gap:1.1rem" novalidate>
+  <div><h2>Or ask us to contact you</h2><p class="muted" style="margin-top:.3rem">Three quick steps. We'll get back to you.</p></div>
+  <div class="field"><span class="lab">1. What do you need help with?</span><div class="choices" id="helpTopics"></div></div>
+  <div class="field"><label for="hName">2. Your name</label><input type="text" id="hName" autocomplete="name"></div>
+  <div class="field"><label for="hPhone">Best phone number</label><input type="tel" id="hPhone" autocomplete="tel"></div>
+  <div class="field"><label for="hRoom">Room number or where you live</label><input type="text" id="hRoom" placeholder="e.g. Room 12, or at home"></div>
+  <div class="field"><label for="hHow">3. How would you like help?</label><select id="hHow"><option>Phone call</option><option>Come and see me in person</option><option>Video call</option><option>Contact my family member</option></select></div>
+  <div class="field"><label for="hUrg">How soon?</label><select id="hUrg"><option value="urgent">Urgent, today please</option><option value="soon" selected>In the next few days</option><option value="whenever">Whenever suits</option></select></div>
+  <div class="field"><label for="hMsg">Anything else? (optional)</label><textarea id="hMsg" placeholder="e.g. I got a call saying my computer has a virus"></textarea></div>
+  <button class="btn danger wide" type="submit" id="hSubmit"><svg class="i"><use href="#i-send"/></svg> Send my help request</button>
+  <p id="hNote" class="muted"></p>
+ </form>
+ <div class="stack" id="myReqs"></div>
+ <h2 class="sec">Phone numbers you can trust</h2>
+ <div class="stack" id="phones"></div>
 </section>
 
 <!-- STAFF -->
 <section class="view" id="v-staff">
-  <button class="back" onclick="go('home')">← Back</button>
-  <h1>Staff dashboard</h1>
-  <p class="muted">Help requests and session bookings from residents. Staff only.</p>
-  <div id="staffBody"><div class="card">Loading…</div></div>
+ <a class="back" href="#home"><svg class="i"><use href="#i-left"/></svg> Home</a>
+ <div class="stack" style="gap:.4rem"><h1>Staff dashboard</h1><p class="lead">Help requests and class bookings from residents. Visible to editors and the owner only.</p></div>
+ <div class="stack" id="staffBody"><div class="card">Loading…</div></div>
 </section>
 
 </main>
 
-<footer>
-  <div class="brandfoot"><svg class="cbgmark" viewBox="0 0 102.514 102.514" aria-hidden="true"><path fill="currentColor" transform="matrix(1,0,0,-1,60.90541,18.044983)" d="M0 0H-24.735V-11.17C-33.375-14.901-39.438-23.501-39.438-33.494-39.438-43.486-33.376-52.085-24.735-55.816V-66.423H0C5.38-66.423 10.438-64.328 14.242-60.524 18.046-56.72 20.141-51.662 20.141-46.282 20.141-41.475 18.409-36.836 15.321-33.211 18.409-29.587 20.141-24.948 20.141-20.141 20.141-9.035 11.106 0 0 0M10.13-35.078C13.291-37.939 15.105-42.023 15.105-46.282 15.105-50.317 13.533-54.11 10.681-56.963 7.828-59.816 4.034-61.387 0-61.387H-19.698V-57.362C-18.217-57.645-16.69-57.798-15.127-57.798L0-57.76C6.207-57.76 11.257-52.709 11.257-46.502 11.257-40.295 6.207-35.245 0-35.245H-24.735V-45.633C-23.251-46.81-21.549-47.721-19.698-48.294V-40.282L0-40.281C3.43-40.281 6.221-43.072 6.221-46.502 6.221-49.932 3.43-52.723-.007-52.723L-15.133-52.762C-25.758-52.762-34.402-44.118-34.402-33.494-34.401-22.869-25.758-14.226-15.12-14.226L0-14.144C3.308-14.144 5.999-16.835 5.999-20.143 5.999-23.451 3.308-26.142 0-26.142H-19.698V-18.695C-21.548-19.267-23.251-20.175-24.735-21.35V-31.179L0-31.178C6.085-31.178 11.035-26.228 11.035-20.143 11.035-14.058 6.085-9.107-.014-9.108L-15.133-9.189C-16.694-9.189-18.219-9.343-19.698-9.625V-5.037L0-5.036C8.329-5.036 15.105-11.812 15.105-20.141 15.105-24.4 13.291-28.483 10.13-31.344L8.066-33.211Z"/><path fill="currentColor" transform="matrix(1,0,0,-1,51.25702,.99993899)" d="M0 0C-27.712 0-50.257-22.546-50.257-50.257-50.257-77.969-27.712-100.514 0-100.513 27.712-100.513 50.256-77.968 50.257-50.256 50.257-22.545 27.712 0 0 0M0-95.477C-24.935-95.477-45.221-75.192-45.221-50.257-45.221-25.323-24.934-5.037 0-5.036 24.934-5.036 45.221-25.322 45.22-50.256 45.22-75.191 24.934-95.477 0-95.477"/></svg><div><b>CODE BLACK GROUP</b><span>One Code. One Strategy. One Outcome.</span><div class="divs"><i>Strike Force · Cyber Security</i><i>AI Dome · Safe AI</i><i>Midnight IT · 24/7 Support</i></div></div></div>
-  <p>Golden Shield is delivered by Code Black Group Global Pty Ltd. Phone 1300 737 562 · codeblackgroup.com.au</p>
-  <p>General information only. In an emergency call 000. · <a href="#staff">Staff</a></p>
+<footer class="wrap">
+ <div class="brandfoot"><svg class="mark" aria-hidden="true"><use href="#cbg"/></svg><div><b>CODE BLACK GROUP</b><span>One Code. One Strategy. One Outcome.</span></div></div>
+ <div class="ack"><span class="dots" aria-hidden="true"></span><p><b>Acknowledgement of Country</b>Code Black Group acknowledges the Traditional Custodians of the lands on which we live, work and learn, including the Wurundjeri Woi-wurrung and Bunurong peoples of the Kulin Nation, where Golden Shield was created. We pay our respects to their Elders past and present, and extend that respect to all Aboriginal and Torres Strait Islander peoples. Sovereignty was never ceded.</p></div>
+ <p>Golden Shield is delivered by Code Black Group Global Pty Ltd · 1300 737 562 · codeblackgroup.com.au</p>
+ <p>General information only. In an emergency call 000. · <a href="#staff">Staff</a></p>
+ <p>© 2026 Code Black Group Global Pty Ltd. All rights reserved. Golden Shield is confidential and provided for evaluation under the trial terms. Copying, reverse-engineering or entering any part of it into an AI tool is not permitted.</p>
 </footer>
 
-<nav class="bar" aria-label="Main">
-  <a href="#home" data-nav="home"><span class="e">🏠</span>Home</a>
-  <a href="#learn" data-nav="learn"><span class="e">🛡️</span>Learn</a>
-  <a href="#ai" data-nav="ai"><span class="e">🤖</span>AI</a>
-  <a href="#sessions" data-nav="sessions"><span class="e">📅</span>Classes</a>
-  <a href="#help" data-nav="help" class="sos"><span class="e">🆘</span>Help</a>
+<nav class="tabs" aria-label="Main">
+ <div class="wrap">
+  <a href="#home" data-nav="home"><svg class="i"><use href="#i-home"/></svg>Home</a>
+  <a href="#learn" data-nav="learn"><svg class="i"><use href="#i-shield"/></svg>Learn</a>
+  <a href="#check" data-nav="check"><svg class="i"><use href="#i-search"/></svg>Check</a>
+  <a href="#sessions" data-nav="sessions"><svg class="i"><use href="#i-calendar"/></svg>Classes</a>
+  <a href="#help" data-nav="help" class="sos"><svg class="i"><use href="#i-lifebuoy"/></svg>Help</a>
+ </div>
 </nav>
-<div class="toast" id="toast" role="status"></div>
+
+<div class="sheet" id="sheet" hidden role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
+ <div class="panel">
+  <div class="phead"><h2 id="sheetTitle">Make it easier to read</h2><button class="iconbtn" id="sheetClose" aria-label="Close"><svg class="i"><use href="#i-x"/></svg></button></div>
+  <p class="lab" style="margin:0">Text size</p>
+  <div class="sizes">
+   <button data-size="0"><b style="font-size:18px">Aa</b>Standard</button>
+   <button data-size="1"><b style="font-size:22px">Aa</b>Large</button>
+   <button data-size="2"><b style="font-size:27px">Aa</b>Extra large</button>
+  </div>
+  <button class="toggle" id="hcToggle" aria-pressed="false">High contrast (yellow on black)<span class="sw"></span></button>
+  <p class="lab" style="margin:0">Reading speed</p>
+  <div class="sizes">
+   <button data-rate="0.8"><b>Slower</b></button>
+   <button data-rate="0.95"><b>Normal</b></button>
+   <button data-rate="1.1"><b>Faster</b></button>
+  </div>
+  <button class="btn ghost wide" id="voiceTest"><svg class="i"><use href="#i-speaker"/></svg> Test the voice</button>
+  <button class="btn wide" id="sheetDone">Done</button>
+  <button class="btn ghost wide" id="signOut">Sign out of the trial</button>
+ </div>
+</div>
+<div class="gate wrap" id="gate" role="dialog" aria-modal="true" aria-labelledby="gateTitle">
+ <div class="ginner">
+  <div class="gbrand"><svg class="mark" aria-hidden="true"><use href="#cbg"/></svg><div><b>Golden Shield</b><small>Trial access · Code Black Group</small></div></div>
+  <div class="stack" style="gap:.4rem"><h1 id="gateTitle">Welcome to your trial</h1><p class="lead">Enter your details and the trial password from your Code Black Group contact to start exploring.</p></div>
+  <form class="card" id="gateForm" style="gap:1rem" novalidate>
+   <div class="field"><label for="gName">Your full name</label><input type="text" id="gName" autocomplete="name"></div>
+   <div class="field"><label for="gOrg">Organisation or facility</label><input type="text" id="gOrg" autocomplete="organization" placeholder="e.g. Sunrise Aged Care, Toorak"></div>
+   <div class="two">
+    <div class="field"><label for="gEmail">Email</label><input type="text" id="gEmail" inputmode="email" autocomplete="email"></div>
+    <div class="field"><label for="gPhone">Phone</label><input type="tel" id="gPhone" autocomplete="tel"></div>
+   </div>
+   <div class="field"><label for="gRole">Your role (optional)</label><input type="text" id="gRole" placeholder="e.g. Facility manager, resident, family member"></div>
+   <div class="field"><label for="gPass">Trial password</label><input type="text" id="gPass" autocomplete="off" autocapitalize="off" spellcheck="false" style="-webkit-text-security:disc"></div>
+   <details class="terms" id="gTermsBox">
+    <summary>Read the trial terms</summary>
+    <ol>
+     <li>Golden Shield, including its design, lessons, written content, AI instructions and code, is owned by Code Black Group Global Pty Ltd (ABN 62 315 213 466) and is confidential.</li>
+     <li>You may use Golden Shield only to evaluate it for your organisation during the trial.</li>
+     <li>You must not copy, reproduce, distribute, modify, reverse-engineer, decompile or scrape any part of Golden Shield, or create anything based on it.</li>
+     <li>You must not enter, paste or upload any part of Golden Shield (including its code, text, screens or screenshots) into any AI tool, model or service, or help anyone else to do so.</li>
+     <li>You must not share the trial password or your access with anyone outside your organisation without our written consent.</li>
+     <li>We may end your access at any time, and access ends when the trial ends. If we ask, you will delete any Golden Shield material you hold.</li>
+     <li>We use the details you enter to run the trial and contact you about it.</li>
+     <li>These terms are governed by the laws of Victoria, Australia.</li>
+    </ol>
+    <p class="tnote">Trial terms version 1 · 20 November 2026</p>
+   </details>
+   <label class="check"><input type="checkbox" id="gTerms"><span>I have read and agree to the <b>trial terms</b>, including keeping Golden Shield confidential and not copying it or putting it into any AI tool.</span></label>
+   <label class="check"><input type="checkbox" id="gOk"><span>I'm happy for Code Black Group to contact me about this trial.</span></label>
+   <p class="err" id="gErr" aria-live="polite"></p>
+   <button class="btn wide" type="submit" id="gGo">Start my trial <svg class="i"><use href="#i-right"/></svg></button>
+   <p class="muted" style="font-size:.8rem">Don't have a password? Call Code Black Group on 1300 737 562.</p>
+  </form>
+  <p class="muted" style="font-size:.8rem;text-align:center">© 2026 Code Black Group Global Pty Ltd. All rights reserved. Confidential trial.</p>
+  <p class="muted" style="font-size:.8rem;text-align:center">We acknowledge the Traditional Custodians of the lands across Australia and pay our respects to Elders past and present.</p>
+ </div>
+</div>
+<div class="readbar" id="readbar" hidden role="region" aria-label="Reading aloud"><span class="pulse" aria-hidden="true"><svg class="i"><use href="#i-speaker"/></svg></span><b>Reading aloud</b><button type="button" id="rbPause">Pause</button><button type="button" id="rbStop" class="stop">Stop</button></div>
+<div class="toast" id="toast" role="status" hidden></div>
 
 <script>
+document.documentElement.lang="en-AU";
 /* ---------- CONTENT ---------- */
 const LESSONS = [
- {id:"scams",track:"cyber",icon:"🚩",title:"Spot a scam in 5 seconds",intro:"Scammers are clever, but almost every scam shows the same warning signs.",
+ {id:"scams",track:"cyber",icon:"flag",title:"Spot a scam in 5 seconds",intro:"Scammers are clever, but almost every scam shows the same warning signs.",
   points:["They contact you out of the blue — a call, text, email or social media message you weren't expecting.","They rush you: \"Act now\", \"Your account will be closed\", \"You'll be arrested\".","They ask for money in an unusual way — gift cards, cryptocurrency, or a transfer to a new account.","They ask for your password, PIN, or the code sent to your phone.","It sounds too good (or too scary) to be true — a prize, an investment, a refund, a threat."],
-  todo:["STOP — don't reply, click, or pay.","CHECK — contact the company using a number you find yourself (on a bill, your card, or their official website).","ASK — talk it over with family, a staff member, or press I Need Help."],
+  todo:["STOP — don't reply, click, or pay.","CHECK — contact the company using a number you find yourself (on a bill, your card, or their official website).","ASK — talk it over with family, a staff member, or press I need help."],
   q:{text:"A caller says they're from your bank and needs the 6-digit code just sent to your phone. What do you do?",opts:["Read them the code so they can help","Hang up, then call the bank on the number on your card","Ask them to call back tomorrow"],a:1,why:"Your bank will never ask for that code. Anyone asking for it is trying to get into your account."}},
- {id:"texts",track:"cyber",icon:"📱",title:"Dodgy texts & emails",intro:"Fake messages often pretend to be AusPost, toll roads, myGov, the ATO or your bank.",
+ {id:"texts",track:"cyber",icon:"message",title:"Dodgy texts & emails",intro:"Fake messages often pretend to be AusPost, toll roads, myGov, the ATO or your bank.",
   points:["The link takes you to a fake website that looks real and steals your details.","Real organisations rarely ask you to tap a link to 'verify' or 'pay a small fee'.","A message can appear in the same thread as real messages from that company — that doesn't make it real.","Spelling is no longer a giveaway: scammers now use AI to write perfect messages."],
   todo:["Don't tap the link.","Open the official app, or type the website address yourself.","Delete the message and block the number.","Report it at scamwatch.gov.au."],
   q:{text:"\"Your parcel couldn't be delivered. Pay $2.99 to redeliver: [link]\". What's the safest choice?",opts:["Pay — it's only $2.99","Tap the link to check if it's real","Delete it. If you're expecting a parcel, check in the official AusPost app"],a:2,why:"The small fee is bait. The real goal is your card details."}},
- {id:"phone",track:"cyber",icon:"☎️",title:"Phone calls & 'computer problems'",intro:"Some scammers call pretending to be Microsoft, Telstra, the NBN, your bank or even the police.",
+ {id:"phone",track:"cyber",icon:"phone",title:"Phone calls & 'computer problems'",intro:"Some scammers call pretending to be Microsoft, Telstra, the NBN, your bank or even the police.",
   points:["Caller ID can be faked — the number can look genuine.","A pop-up may say your computer has a virus and show a number to call.","They'll ask you to install an app so they can 'fix' your device — this lets them control it.","They may keep you on the phone for a long time and tell you not to tell anyone."],
   todo:["Hang up. It's not rude — it's smart.","Never let someone you don't know take control of your device.","Close the pop-up or switch the device off, then ask for help.","Call back using a number from a bill or the official website."],
   q:{text:"A big warning pops up: \"VIRUS DETECTED! Call Microsoft now on 1800…\". What do you do?",opts:["Call the number quickly","Close it or switch the device off, and ask for help","Type your password to unlock it"],a:1,why:"Microsoft doesn't put phone numbers in warning pop-ups. It's a trick to get you to call scammers."}},
- {id:"family",track:"cyber",icon:"👪",title:"'Hi Mum' & fake family emergencies",intro:"Scammers pretend to be a son, daughter or grandchild who needs money urgently.",
+ {id:"family",track:"cyber",icon:"users",title:"'Hi Mum' & fake family emergencies",intro:"Scammers pretend to be a son, daughter or grandchild who needs money urgently.",
   points:["Usually starts with \"Hi Mum/Dad, I've lost my phone, this is my new number\".","They then ask for money for a bill, a fine or an emergency.","AI can now copy a person's voice from a short video, so a phone call can sound just like them."],
   todo:["Call your family member on their usual, saved number.","Agree on a family 'safe word' that only you know.","Never send money to a new account because of a message."],
   q:{text:"You get a text from a new number: \"Hi Nan, it's me, lost my phone, can you pay this bill for me today?\"",opts:["Pay it — they sound stressed","Call your grandchild on their usual number first","Reply asking for the bank details"],a:1,why:"A quick call to their real number will tell you straight away if it's genuine."}},
- {id:"passwords",track:"cyber",icon:"🔑",title:"Passwords made easy",intro:"A strong password doesn't have to be hard to remember.",
+ {id:"passwords",track:"cyber",icon:"key",title:"Passwords made easy",intro:"A strong password doesn't have to be hard to remember.",
   points:["Use a passphrase: four random words, like 'purple kangaroo teapot river'.","Use a different password for your email and your bank.","Turn on two-step verification — a code is sent to your phone when you log in.","It's fine to keep passwords in a notebook — keep it somewhere safe at home, away from your device."],
   todo:["Change any password you use in lots of places.","Ask us to help you turn on two-step verification.","Never share a code sent to your phone with anyone."],
   q:{text:"Which is the strongest password?",opts:["Mary1948","password123","garden piano sunset biscuit"],a:2,why:"Four random words are long, strong and easy for you to remember."}},
- {id:"banking",track:"cyber",icon:"🏦",title:"Safe online banking",intro:"Online banking is safe when you follow a few simple habits.",
+ {id:"banking",track:"cyber",icon:"bank",title:"Safe online banking",intro:"Online banking is safe when you follow a few simple habits.",
   points:["Your bank will never ask for your password or codes by phone, text or email.","Use your bank's official app, or type the address yourself.","Turn on alerts so you get a message whenever money leaves your account.","Check your statements regularly for anything you don't recognise."],
   todo:["If something looks wrong, call your bank immediately — they may be able to stop it.","Ask your bank about adding a trusted person to help watch your account."],
   q:{text:"What will your bank NEVER ask you for?",opts:["Your online banking password or one-time code","Your name","Which branch you visit"],a:0,why:"No genuine bank staff will ask for your password or one-time code."}},
- {id:"romance",track:"cyber",icon:"💌",title:"Online friends & romance scams",intro:"Some people online pretend to be friends or sweethearts to win your trust — then ask for money.",
+ {id:"romance",track:"cyber",icon:"heart",title:"Online friends & romance scams",intro:"Some people online pretend to be friends or sweethearts to win your trust — then ask for money.",
   points:["They become very affectionate very quickly.","They always have a reason they can't video call or meet in person.","Sooner or later there's an emergency, a travel cost, or an 'investment opportunity'.","Fake ads may show celebrities 'recommending' investments — these are scams."],
   todo:["Never send money to someone you haven't met in person.","Talk to someone you trust — scammers ask you to keep it secret.","Report the profile to the website or app."],
   q:{text:"An online friend you've never met asks to borrow $2,000 for a plane ticket to visit you.",opts:["Send it — they'll pay you back","Say no and talk to someone you trust","Send half"],a:1,why:"This is the most common pattern in romance scams."}},
- {id:"devices",track:"cyber",icon:"📲",title:"Keep your phone & tablet healthy",intro:"A few small habits keep your device safe.",
+ {id:"devices",track:"cyber",icon:"smartphone",title:"Keep your phone & tablet healthy",intro:"A few small habits keep your device safe.",
   points:["Install updates when your device asks — they fix security holes.","Lock your screen with a PIN, fingerprint or face.","Only download apps from the App Store or Google Play.","Back up your photos so you never lose them."],
   todo:["Check for updates in Settings once a month.","Ask us at a session to set up backups for you."],
   q:{text:"Your tablet says an update is ready. What's best?",opts:["Ignore it forever","Install it (when charged and on home Wi-Fi)","Turn the tablet off for good"],a:1,why:"Updates protect you from new threats."}},
- {id:"ai-what",track:"ai",icon:"🧠",title:"What is AI? (in plain English)",intro:"AI — Artificial Intelligence — is a computer program that has learned from huge amounts of writing, pictures and sound.",
+ {id:"ai-what",track:"ai",icon:"bulb",title:"What is AI? (in plain English)",intro:"AI — Artificial Intelligence — is a computer program that has learned from huge amounts of writing, pictures and sound.",
   points:["Think of it like a very well-read assistant that guesses the most helpful answer.","You already use AI: voice assistants like Siri, predictive text, and suggestions on TV apps.","Chat assistants like ChatGPT, Microsoft Copilot, Google Gemini and Claude let you type or speak a question and get a reply.","AI is a tool, not a person — even when it sounds friendly."],
   todo:["Try the 'Practise with an AI helper' page in this app."],
   q:{text:"Can AI make mistakes?",opts:["No, it's a computer so it's always right","Yes — always double-check important things","Only on weekends"],a:1,why:"AI can sound confident and still be wrong."}},
- {id:"ai-uses",track:"ai",icon:"✨",title:"How AI can help day to day",intro:"AI can save time and make some tasks easier.",
+ {id:"ai-uses",track:"ai",icon:"sparkle",title:"How AI can help day to day",intro:"AI can save time and make some tasks easier.",
   points:["Write a birthday message, letter or email.","Explain a confusing letter or long word in simple terms.","Suggest a recipe from what's in your fridge.","Help plan a trip or a family get-together.","Translate a message into another language."],
   todo:["Ask it like you'd ask a person.","If the answer is hard to follow, say: \"Explain it more simply\".","Ask follow-up questions — it remembers the conversation."],
   q:{text:"The AI's answer is too complicated. What can you do?",opts:["Give up","Ask it to explain more simply","Turn the device off"],a:1,why:"AI is happy to try again — just ask."}},
- {id:"ai-safe",track:"ai",icon:"🔐",title:"Using AI safely",intro:"AI is useful, but treat it like a stranger on the phone when it comes to personal details.",
+ {id:"ai-safe",track:"ai",icon:"lock",title:"Using AI safely",intro:"AI is useful, but treat it like a stranger on the phone when it comes to personal details.",
   points:["Never type passwords, bank details, your Medicare number or full address.","Check health, money and legal advice with a real professional.","Only use well-known AI apps from official app stores.","Be wary of AI 'friends' or apps that ask you to pay or share personal details."],
   todo:["Keep questions general: \"What are signs of a cold?\" not your full medical history."],
   q:{text:"Is it OK to type your bank card number into an AI chat?",opts:["Yes, it's private","No — never share it","Only half of it"],a:1,why:"Keep financial details out of AI chats."}},
- {id:"ai-scams",track:"ai",icon:"🎭",title:"AI tricks scammers use",intro:"Scammers now use AI too. Knowing their tricks takes away their power.",
+ {id:"ai-scams",track:"ai",icon:"mask",title:"AI tricks scammers use",intro:"Scammers now use AI too. Knowing their tricks takes away their power.",
   points:["Voice cloning: a phone call that sounds exactly like a loved one.","Deepfake videos: fake clips of celebrities or politicians promoting 'investments'.","Fake photos and profiles that look completely real.","Perfectly written scam emails — no spelling mistakes to warn you."],
   todo:["Slow down when anything feels urgent.","Check through a different way — call the person on their usual number.","Famous people don't message you with investment offers."],
   q:{text:"You see a video of a famous TV presenter promoting a 'guaranteed' investment. Most likely?",opts:["It's a genuine tip","It's a deepfake scam","It's a government program"],a:1,why:"'Guaranteed' returns plus a celebrity face is a classic scam."}}
 ];
 const SESSIONS = [
- {id:"s1",date:"2026-11-17",time:"10:30am",title:"Spot the Scam",track:"Cyber safety",len:"45 min",desc:"Real examples of scam texts, calls and emails — and how to tell in seconds."},
- {id:"s2",date:"2026-11-26",time:"2:00pm",title:"Passwords Made Easy",track:"Hands-on",len:"60 min",desc:"Create a passphrase and turn on two-step verification. Bring your device."},
- {id:"s3",date:"2026-12-01",time:"10:30am",title:"AI Made Simple",track:"AI training",len:"60 min",desc:"Meet an AI assistant, try it together, and learn what to never share."},
- {id:"s4",date:"2026-12-10",time:"2:00pm",title:"Safe Christmas Shopping",track:"Cyber safety",len:"45 min",desc:"Online shopping, fake parcel texts and gift card scams at Christmas."},
- {id:"s5",date:"2027-02-02",time:"10:30am",title:"Video Calls with Family",track:"Hands-on",len:"60 min",desc:"FaceTime, WhatsApp and Zoom — step by step, at your pace."},
- {id:"s6",date:"2027-02-16",time:"1:00pm",title:"Ask the Tech Expert",track:"Drop-in",len:"2 hours",desc:"Bring any question or device. One-on-one help from our engineers."}
+ {id:"s1",date:"2027-01-12",time:"10:30am",title:"Spot the Scam",track:"Cyber safety",len:"45 min",desc:"Real examples of scam texts, calls and emails — and how to tell in seconds."},
+ {id:"s2",date:"2027-01-14",time:"2:00pm",title:"Passwords Made Easy",track:"Hands-on",len:"60 min",desc:"Create a passphrase and turn on two-step verification. Bring your device."},
+ {id:"s3",date:"2027-01-19",time:"10:30am",title:"AI Made Simple",track:"AI training",len:"60 min",desc:"Meet an AI assistant, try it together, and learn what to never share."},
+ {id:"s4",date:"2027-01-21",time:"2:00pm",title:"Safe Online Sales Shopping",track:"Cyber safety",len:"45 min",desc:"Shopping the January sales safely: fake stores, parcel texts and gift card scams."},
+ {id:"s5",date:"2027-01-28",time:"10:30am",title:"Video Calls with Family",track:"Hands-on",len:"60 min",desc:"FaceTime, WhatsApp and Zoom — step by step, at your pace."},
+ {id:"s6",date:"2027-01-29",time:"1:00pm",title:"Ask the Tech Expert",track:"Drop-in",len:"2 hours",desc:"Bring any question or device. One-on-one help from our engineers."}
 ];
 const VIDEOS = [
  {t:"Be Connected — free courses & videos",s:"eSafety Commissioner (Australian Government)",d:"Hundreds of free, self-paced lessons on scams, online banking, myGov and video calls, made for Australians over 50.",u:"https://beconnected.esafety.gov.au"},
@@ -365,224 +616,430 @@ const VIDEOS = [
 ];
 const PHONES = [
  {n:"Emergency — someone is in danger",num:"000",tel:"000"},
- {n:"Golden Shield support — Code Black Group",num:"1300 737 562",tel:"1300737562",d:"Our team can help with scams, devices and AI questions."},
  {n:"IDCARE — identity theft support (free)",num:"1800 595 160",tel:"1800595160",d:"If your personal details or ID were taken. Weekday business hours."},
  {n:"Australian Cyber Security Hotline",num:"1300 292 371",tel:"1300292371",d:"Expert cyber advice, 24 hours, 7 days."},
  {n:"Report a scam — Scamwatch",num:"scamwatch.gov.au",url:"https://www.scamwatch.gov.au/report-a-scam",d:"Reporting helps warn others, even if you didn't lose money."}
 ];
-const TOPICS = [["scammed","😟","I think I've been scammed"],["message","📩","I got a strange message or call"],["device","📱","Help with my phone, tablet or computer"],["password","🔑","Passwords or logging in"],["ai","🤖","I want to learn about AI"],["video","📹","Video calls with family"],["other","💬","Something else"]];
+const TOPICS = [["scammed","alert","I think I've been scammed"],["message","message","I got a strange message or call"],["device","smartphone","Help with my phone, tablet or computer"],["password","key","Passwords or logging in"],["ai","sparkle","I want to learn about AI"],["video","video","Video calls with family"],["other","dots","Something else"]];
+const EXAMPLES = [
+ ["Parcel text","AusPost: Your parcel is on hold due to an incomplete address. Pay $2.99 within 24 hours to redeliver: http://auspost-redeliver.info"],
+ ["'Hi Mum' text","Hi Mum, I dropped my phone, this is my new number. Can you help me pay a bill today? I'll pay you back tomorrow x"],
+ ["Bank call","This is the fraud team from your bank. Your account has been locked. Please read me the code we just sent to verify it's you."]
+];
 
 /* ---------- STORAGE (this device only) ---------- */
 const LS = {get(k,d){try{const v=localStorage.getItem("gs_"+k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem("gs_"+k,JSON.stringify(v))}catch(e){}}};
 let done = LS.get("done",{}), myBookings = LS.get("bookings",{});
 
-/* ---------- UI helpers ---------- */
+/* ---------- helpers ---------- */
 const $ = s=>document.querySelector(s);
+const $$ = s=>document.querySelectorAll(s);
 const esc = s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-function toast(t){const el=$("#toast");el.textContent=t;el.style.display="block";clearTimeout(toast._t);toast._t=setTimeout(()=>el.style.display="none",4000)}
+const ic = n=>`<svg class="i" aria-hidden="true"><use href="#i-${n}"/></svg>`;
+function toast(t){const el=$("#toast");el.textContent=t;el.hidden=false;clearTimeout(toast._t);toast._t=setTimeout(()=>el.hidden=true,4000)}
 function go(v){location.hash=v}
-let fs = LS.get("fs",20); const hc = LS.get("hc",false);
-function applyDisplay(){document.documentElement.style.setProperty("--fs",fs+"px");document.body.classList.toggle("hc",LS.get("hc",false));$("#hcBtn").setAttribute("aria-pressed",LS.get("hc",false))}
-$("#fsUp").onclick=()=>{fs=Math.min(30,fs+2);LS.set("fs",fs);applyDisplay()};
-$("#fsDown").onclick=()=>{fs=Math.max(16,fs-2);LS.set("fs",fs);applyDisplay()};
-$("#hcBtn").onclick=()=>{LS.set("hc",!LS.get("hc",false));applyDisplay()};
+/* ---------- READ ALOUD (Australian voice first) ---------- */
+let tts=null, ttsBusy=false, devBusy=false, devPaused=false, ttsPaused=false;
+let voicePref="claude"; // standard Claude voice; the device's own default voice is the backup
+let readRate=LS.get("rate",0.95);
+const AU_GOOD=/natural|online|neural|premium|enhanced|karen|lee|catherine|natasha|william|google/i;
+function allVoices(){ try{ return window.speechSynthesis?speechSynthesis.getVoices():[] }catch(e){ return [] } }
+function auVoices(){ return allVoices().filter(v=>/^en[-_]AU/i.test(v.lang)).sort((a,b)=>(AU_GOOD.test(b.name)?1:0)-(AU_GOOD.test(a.name)?1:0)) }
+function pickDeviceVoice(){
+  const all=allVoices();
+  return null;
+}
+function chunks(text){ const parts=(String(text).match(/[^.!?]+[.!?]*\s*/g)||[String(text)]).map(s=>s.trim()).filter(Boolean); const out=[]; let cur=""; parts.forEach(p=>{ if((cur+" "+p).length>500&&cur){out.push(cur.trim());cur=p}else cur+=" "+p }); if(cur.trim()) out.push(cur.trim()); return out.map(s=>s.slice(0,1900)) }
+function setReading(on){ const rb=$("#readbar"); if(!rb) return; rb.hidden=!on; if(!on){devPaused=false;ttsPaused=false;$("#rbPause").textContent="Pause"} }
+function stopSpeak(){ if(tts&&ttsBusy){ tts.stop().catch(()=>{}) } try{ if(window.speechSynthesis&&(speechSynthesis.speaking||speechSynthesis.pending||devBusy)) speechSynthesis.cancel() }catch(e){} devBusy=false; setReading(false) }
+// iPhone/iPad: wake speech on the first tap so later readings are allowed to play.
+let speechWoken=false;
+function wakeSpeech(){ if(speechWoken||!window.speechSynthesis) return; speechWoken=true; try{ const u=new SpeechSynthesisUtterance(" "); u.volume=0; speechSynthesis.speak(u) }catch(e){} }
+document.addEventListener("touchend",wakeSpeech,{once:true,passive:true});
+document.addEventListener("click",wakeSpeech,{once:true});
+const IS_IOS=/iP(hone|ad|od)/.test(navigator.userAgent)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1);
+function deviceSpeak(text,voice){
+  if(!window.speechSynthesis||!window.SpeechSynthesisUtterance){ toast(IS_IOS?"Read-aloud doesn't work inside this app view. Open Golden Shield in Safari to hear it.":"Read-aloud isn't available on this device."); return }
+  try{
+    try{ speechSynthesis.resume() }catch(e){}
+    const list=chunks(text); devBusy=true; setReading(true); let started=false;
+    list.forEach((t,i)=>{ const u=new SpeechSynthesisUtterance(t); if(voice){u.voice=voice;u.lang=voice.lang}else{u.lang=(navigator.language&&/^en/i.test(navigator.language))?navigator.language:"en-AU"} u.rate=readRate; u.volume=1;
+      if(i===0) u.onstart=()=>{started=true};
+      if(i===list.length-1){ u.onend=()=>{devBusy=false;setReading(false)} }
+      u.onerror=(ev)=>{ if(ev&&ev.error&&ev.error!=="interrupted"&&ev.error!=="canceled"){ devBusy=false; setReading(false); toast(IS_IOS?"Couldn't play the voice. Check the iPhone isn't on silent and the volume is up, then tap again.":"Couldn't play the voice. Please tap again.") } };
+      speechSynthesis.speak(u) });
+    setTimeout(()=>{ if(devBusy&&!started&&!(speechSynthesis.speaking)){ toast(IS_IOS?"Can't hear anything? Flip the silent switch on the side of your iPhone off and turn the volume up.":"Can't hear anything? Check your volume is turned up.") } },2500);
+  }catch(e){ devBusy=false; setReading(false); toast("Read-aloud isn't available on this device.") }
+}
+async function speak(text){
+  stopSpeak();
+  const dev=pickDeviceVoice();
+  const useClaude = tts && (voicePref==="claude" || (voicePref==="auto" && !dev));
+  if(!useClaude){ deviceSpeak(text,dev); return }
+  ttsBusy=true; setReading(true);
+  try{ await tts.speak(chunks(text).map(t=>({text:t})),{voice:"buttery",rate:readRate,language:"en"}) }
+  catch(e){
+    const c=e&&e.code;
+    if(c==="not_granted"||c==="unavailable"){ tts=null; renderVoices(); toast("The Claude voice is turned off here. Using this device's voice instead."); if(c==="unavailable") deviceSpeak(text,dev) }
+    else if(c==="rate_limited") toast("That's a lot of reading for now. Please try again a bit later.");
+    else if(c==="no_gesture") toast("Please tap Read it to me again.");
+    else if(c==="busy") toast("Reading will work once you've finished speaking.");
+    else if(c!=="stopped") deviceSpeak(text,dev);
+  }
+  finally{ ttsBusy=false; if(!devBusy) setReading(false) }
+}
+$("#rbStop").onclick=stopSpeak;
+$("#rbPause").onclick=async()=>{
+  const b=$("#rbPause");
+  if(ttsBusy&&tts){ try{ if(ttsPaused){await tts.resume();ttsPaused=false;b.textContent="Pause"}else{await tts.pause();ttsPaused=true;b.textContent="Resume"} }catch(e){} return }
+  try{ if(devPaused){speechSynthesis.resume();devPaused=false;b.textContent="Pause"}else{speechSynthesis.pause();devPaused=true;b.textContent="Resume"} }catch(e){}
+};
+function renderVoices(){
+  $$("[data-rate]").forEach(b=>b.setAttribute("aria-pressed",+b.dataset.rate===readRate));
+}
+$$("[data-rate]").forEach(b=>b.onclick=()=>{readRate=+b.dataset.rate;LS.set("rate",readRate);if(tts&&tts.setRate)tts.setRate(readRate).catch(()=>{});renderVoices()});
+$("#voiceTest").onclick=()=>speak("Hello! I'm your Golden Shield reading voice. Remember: stop, check, and ask.");
+try{ if(window.speechSynthesis){ speechSynthesis.addEventListener?speechSynthesis.addEventListener("voiceschanged",renderVoices):(speechSynthesis.onvoiceschanged=renderVoices) } }catch(e){}
 
-function speak(text){
-  try{ if(!window.speechSynthesis) throw 0; speechSynthesis.cancel(); const u=new SpeechSynthesisUtterance(text); u.lang="en-AU"; u.rate=.9; speechSynthesis.speak(u); }
-  catch(e){ toast("Read-aloud isn't available on this device.") }
+/* ---------- display settings ---------- */
+const SIZES=[18,21,25];
+let sizeIx=LS.get("size",1); if(!(sizeIx>=0&&sizeIx<3)) sizeIx=1;
+function applyDisplay(){
+  document.documentElement.style.setProperty("--fs",SIZES[sizeIx]+"px");
+  const hc=!!LS.get("hc",false); document.body.classList.toggle("hc",hc);
+  $$("[data-size]").forEach(b=>b.setAttribute("aria-pressed",+b.dataset.size===sizeIx));
+  $("#hcToggle").setAttribute("aria-pressed",hc);
+}
+$$("[data-size]").forEach(b=>b.onclick=()=>{sizeIx=+b.dataset.size;LS.set("size",sizeIx);applyDisplay()});
+$("#hcToggle").onclick=()=>{LS.set("hc",!LS.get("hc",false));applyDisplay()};
+const openSheet=()=>{$("#sheet").hidden=false;$("#sheetClose").focus()};
+const closeSheet=()=>{$("#sheet").hidden=true;$("#setBtn").focus()};
+$("#setBtn").onclick=openSheet; $("#sheetClose").onclick=closeSheet; $("#sheetDone").onclick=closeSheet;
+$("#sheet").addEventListener("click",e=>{if(e.target.id==="sheet")closeSheet()});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("#sheet").hidden){e.preventDefault();closeSheet()}});
+
+/* ---------- HOME ---------- */
+function greet(){
+  const hr=new Date().getHours(); const nm=LS.get("name","").split(" ")[0];
+  $("#greet").textContent=(hr<12?"Good morning":hr<17?"Good afternoon":"Good evening")+(nm?", "+nm:"");
+  $("#today").textContent=new Date().toLocaleDateString("en-AU",{weekday:"long",day:"numeric",month:"long"});
+}
+function renderHome(){
+  const n=LESSONS.filter(l=>done[l.id]).length, total=LESSONS.length;
+  const next=LESSONS.find(l=>!done[l.id]);
+  const C=2*Math.PI*28, off=C*(1-n/total);
+  const ring=`<div class="ring" aria-hidden="true"><svg viewBox="0 0 64 64"><circle class="trk" cx="32" cy="32" r="28"/><circle class="val" cx="32" cy="32" r="28" stroke-dasharray="${C}" stroke-dashoffset="${off}"/></svg><b>${n}/${total}</b></div>`;
+  const el=$("#continue");
+  if(next){ el.href="#lesson-"+next.id; el.innerHTML=`${ring}<div class="cbody"><span>${n?"Keep going · next lesson":"Start here · your first lesson"}</span><h3>${esc(next.title)}</h3></div>${ic("chevron")}`; }
+  else { el.href="#learn"; el.innerHTML=`${ring}<div class="cbody"><span>All ${total} lessons done</span><h3>You're a Golden Shield Champion</h3></div>${ic("chevron")}`; }
 }
 
-/* ---------- RENDER LISTS ---------- */
-function lessonTile(l){return `<a class="tile" href="#lesson-${l.id}" style="margin:10px 0"><div class="ic">${l.icon}</div><div style="flex:1"><b>${esc(l.title)}</b><span>${esc(l.intro)}</span></div>${done[l.id]?'<span class="pill done">✓ Done</span>':''}</a>`}
-function renderLists(){
-  $("#cyberList").innerHTML = LESSONS.filter(l=>l.track==="cyber").map(lessonTile).join("");
-  $("#aiList").innerHTML = LESSONS.filter(l=>l.track==="ai").map(lessonTile).join("");
-  const n=Object.keys(done).filter(k=>LESSONS.some(l=>l.id===k)).length;
-  $("#progBar").style.width=(n/LESSONS.length*100)+"%";
-  $("#progText").textContent = n===LESSONS.length ? "🏅 All 12 lessons done — you're a Golden Shield Champion!" : `${n} of ${LESSONS.length} lessons done. Keep going!`;
+/* ---------- LEARN ---------- */
+let curTrack="cyber";
+function renderLearn(track){
+  curTrack=track;
+  const list=LESSONS.filter(l=>l.track===track), n=list.filter(l=>done[l.id]).length;
+  $("#tab-cyber").setAttribute("aria-selected",track==="cyber");
+  $("#tab-ai").setAttribute("aria-selected",track==="ai");
+  $("#trackBar").style.width=(n/list.length*100)+"%";
+  $("#trackText").textContent=`${n} of ${list.length} done`;
+  $("#lessonList").innerHTML=list.map(l=>{const d=done[l.id];return `<a class="rowlink" href="#lesson-${l.id}"><span class="tic ${d?"is-done":""}">${ic(d?"check":l.icon)}</span><span class="rb"><b>${esc(l.title)}</b><span>${esc(l.intro)}</span></span>${d?'<span class="chip good time">Done</span>':'<span class="chip time">3 min</span>'}${ic("chevron")}</a>`}).join("");
+  $("#practiceLink").hidden = track!=="ai";
 }
 function renderLesson(id){
   const l=LESSONS.find(x=>x.id===id); if(!l){go("learn");return}
-  $("#lessonBack").onclick=()=>go(l.track==="ai"?"ai":"learn");
-  const readText=[l.title,l.intro,"What to look for.",...l.points,"What to do.",...l.todo].join(". ");
-  $("#lessonBody").innerHTML=`
-   <span class="pill">${l.track==="ai"?"AI Made Simple":"Stay Safe Online"}</span>
-   <h1>${l.icon} ${esc(l.title)}</h1>
-   <p style="font-size:1.1rem">${esc(l.intro)}</p>
-   <button class="btn secondary" id="readBtn">🔊 Read it to me</button>
-   <div class="card"><h2 style="margin-top:0">${l.track==="ai"?"Good to know":"Warning signs"}</h2><ul class="list">${l.points.map((p,i)=>`<li><span class="n">${i+1}</span><span>${esc(p)}</span></li>`).join("")}</ul></div>
-   <div class="rule"><b>What to do</b><ul style="margin:.4em 0 0;padding-left:1.2em">${l.todo.map(t=>`<li>${esc(t)}</li>`).join("")}</ul></div>
-   <div class="card quiz"><h2 style="margin-top:0">Quick check ✅</h2><p><b>${esc(l.q.text)}</b></p>${l.q.opts.map((o,i)=>`<button class="opt" data-i="${i}">${esc(o)}</button>`).join("")}<div class="feedback" id="fb" aria-live="polite"></div></div>
-   <div class="row"><a class="btn secondary" href="#help">I have a question about this</a></div>`;
+  const list=LESSONS.filter(x=>x.track===l.track), idx=list.indexOf(l), nxt=list[idx+1];
+  const trackName=l.track==="ai"?"AI made simple":"Staying safe";
+  const readText=[l.title,l.intro,l.track==="ai"?"Good to know.":"Warning signs.",...l.points,"What to do.",...l.todo].join(". ");
+  $("#v-lesson").innerHTML=`
+   <a class="back" href="#${l.track==="ai"?"ai":"learn"}">${ic("left")} All lessons</a>
+   <div class="stack" style="gap:.5rem"><p class="eyebrow">${trackName} · Lesson ${idx+1} of ${list.length}</p><h1>${esc(l.title)}</h1><p class="lead">${esc(l.intro)}</p></div>
+   <button class="btn ghost" id="readBtn" style="align-self:flex-start">${ic("speaker")} Read it to me</button>
+   <div class="card"><h2>${l.track==="ai"?"Good to know":"Warning signs"}</h2><ul class="signs">${l.points.map(p=>`<li><span>${esc(p)}</span></li>`).join("")}</ul></div>
+   <div class="card panel-do"><h2>What to do</h2><ul class="dos">${l.todo.map(t=>`<li>${ic("check")}<span>${esc(t)}</span></li>`).join("")}</ul></div>
+   <div class="card"><p class="eyebrow">Quick question</p><h2>${esc(l.q.text)}</h2><div class="opts">${l.q.opts.map((o,i)=>`<button class="opt" data-i="${i}"><span class="L">${"ABC"[i]}</span><span>${esc(o)}</span></button>`).join("")}</div><p class="fb" id="fb" aria-live="polite"></p></div>
+   <div class="btns">${nxt?`<a class="btn" href="#lesson-${nxt.id}" style="flex:1">Next lesson ${ic("right")}</a>`:`<a class="btn" href="#${l.track==="ai"?"ai":"learn"}" style="flex:1">Back to all lessons</a>`}<a class="btn ghost" href="#help">Ask a question</a></div>`;
   $("#readBtn").onclick=()=>speak(readText);
-  document.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{
-    const i=+b.dataset.i; document.querySelectorAll(".opt").forEach(x=>x.classList.remove("right","wrong"));
-    if(i===l.q.a){b.classList.add("right");$("#fb").innerHTML=`🎉 That's right! ${esc(l.q.why)}`;done[l.id]=1;LS.set("done",done);renderLists()}
-    else{b.classList.add("wrong");$("#fb").innerHTML=`Not quite — have another go. Hint: think STOP · CHECK · ASK.`}
+  $$("#v-lesson .opt").forEach(b=>b.onclick=()=>{
+    const i=+b.dataset.i; $$("#v-lesson .opt").forEach(x=>x.classList.remove("right","wrong"));
+    if(i===l.q.a){b.classList.add("right");$("#fb").innerHTML=`<span style="color:var(--good)">That's right!</span> ${esc(l.q.why)}`;done[l.id]=1;LS.set("done",done);renderHome()}
+    else{b.classList.add("wrong");$("#fb").textContent="Not quite. Have another go. Hint: think Stop, Check, Ask."}
   });
 }
+
+/* ---------- SESSIONS / VIDEOS / PHONES / TOPICS ---------- */
 function fmtDate(s){const d=new Date(s+"T12:00:00");return{d:d.getDate(),m:d.toLocaleString("en-AU",{month:"short"}),w:d.toLocaleString("en-AU",{weekday:"long"}),full:d.toLocaleDateString("en-AU",{weekday:"long",day:"numeric",month:"long",year:"numeric"})}}
 function renderSessions(){
-  $("#sessList").innerHTML=SESSIONS.map(s=>{const f=fmtDate(s.date);const booked=myBookings[s.id];return `<div class="card session"><div class="date"><div class="m">${f.m}</div><div class="d">${f.d}</div><div class="m">${f.w.slice(0,3)}</div></div><div style="flex:1"><span class="pill">${esc(s.track)}</span><h3>${esc(s.title)}</h3><p class="muted" style="margin:.2em 0">${f.w} ${s.time} · ${s.len} · Community room (also online)</p><p>${esc(s.desc)}</p>${booked?`<span class="pill done">✓ You're booked in</span> <button class="back" data-cancel="${s.id}">Cancel</button>`:`<button class="btn" data-book="${s.id}">Book my spot</button>`}</div></div>`}).join("");
-  document.querySelectorAll("[data-book]").forEach(b=>b.onclick=()=>book(b.dataset.book,true));
-  document.querySelectorAll("[data-cancel]").forEach(b=>b.onclick=()=>book(b.dataset.cancel,false));
+  const today=new Date().toLocaleDateString("en-CA");
+  const up=SESSIONS.filter(s=>s.date>=today);
+  if(!up.length){$("#sessList").innerHTML=`<div class="card"><h3>New classes coming soon</h3><p class="muted">Check back shortly, or ask us for a one-on-one.</p></div>`;return}
+  $("#sessList").innerHTML=up.map((s,k)=>{const f=fmtDate(s.date);const booked=myBookings[s.id];return `<div class="card sess"><div class="date"><div class="m">${f.m}</div><div class="d">${f.d}</div><div class="m">${f.w.slice(0,3)}</div></div><div class="sb"><div class="btns" style="gap:6px">${k===0?'<span class="chip next-tag">Next up</span>':""}<span class="chip">${esc(s.track)}</span></div><h3>${esc(s.title)}</h3><div class="meta"><span>${ic("clock")}${f.w} ${s.time} · ${s.len}</span><span>${ic("pin")}Community room, or online</span></div><p>${esc(s.desc)}</p>${booked?`<div class="btns" style="align-items:center"><span class="chip good">${ic("check")} You're booked in</span><button class="btn ghost" style="min-height:48px;padding:0 18px" data-cancel="${s.id}">Cancel</button></div>`:`<button class="btn" style="align-self:flex-start" data-book="${s.id}">Book my spot</button>`}</div></div>`}).join("");
+  $$("[data-book]").forEach(b=>b.onclick=()=>book(b.dataset.book,true));
+  $$("[data-cancel]").forEach(b=>b.onclick=()=>book(b.dataset.cancel,false));
 }
 function renderVideos(){
-  const play='<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="11" fill="#C99A2E"/><path d="M10 7.5v9l7-4.5z" fill="#111"/></svg>';
-  $("#vidList").innerHTML=VIDEOS.map(v=>`<a class="card vid" href="${v.u}" target="_blank" rel="noopener" style="text-decoration:none;color:var(--ink)"><div class="thumb">${play}</div><div><h3>${esc(v.t)}</h3><p class="muted" style="margin:0">${esc(v.s)}</p><p style="margin:.3em 0 0;font-weight:400">${esc(v.d)}</p></div></a>`).join("")+
-  `<div class="card"><h3>🎬 Golden Shield video lessons</h3><p>Short videos recorded by our own trainers for each lesson in this app are coming soon.</p></div>`;
+  $("#vidList").innerHTML=VIDEOS.map(v=>`<a class="card vid" href="${v.u}" target="_blank" rel="noopener"><span class="tic">${ic("play")}</span><span class="vb"><small>${esc(v.s)}</small><h3>${esc(v.t)}</h3><span>${esc(v.d)}</span></span>${ic("ext")}</a>`).join("")+
+  `<div class="card"><h3>Golden Shield video lessons</h3><p class="muted">Short videos from our own trainers for each lesson are coming soon.</p></div>`;
 }
 function renderPhones(){
-  $("#phones").innerHTML=PHONES.map(p=>`<div class="card phone"><div><b>${esc(p.n)}</b>${p.d?`<p class="muted" style="margin:.2em 0 0">${esc(p.d)}</p>`:""}</div>${p.url?`<a class="btn secondary" href="${p.url}" target="_blank" rel="noopener">${esc(p.num)}</a>`:`<a class="btn ${p.num==="000"?"red":""}" href="tel:${p.tel}"><span class="num">${p.num}</span></a>`}</div>`).join("");
+  $("#phones").innerHTML=PHONES.map(p=>`<div class="card phone"><div class="pb"><b>${esc(p.n)}</b><span class="num">${esc(p.num)}</span>${p.d?`<span>${esc(p.d)}</span>`:""}</div>${p.url?`<a class="btn ghost" href="${p.url}" target="_blank" rel="noopener">Open ${ic("ext")}</a>`:`<a class="btn ${p.num==="000"?"danger":"ghost"}" href="tel:${p.tel}">${ic("phone")} Call</a>`}</div>`).join("");
 }
 let chosenTopic=null;
 function renderTopics(){
-  $("#helpTopics").innerHTML=TOPICS.map(([k,e,t])=>`<button type="button" class="choice" data-k="${k}" aria-pressed="${chosenTopic===k}"><span class="e">${e}</span>${esc(t)}</button>`).join("");
-  document.querySelectorAll(".choice").forEach(b=>b.onclick=()=>{chosenTopic=b.dataset.k;renderTopics()});
+  $("#helpTopics").innerHTML=TOPICS.map(([k,e,t])=>`<button type="button" class="choice" data-k="${k}" aria-pressed="${chosenTopic===k}">${ic(e)}<span>${esc(t)}</span></button>`).join("");
+  $$(".choice").forEach(b=>b.onclick=()=>{chosenTopic=b.dataset.k;renderTopics()});
 }
 
 /* ---------- ROUTER ---------- */
 const VIEWS=["home","learn","ai","lesson","practice","check","sessions","videos","help","staff"];
 function route(){
-  let h=(location.hash||"#home").slice(1); let v=h, arg=null;
+  let h=(location.hash||"#home").slice(1), v=h, arg=null;
   if(h.startsWith("lesson-")){v="lesson";arg=h.slice(7)}
   if(!VIEWS.includes(v)) v="home";
-  document.querySelectorAll(".view").forEach(s=>s.classList.toggle("on",s.id==="v-"+v));
-  const navKey = v==="lesson" ? (LESSONS.find(l=>l.id===arg)?.track==="ai"?"ai":"learn") : v==="practice"?"ai":v;
-  document.querySelectorAll("nav.bar a").forEach(a=>a.classList.toggle("on",a.dataset.nav===navKey&&navKey!=="help"));
+  if(typeof trialToken!=="undefined"&&!trialToken&&v!=="staff"&&$("#gate").hidden) lockGate();
+  const viewId = v==="ai"?"learn":v;
+  $$(".view").forEach(s=>s.classList.toggle("on",s.id==="v-"+viewId));
+  const navKey = ["learn","ai","lesson","practice"].includes(v)?"learn":v;
+  $$("nav.tabs a").forEach(a=>{const on=a.dataset.nav===navKey&&navKey!=="help";a.classList.toggle("on",on);on?a.setAttribute("aria-current","page"):a.removeAttribute("aria-current")});
+  if(v==="learn"||v==="ai") renderLearn(v==="ai"?"ai":"cyber");
   if(v==="lesson") renderLesson(arg);
+  if(v==="home") renderHome();
   if(v==="staff") loadStaff();
-  try{speechSynthesis.cancel()}catch(e){}
+  stopSpeak();
   window.scrollTo(0,0);
 }
 window.addEventListener("hashchange",route);
 
-/* ---------- SERVER API ---------- */
-const api = async (path, opts={}) => { const r = await fetch(path, {headers:{'Content-Type':'application/json',...(opts.headers||{})},...opts}); if(!r.ok) throw new Error(r.status); return r.json(); };
-let uid = LS.get("uid",null); if(!uid){ uid = (crypto.randomUUID ? crypto.randomUUID() : 'u'+Date.now()+Math.random().toString(36).slice(2)); LS.set("uid",uid); }
+/* ---------- SERVER CONNECTION ---------- */
+let uid = LS.get("uid",null); if(!uid){ uid=(window.crypto&&crypto.randomUUID)?crypto.randomUUID():"u"+Date.now().toString(36)+Math.random().toString(36).slice(2,10); LS.set("uid",uid); }
+let trialToken = (()=>{ try{ return sessionStorage.getItem("gs_token")||"" }catch(e){ return "" } })();
 let aiOn=false;
-api('/api/config').then(c=>{ aiOn=!!c.ai; if(aiOn) $("#imgWrap").style.display="block"; else $("#chatNote").textContent="The AI helper isn't switched on yet. You can still read all the AI lessons."; }).catch(()=>{});
+async function api(path,opts={}){
+  const headers=Object.assign({"content-type":"application/json","x-uid":uid,"x-trial-token":trialToken},opts.headers||{});
+  const r=await fetch(path,Object.assign({},opts,{headers}));
+  let body=null; try{ body=await r.json() }catch(e){}
+  if(!r.ok){ const err=new Error((body&&body.error)||("HTTP "+r.status)); err.status=r.status; throw err }
+  return body;
+}
+function afterSignIn(){
+  api("/api/config").then(c=>{ aiOn=!!(c&&c.ai); $("#imgWrap").hidden=!aiOn; $("#chatNote").textContent=aiOn?"":"The AI helper isn't switched on yet. You can still read all the AI lessons."; }).catch(()=>{});
+  loadMine();
+  api("/api/bookings/mine").then(b=>{ if(b&&b.sessions){ myBookings=b.sessions; LS.set("bookings",myBookings); renderSessions(); } }).catch(()=>{});
+}
 
 /* ---------- HELP REQUESTS ---------- */
 let myReqData={items:[]};
-async function loadMine(){ try{ myReqData = await api('/api/requests/mine?uid='+encodeURIComponent(uid)); renderMyReqs(); }catch(e){} }
-loadMine(); setInterval(()=>{ if(location.hash==='#help') loadMine(); }, 30000);
-api('/api/bookings/mine?uid='+encodeURIComponent(uid)).then(b=>{ if(b&&b.sessions){ myBookings=b.sessions; LS.set("bookings",myBookings); renderSessions(); } }).catch(()=>{});
-const STATUS={new:["Received","pill"],progress:["We're working on it","pill"],done:["Sorted ✓","pill done"]};
+async function loadMine(){ try{ myReqData=await api("/api/requests/mine"); renderMyReqs(); }catch(e){} }
+const STATUS={new:["Received","chip"],progress:["We're working on it","chip"],done:["Sorted","chip good"]};
 function renderMyReqs(){
   const items=(myReqData.items||[]).slice().reverse();
   if(!items.length){$("#myReqs").innerHTML="";return}
-  $("#myReqs").innerHTML=`<h2>My help requests</h2>`+items.map(r=>{const st=STATUS[r.status]||STATUS.new;const t=TOPICS.find(x=>x[0]===r.topic);return `<div class="card"><span class="${st[1]}">${st[0]}</span><h3 style="margin-top:8px">${t?t[1]+" "+esc(t[2]):"Help request"}</h3><p class="muted" style="margin:0">Sent ${new Date(r.created).toLocaleString("en-AU",{weekday:"short",day:"numeric",month:"short",hour:"numeric",minute:"2-digit"})}</p>${r.reply?`<p><b>Our reply:</b> ${esc(r.reply)}</p>`:""}</div>`}).join("");
+  $("#myReqs").innerHTML=`<h2 class="sec">My help requests</h2>`+items.map(r=>{const st=STATUS[r.status]||STATUS.new;const t=TOPICS.find(x=>x[0]===r.topic);return `<div class="card"><span class="${st[1]}">${st[0]}</span><h3>${t?esc(t[2]):"Help request"}</h3><p class="muted">Sent ${new Date(r.created).toLocaleString("en-AU",{weekday:"short",day:"numeric",month:"short",hour:"numeric",minute:"2-digit"})}</p></div>`}).join("");
 }
 $("#helpForm").addEventListener("submit",async e=>{
   e.preventDefault();
   const name=$("#hName").value.trim();
-  if(!chosenTopic){toast("Please tap what you need help with.");return}
+  if(!chosenTopic){toast("Please tap what you need help with.");$("#helpTopics").scrollIntoView({behavior:"smooth",block:"center"});return}
   if(!name){toast("Please type your name.");$("#hName").focus();return}
   const req={topic:chosenTopic,name,room:$("#hRoom").value.trim(),phone:$("#hPhone").value.trim(),how:$("#hHow").value,urgency:$("#hUrg").value,message:$("#hMsg").value.trim().slice(0,2000)};
   const btn=$("#hSubmit"); btn.disabled=true; btn.textContent="Sending…";
-  let sent=false; try{ await api('/api/requests',{method:'POST',body:JSON.stringify({uid,...req})}); sent=true; }catch(err){}
-  btn.disabled=false; btn.textContent="Send my help request";
+  let sent=false; try{ await api("/api/requests",{method:"POST",body:JSON.stringify(req)}); sent=true; }catch(err){ if(err.status===401){ toast("Please sign in again."); lockGate(); } }
+  btn.disabled=false; btn.innerHTML=ic("send")+" Send my help request";
   if(sent){
-    $("#hNote").innerHTML="✅ <b>Thank you, "+esc(name)+".</b> Your request has been sent. Someone from our team will contact you "+(req.urgency==="urgent"?"today.":"soon.")+(req.topic==="scammed"?" If money has left your account, please also call your bank now.":"");
-    toast("Help request sent ✓"); $("#hMsg").value=""; chosenTopic=null; renderTopics(); loadMine();
+    $("#hNote").innerHTML="<b>Thank you, "+esc(name)+".</b> Your request has been sent to our team. Someone will contact you "+(req.urgency==="urgent"?"today.":"soon.")+(req.topic==="scammed"?" If money has left your account, please also call your bank now.":"");
+    toast("Help request sent"); $("#hMsg").value=""; chosenTopic=null; renderTopics(); loadMine();
   } else {
-    $("#hNote").innerHTML="⚠️ We couldn't send this online right now. <b>Please call us on 1300 737 562</b> and we'll help straight away.";
+    $("#hNote").innerHTML="We couldn't send this online right now. <b>Please call us on 1300 737 562</b> and we'll help straight away.";
   }
 });
+$("#hName").addEventListener("change",()=>{LS.set("name",$("#hName").value.trim());greet()});
 
 /* ---------- BOOKINGS ---------- */
 async function book(id,on){
   const s=SESSIONS.find(x=>x.id===id); const next={...myBookings};
   if(on) next[id]={booked:new Date().toISOString(),title:s.title,date:s.date}; else delete next[id];
   myBookings=next; LS.set("bookings",next); renderSessions();
-  try{ await api('/api/bookings',{method:'POST',body:JSON.stringify({uid,name:$("#hName").value.trim()||LS.get("name",""),sessions:next})}); }catch(e){}
-  toast(on?`You're booked in for ${s.title} 🎉`:"Booking cancelled");
+  try{ await api("/api/bookings",{method:"POST",body:JSON.stringify({name:$("#hName").value.trim()||LS.get("name",""),sessions:next})}); toast(on?`You're booked in for ${s.title}`:"Booking cancelled"); }
+  catch(e){ toast(on?"Saved on this device, but we couldn't reach our team. Please call 1300 737 562 to confirm.":"Booking cancelled on this device.") }
 }
 
 /* ---------- SCAM CHECKER ---------- */
+$("#examples").innerHTML=EXAMPLES.map((x,i)=>`<button type="button" class="ex" data-ex="${i}">${esc(x[0])}</button>`).join("");
+$$("[data-ex]").forEach(b=>b.onclick=()=>{$("#chkText").value=EXAMPLES[+b.dataset.ex][1];$("#chkText").focus()});
 function ruleCheck(t){
   const x=t.toLowerCase(); const r=[];
-  if(/https?:\/\/|www\.|\.com|\.au\/|bit\.ly|tinyurl/.test(x)) r.push("It contains a link. Real companies rarely ask you to tap a link to pay or verify.");
+  if(/https?:\/\/|www\.|\.com|\.au\/|\.info|bit\.ly|tinyurl/.test(x)) r.push("It contains a link. Real companies rarely ask you to tap a link to pay or verify.");
   if(/urgent|immediately|within 24|today only|suspend|locked|final notice|act now|arrest|warrant/.test(x)) r.push("It tries to rush or scare you.");
   if(/gift card|itunes|google play card|bitcoin|crypto|western union|wire/.test(x)) r.push("It asks for payment in a way scammers love (gift cards or crypto).");
   if(/code|pin|password|one-time|otp|verify your|confirm your details|login/.test(x)) r.push("It asks for codes, passwords or to 'verify' your details.");
-  if(/hi mum|hi mom|hi dad|new number|lost my phone/.test(x)) r.push("It looks like a 'Hi Mum' family impersonation message.");
+  if(/hi mum|hi mom|hi dad|new number|lost my phone|dropped my phone/.test(x)) r.push("It looks like a 'Hi Mum' family impersonation message.");
   if(/won|winner|prize|lottery|refund|rebate|guaranteed|investment|return/.test(x)) r.push("It promises a prize, refund or money that seems too good to be true.");
   if(/remote|anydesk|teamviewer|virus|microsoft|tech support/.test(x)) r.push("It mentions fixing your computer or remote access — a common tech-support scam.");
   const verdict = r.length>=2?"likely_scam":r.length===1?"suspicious":"unsure";
-  return {verdict,headline: verdict==="likely_scam"?"This looks like a scam":verdict==="suspicious"?"Be careful — this looks suspicious":"We couldn't find obvious warning signs",reasons:r.length?r:["No common warning signs were found — but scammers keep changing their tricks."],whatToDo:["Don't tap links or call numbers in the message.","Contact the company using a number you find yourself.","If unsure, press I Need Help and we'll check it with you."]};
+  return {verdict,headline: verdict==="likely_scam"?"This looks like a scam":verdict==="suspicious"?"Be careful — this looks suspicious":"We couldn't find obvious warning signs",reasons:r.length?r:["No common warning signs were found — but scammers keep changing their tricks."],whatToDo:["Don't tap links or call numbers in the message.","Contact the company using a number you find yourself.","If unsure, press I need help and we'll check it with you."]};
 }
 function showVerdict(v,viaAI){
   const cls=v.verdict==="likely_scam"?"bad":v.verdict==="looks_ok"?"ok":"warn";
-  const ic=cls==="bad"?"🚫":cls==="ok"?"✅":"⚠️";
-  $("#chkOut").innerHTML=`<div class="verdict ${cls}"><h2>${ic} ${esc(v.headline)}</h2><h3>Why</h3><ul>${(v.reasons||[]).map(r=>`<li>${esc(r)}</li>`).join("")}</ul><h3>What to do</h3><ul>${(v.whatToDo||[]).map(r=>`<li>${esc(r)}</li>`).join("")}</ul><div class="row"><button class="btn secondary" id="vRead">🔊 Read it to me</button><a class="btn" href="#help">Ask a person to check</a></div><p class="muted" style="margin-top:10px">${viaAI?"Checked by AI.":"Checked using common warning signs."} Guidance only — when in doubt, don't click and ask someone.</p></div>`;
+  const icn=cls==="bad"?"stop":cls==="ok"?"ok":"alert";
+  $("#chkOut").innerHTML=`<div class="verdict ${cls}"><h2>${ic(icn)} ${esc(v.headline)}</h2><h3>Why</h3><ul>${(v.reasons||[]).map(r=>`<li>${esc(r)}</li>`).join("")}</ul><h3>What to do</h3><ul>${(v.whatToDo||[]).map(r=>`<li>${esc(r)}</li>`).join("")}</ul><div class="btns"><button class="btn ghost" id="vRead">${ic("speaker")} Read it to me</button><a class="btn" href="#help">Ask a person to check</a></div><p class="muted">${viaAI?"Checked by AI.":"Checked using common warning signs."} Guidance only. When in doubt, don't click, and ask someone.</p></div>`;
   $("#vRead").onclick=()=>speak([v.headline,...(v.reasons||[]),"What to do.",...(v.whatToDo||[])].join(". "));
+  $("#chkOut").scrollIntoView({behavior:"smooth",block:"start"});
 }
+function fileToBase64(f){ return new Promise((res,rej)=>{ const r=new FileReader(); r.onload=()=>res(String(r.result).split(",")[1]||""); r.onerror=rej; r.readAsDataURL(f); }) }
 $("#chkClear").onclick=()=>{$("#chkText").value="";$("#chkOut").innerHTML="";const f=$("#chkImg");if(f)f.value=""};
-const toB64 = f => new Promise((res,rej)=>{const r=new FileReader(); r.onload=()=>res(String(r.result).split(',')[1]); r.onerror=rej; r.readAsDataURL(f);});
 $("#chkBtn").onclick=async()=>{
   const t=$("#chkText").value.trim(); const file=$("#chkImg")&&$("#chkImg").files[0];
-  if(!t&&!file){toast("Paste a message or add a screenshot first.");return}
+  if(!t&&!file){toast("Paste a message, or tap an example first.");return}
   const btn=$("#chkBtn"); btn.disabled=true; btn.textContent="Checking…";
-  $("#chkOut").innerHTML=`<div class="card">🔍 Having a careful look…</div>`;
+  $("#chkOut").innerHTML=`<div class="card">Having a careful look…</div>`;
   let result=null;
-  if(aiOn){ try{ const body={text:t}; if(file&&file.size<4.5e6){ body.image=await toB64(file); body.mediaType=file.type||'image/png'; }
-      const r=await api('/api/check',{method:'POST',body:JSON.stringify(body)}); if(r&&r.verdict){ result=r; showVerdict(r,true);} }catch(e){} }
-  if(!result){ if(!t){$("#chkOut").innerHTML=`<div class="card">We couldn't read the screenshot right now. Please paste the words instead, or press <a href="#help">I Need Help</a>.</div>`} else showVerdict(ruleCheck(t),false) }
-  btn.disabled=false; btn.textContent="Check it for me";
+  if(aiOn&&aiQuota().n<AI_DAILY){
+    aiSpend();
+    try{
+      const body={text:redactStrict(t).slice(0,3000)};
+      if(file&&file.size<5e6){ body.image=await fileToBase64(file); body.mediaType=file.type; }
+      const r=await api("/api/check",{method:"POST",body:JSON.stringify(body)});
+      if(r&&r.verdict){ result=r; showVerdict(r,true); }
+    }catch(e){ result=null }
+  }
+  if(!result){ if(!t){$("#chkOut").innerHTML=`<div class="card">We couldn't read the screenshot right now. Please paste the words instead, or press <a href="#help">I need help</a>.</div>`} else showVerdict(ruleCheck(t),false) }
+  btn.disabled=false; btn.innerHTML=ic("search")+" Check it for me";
 };
+
+/* ---------- AI GUARDRAILS (the server applies the same rules again) ---------- */
+const PII=[
+ {re:/\b\d(?:[ -]?\d){12,18}\b/g,label:"a card or account number",strict:true},
+ {re:/\b\d{4}[ -]?\d{5}[ -]?\d(?:[ -]?\d)?\b/g,label:"a Medicare number",strict:true},
+ {re:/\b\d{3}[ -]?\d{3}[ -]?\d{3}\b/g,label:"a tax file number",strict:true},
+ {re:/\bBSB\b[^\n]{0,20}|\b\d{3}-\d{3}\b/gi,label:"bank details",strict:true},
+ {re:/\b(?:password|passcode|passphrase|pin|code)\s*(?:is|was|=|:)\s*\S+/gi,label:"a password, PIN or code",strict:true},
+ {re:/\b\d{1,5}[a-z]?\s+(?:[A-Z][a-z]+\s){1,3}(?:street|st|road|rd|avenue|ave|court|crt|ct|drive|dr|lane|ln|place|pl|crescent|cres|parade|pde|way|close|grove|terrace|tce)\b/gi,label:"a street address",strict:true},
+ {re:/[\w.+-]+@[\w-]+\.[\w.]+/g,label:"an email address",strict:false},
+ {re:/(?:\+?61\s?|\b0)[2-478](?:[ -]?\d){8}\b/g,label:"a phone number",strict:false}
+];
+function findPII(t){ for(const p of PII){ p.re.lastIndex=0; if(p.re.test(t)) return p.label } return null }
+function redactStrict(t){ let x=t; PII.filter(p=>p.strict).forEach(p=>{p.re.lastIndex=0;x=x.replace(p.re,"[removed]")}); return x }
+const SAFE_SITES=/(?:^|\.)(scamwatch\.gov\.au|esafety\.gov\.au|cyber\.gov\.au|moneysmart\.gov\.au|idcare\.org|codeblackgroup\.com\.au|my\.gov\.au|servicesaustralia\.gov\.au)$/i;
+const SAFE_NUMS=["000","1300737562","1800595160","1300292371"];
+function cleanOut(t){
+  return String(t||"")
+   .replace(/\b(?:https?:\/\/)?(?:www\.)?((?:[a-z0-9-]+\.)+[a-z]{2,})(\/[^\s)]*)?/gi,(m,host)=>/@/.test(m)||/^\d/.test(host)?m:(SAFE_SITES.test(host)?m:"[link removed]"))
+   .replace(/(?:\+?61\s?|\b0|\b1[38]00)[\d -]{6,12}\d\b/g,m=>SAFE_NUMS.includes(m.replace(/\D/g,""))?m:"[number removed]");
+}
+function aiQuota(){ const d=new Date().toLocaleDateString("en-CA"); const q=LS.get("aiq",{d,n:0}); return q.d===d?q:{d,n:0} }
+function aiSpend(){ const q=aiQuota(); q.n++; LS.set("aiq",q); return q.n }
+const AI_DAILY=40;
 
 /* ---------- AI PRACTICE ---------- */
 const STARTERS=["What is AI, in simple words?","Help me write a birthday message for my granddaughter","How do I make a video call?","Give me an easy recipe with eggs and spinach"];
 let convo=[];
-function renderChat(){ $("#chat").innerHTML=convo.map(m=>`<div class="msg ${m.role==="user"?"me":"ai"}">${esc(m.content)}</div>`).join(""); $("#chat").scrollTop=1e6 }
-$("#starters").innerHTML=STARTERS.map(s=>`<button class="btn secondary" style="min-height:48px;font-size:.85rem;padding:0 14px" data-s="${esc(s)}">${esc(s)}</button>`).join("");
-document.querySelectorAll("[data-s]").forEach(b=>b.onclick=()=>{$("#chatIn").value=b.dataset.s;sendChat()});
+function renderChat(){ $("#chat").innerHTML=convo.map(m=>`<div class="msg ${m.role==="user"?"me":"ai"}">${esc(m.role==="user"?m.content:cleanOut(m.content))}</div>`).join(""); $("#chat").scrollTop=1e6; $("#startWrap").hidden=convo.length>0 }
+$("#starters").innerHTML=STARTERS.map(s=>`<button class="starter" data-s="${esc(s)}">${ic("chat")}<span>${esc(s)}</span></button>`).join("");
+$$("[data-s]").forEach(b=>b.onclick=()=>{$("#chatIn").value=b.dataset.s;sendChat()});
 $("#chatSend").onclick=sendChat;
 async function sendChat(){
   const q=$("#chatIn").value.trim(); if(!q) return;
   if(!aiOn){toast("The AI helper isn't switched on yet.");return}
-  if(/\b\d{4}[ -]?\d{4}[ -]?\d{4}[ -]?\d{4}\b|\b\d{10}\b|password/i.test(q)){ toast("That looks like private information. Please don't share it with AI."); }
-  convo.push({role:"user",content:q}); $("#chatIn").value=""; convo.push({role:"assistant",content:"…"}); renderChat();
-  try{ const r=await api('/api/chat',{method:'POST',body:JSON.stringify({messages:convo.slice(0,-1).slice(-12)})}); convo[convo.length-1].content=r.text||"Sorry, I couldn't answer just now."; }
-  catch(e){ convo[convo.length-1].content= String(e.message)==='429' ? "I need a little rest — please try again in a minute." : "Sorry, I couldn't answer just now. Please try again later."; }
+  const pii=findPII(q);
+  if(pii){ $("#chatNote").innerHTML=`<b>Not sent.</b> Your message looks like it includes ${pii}. For your safety, Goldie never receives personal details. Please take it out and try again.`; return }
+  if(aiQuota().n>=AI_DAILY){ $("#chatNote").textContent="You've reached today's limit for Goldie. Please come back tomorrow, or press I need help to talk to a person."; return }
+  aiSpend(); $("#chatNote").textContent="";
+  convo.push({role:"user",content:q.slice(0,500)}); $("#chatIn").value=""; convo.push({role:"assistant",content:"…"}); renderChat();
+  try{
+    const r=await api("/api/chat",{method:"POST",body:JSON.stringify({messages:convo.slice(0,-1).slice(-8)})});
+    convo[convo.length-1].content=(r&&r.text)||"Sorry, I couldn't answer just now.";
+  }catch(e){
+    convo[convo.length-1].content= e.status===429?"I need a little rest — please try again in a minute.":e.status===422?"For your safety I can't take personal details. Please ask again without them.":"Sorry, I couldn't answer just now. Please try again later.";
+  }
   renderChat();
 }
 
 /* ---------- STAFF ---------- */
-let staffKey = (()=>{ try{ return sessionStorage.getItem('gs_staff')||'' }catch(e){ return '' } })();
+let staffKey=(()=>{ try{ return sessionStorage.getItem("gs_staff")||"" }catch(e){ return "" } })();
 async function loadStaff(){
   const body=$("#staffBody");
   if(!staffKey){
-    body.innerHTML=`<div class="card"><form id="staffLogin"><label for="sk">Staff password</label><input type="text" id="sk" autocomplete="current-password" style="-webkit-text-security:disc"><div style="margin-top:12px"><button class="btn" type="submit">Open dashboard</button></div><p id="skNote" class="muted"></p></form></div>`;
-    $("#staffLogin").onsubmit=async e=>{ e.preventDefault(); staffKey=$("#sk").value.trim(); try{ await staffDraw(); try{sessionStorage.setItem('gs_staff',staffKey)}catch(_){} }catch(err){ staffKey=''; $("#skNote").textContent="That password didn't work."; } };
+    body.innerHTML=`<form class="card" id="staffLogin"><div class="field"><label for="sk">Staff password</label><input type="text" id="sk" autocomplete="current-password" style="-webkit-text-security:disc"></div><button class="btn" type="submit">Open dashboard</button><p id="skNote" class="err"></p></form>`;
+    $("#staffLogin").onsubmit=async e=>{ e.preventDefault(); staffKey=$("#sk").value.trim(); try{ await staffDraw(); try{sessionStorage.setItem("gs_staff",staffKey)}catch(_){} }catch(err){ staffKey=""; $("#skNote").textContent="That password didn't work."; } };
     return;
   }
-  try{ await staffDraw(); }catch(e){ staffKey=''; try{sessionStorage.removeItem('gs_staff')}catch(_){} loadStaff(); }
+  try{ await staffDraw(); }catch(e){ staffKey=""; try{sessionStorage.removeItem("gs_staff")}catch(_){} loadStaff(); }
 }
 async function staffDraw(){
   const body=$("#staffBody");
-  const d=await api('/api/staff/overview',{headers:{'x-staff-key':staffKey}});
-  const all=d.requests; const counts=d.bookings;
-  all.sort((a,b)=>(a.status==="done")-(b.status==="done")||(b.urgency==="urgent")-(a.urgency==="urgent")||b.created.localeCompare(a.created));
+  const d=await api("/api/staff/overview",{headers:{"x-staff-key":staffKey}});
+  const all=(d.requests||[]).slice().sort((a,b)=>(a.status==="done")-(b.status==="done")||(b.urgency==="urgent")-(a.urgency==="urgent")||String(b.created).localeCompare(String(a.created)));
   const open=all.filter(r=>r.status!=="done").length, urgent=all.filter(r=>r.status!=="done"&&r.urgency==="urgent").length;
-  body.innerHTML=`<div class="grid"><div class="card"><h3>Open requests</h3><p style="font-size:2rem;margin:0"><b>${open}</b></p></div><div class="card"><h3>Urgent</h3><p style="font-size:2rem;margin:0;color:var(--bad)"><b>${urgent}</b></p></div></div>
-  <div class="row"><button class="btn secondary" id="staffRefresh">Refresh</button></div>
-  <div class="card" style="overflow-x:auto"><h2 style="margin-top:0">Help requests</h2>${all.length?`<table><tr><th>Who</th><th>Need</th><th>Details</th><th>Status</th></tr>${all.map(r=>{const t=TOPICS.find(x=>x[0]===r.topic);return `<tr><td><b>${esc(r.name)}</b><br>${esc(r.room)}<br>${esc(r.phone)}</td><td>${t?t[1]+" "+esc(t[2]):""}<br><span class="pill" style="${r.urgency==="urgent"?"background:var(--bad-soft);color:var(--bad)":""}">${esc(r.urgency)}</span><br><small>${esc(r.how)}</small></td><td>${esc(r.message)}<br><small class="muted">${new Date(r.created).toLocaleString("en-AU")}</small></td><td><select data-u="${esc(r.uid)}" data-r="${esc(r.id)}" style="min-height:44px;padding:6px"><option value="new"${r.status==="new"?" selected":""}>New</option><option value="progress"${r.status==="progress"?" selected":""}>In progress</option><option value="done"${r.status==="done"?" selected":""}>Done</option></select></td></tr>`}).join("")}</table>`:`<p class="muted">No help requests yet.</p>`}</div>
-  <div class="card"><h2 style="margin-top:0">Session bookings</h2><table>${SESSIONS.map(s=>`<tr><td><b>${esc(s.title)}</b><br><small>${fmtDate(s.date).full} ${s.time}</small></td><td>${(counts[s.id]||[]).length} booked<br><small>${esc((counts[s.id]||[]).join(", "))}</small></td></tr>`).join("")}</table></div>`;
+  const counts=d.bookings||{};
+  const trials=(d.trials||[]).slice().sort((a,b)=>String(b.lastSeen||b.created).localeCompare(String(a.lastSeen||a.created)));
+  const em=d.email||{};
+  body.innerHTML=`<div class="card"><h2>Email alerts</h2><p>${em.ready?`Sending to <b>${esc((em.to||[]).join(", "))}</b> using ${esc(em.method)}.`:`<span class="err">Not set up yet.</span> Sign-ins and requests are saved here but not emailed.`}${em.waiting?` <b>${em.waiting}</b> email(s) waiting to retry.`:""}</p><div class="btns"><button class="btn ghost" id="testEmail">Send a test email</button><button class="btn ghost" id="staffRefresh">Refresh</button></div></div>
+  <div class="statgrid"><div class="card"><span class="muted">Open requests</span><span class="big">${open}</span></div><div class="card"><span class="muted">Urgent</span><span class="big" style="color:var(--bad)">${urgent}</span></div></div>
+  <div class="card"><h2>Trial sign-ups (${trials.length})</h2>${trials.length?`<div class="tablewrap"><table><tr><th>Who</th><th>Organisation</th><th>Contact</th><th>Visits</th></tr>${trials.map(t=>`<tr><td><b>${esc(t.name)}</b><br><small>${esc(t.role)}</small></td><td>${esc(t.org)}</td><td>${esc(t.email)}<br>${esc(t.phone)}<br><small>${t.contactOk?"Happy to be contacted":"No contact consent"}<br>${t.termsAccepted?"Agreed to trial terms v"+esc(t.termsVersion||"1"):"Terms not recorded"}<br>${t.emailed===false?"Email not sent yet":t.emailed?"Emailed to team":""}</small></td><td>${t.visits||1}<br><small class="muted">First ${new Date(t.created).toLocaleDateString("en-AU")}<br>Last ${new Date(t.lastSeen||t.created).toLocaleDateString("en-AU")}</small></td></tr>`).join("")}</table></div>`:`<p class="muted">No trial sign-ups yet.</p>`}</div>
+  <div class="card"><h2>Help requests</h2>${all.length?`<div class="tablewrap"><table><tr><th>Who</th><th>Need</th><th>Details</th><th>Status</th></tr>${all.map(r=>{const t=TOPICS.find(x=>x[0]===r.topic);return `<tr><td><b>${esc(r.name)}</b><br>${esc(r.room)}<br>${esc(r.phone)}</td><td>${t?esc(t[2]):""}<br><span class="chip ${r.urgency==="urgent"?"bad":""}">${esc(r.urgency)}</span><br><small>${esc(r.how)}</small></td><td>${esc(r.message)}<br><small class="muted">${new Date(r.created).toLocaleString("en-AU")}</small></td><td><select data-u="${esc(r.uid)}" data-r="${esc(r.id)}" style="min-height:44px;padding:6px"><option value="new"${r.status==="new"?" selected":""}>New</option><option value="progress"${r.status==="progress"?" selected":""}>In progress</option><option value="done"${r.status==="done"?" selected":""}>Done</option></select></td></tr>`}).join("")}</table></div>`:`<p class="muted">No help requests yet.</p>`}</div>
+  <div class="card"><h2>Class bookings</h2><div class="tablewrap"><table>${SESSIONS.map(s=>`<tr><td><b>${esc(s.title)}</b><br><small>${fmtDate(s.date).full} ${s.time}</small></td><td>${(counts[s.id]||[]).length} booked<br><small>${esc((counts[s.id]||[]).join(", "))}</small></td></tr>`).join("")}</table></div></div>`;
   $("#staffRefresh").onclick=()=>staffDraw().catch(()=>toast("Couldn't refresh"));
+  $("#testEmail").onclick=async()=>{ try{ await api("/api/staff/test-email",{method:"POST",headers:{"x-staff-key":staffKey}}); toast("Test email sent. Check the inbox."); }catch(e){ toast("Test email failed: "+e.message) } };
   body.querySelectorAll("select[data-u]").forEach(sel=>sel.onchange=async()=>{
-    try{ await api('/api/staff/requests',{method:'PATCH',headers:{'x-staff-key':staffKey},body:JSON.stringify({uid:sel.dataset.u,id:sel.dataset.r,status:sel.value})}); toast("Status updated"); }catch(e){ toast("Couldn't update — please try again"); }
+    try{ await api("/api/staff/requests",{method:"PATCH",headers:{"x-staff-key":staffKey},body:JSON.stringify({uid:sel.dataset.u,id:sel.dataset.r,status:sel.value})}); toast("Status updated"); }catch(e){ toast("Couldn't update. Please try again.") }
   });
 }
 
+/* ---------- TRIAL GATE ---------- */
+const PROVENANCE="GS-CBG-WATTLE-7Q4K-2611 · the shield remembers its maker · (c) Code Black Group Global Pty Ltd";
+document.body.dataset.gsMark="7Q4K-WATTLE";
+const TERMS_VERSION="1 (2026-11-20)";
+function unlock(){ $("#gate").hidden=true; document.body.classList.remove("locked"); }
+// Password is needed for every new visit: the pass lasts only for this browser tab.
+try{ localStorage.removeItem("gs_trial") }catch(e){}
+function lockGate(){
+  trialToken=""; try{ sessionStorage.removeItem("gs_token") }catch(e){}
+  ["gName","gOrg","gEmail","gPhone","gRole","gPass"].forEach(id=>$("#"+id).value="");
+  $("#gTerms").checked=false; $("#gOk").checked=false; $("#gErr").textContent="";
+  const b=$("#gGo"); b.disabled=false; b.innerHTML="Start my trial "+ic("right");
+  $("#gate").hidden=false; document.body.classList.add("locked"); setTimeout(()=>$("#gName").focus(),50);
+}
+const staffRoute=location.hash==="#staff";
+if(trialToken){ unlock(); afterSignIn(); } else if(staffRoute){ unlock(); } else { LS.set("name",""); lockGate(); }
+$("#gateForm").addEventListener("submit",async e=>{
+  e.preventDefault();
+  const t={name:$("#gName").value.trim(),org:$("#gOrg").value.trim(),email:$("#gEmail").value.trim(),phone:$("#gPhone").value.trim(),role:$("#gRole").value.trim(),contactOk:$("#gOk").checked,termsAccepted:$("#gTerms").checked,termsVersion:TERMS_VERSION};
+  const err=$("#gErr");
+  if(!t.name){err.textContent="Please type your name.";$("#gName").focus();return}
+  if(!t.org){err.textContent="Please type your organisation or facility.";$("#gOrg").focus();return}
+  if(!/^\S+@\S+\.\S+$/.test(t.email)&&!t.phone){err.textContent="Please add an email or phone number so we can follow up.";$("#gEmail").focus();return}
+  if(!t.termsAccepted){err.textContent="Please read and agree to the trial terms to continue.";$("#gTerms").focus();return}
+  if(!$("#gPass").value.trim()){err.textContent="Please type the trial password.";$("#gPass").focus();return}
+  err.textContent=""; const btn=$("#gGo"); btn.disabled=true; btn.textContent="Starting…";
+  try{
+    const r=await api("/api/trial",{method:"POST",body:JSON.stringify(Object.assign({uid,password:$("#gPass").value.trim()},t))});
+    trialToken=r.token||""; try{ sessionStorage.setItem("gs_token",trialToken) }catch(x){}
+  }catch(x){
+    btn.disabled=false; btn.innerHTML="Start my trial "+ic("right");
+    err.textContent = x.status===401?"That trial password isn't right. Check it with your Code Black Group contact."
+      : x.status===429?"Too many tries. Please wait a few minutes and try again."
+      : x.status===400?"Please check your details and try again."
+      : "We couldn't connect just now. Please check your internet and try again, or call 1300 737 562.";
+    if(x.status===401) $("#gPass").focus();
+    return;
+  }
+  if(LS.get("lastUser","")!==t.name.toLowerCase()){ done={}; LS.set("done",{}); myBookings={}; LS.set("bookings",{}); renderHome(); renderSessions(); }
+  LS.set("lastUser",t.name.toLowerCase());
+  $("#hRoom").value=""; $("#hMsg").value=""; myReqData={items:[]}; renderMyReqs();
+  LS.set("name",t.name); $("#hName").value=t.name; if(t.phone) $("#hPhone").value=t.phone; greet();
+  unlock(); toast("Welcome, "+t.name.split(" ")[0]+". Enjoy your trial.");
+  afterSignIn();
+});
+
+$("#signOut").onclick=()=>{
+  stopSpeak(); LS.set("name",""); $("#hName").value=""; $("#hPhone").value=""; $("#hRoom").value=""; $("#hMsg").value="";
+  myReqData={items:[]}; renderMyReqs();
+  $("#sheet").hidden=true; greet(); go("home"); lockGate();
+};
+
 /* ---------- START ---------- */
-const hr=new Date().getHours();
-$("#greet").textContent=(hr<12?"Good morning":hr<17?"Good afternoon":"Good evening")+" 👋";
-$("#hName").addEventListener("change",()=>LS.set("name",$("#hName").value.trim()));
 $("#hName").value=LS.get("name","");
-applyDisplay(); renderLists(); renderSessions(); renderVideos(); renderPhones(); renderTopics(); route();
+greet(); applyDisplay(); renderVoices(); renderHome(); renderSessions(); renderVideos(); renderPhones(); renderTopics(); route();
 </script>
 </body>
 </html>
