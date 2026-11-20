@@ -37,10 +37,40 @@ if (SMTP_HOST) {
     auth: SMTP_USER ? { user: SMTP_USER, pass: env('SMTP_PASS') } : undefined,
   });
 }
-const mailReady = () => !!(RESEND_API_KEY || transporter);
-const mailMethod = () => (RESEND_API_KEY ? 'Resend' : transporter ? 'SMTP (' + SMTP_HOST + ')' : 'not set up');
+// Microsoft 365 via Microsoft Graph (HTTPS). Works on Render's free plan, which blocks SMTP ports.
+const MS_TENANT_ID = env('MS_TENANT_ID'), MS_CLIENT_ID = env('MS_CLIENT_ID'), MS_CLIENT_SECRET = env('MS_CLIENT_SECRET');
+const MS_SENDER = env('MS_SENDER') || SMTP_USER;
+const graphReady = () => !!(MS_TENANT_ID && MS_CLIENT_ID && MS_CLIENT_SECRET && MS_SENDER);
+let graphToken = { value: '', expires: 0 };
+async function graphAccessToken() {
+  if (graphToken.value && Date.now() < graphToken.expires - 60e3) return graphToken.value;
+  const r = await fetch(`https://login.microsoftonline.com/${encodeURIComponent(MS_TENANT_ID)}/oauth2/v2.0/token`, {
+    method: 'POST',
+    headers: { 'content-type': 'application/x-www-form-urlencoded' },
+    body: new URLSearchParams({ client_id: MS_CLIENT_ID, client_secret: MS_CLIENT_SECRET, scope: 'https://graph.microsoft.com/.default', grant_type: 'client_credentials' }),
+  });
+  const j = await r.json().catch(() => ({}));
+  if (!r.ok || !j.access_token) throw new Error('microsoft sign-in ' + r.status + ' ' + (j.error_description || j.error || '').slice(0, 200));
+  graphToken = { value: j.access_token, expires: Date.now() + (j.expires_in || 3600) * 1000 };
+  return graphToken.value;
+}
+const mailReady = () => !!(graphReady() || RESEND_API_KEY || transporter);
+const mailMethod = () => (graphReady() ? 'Microsoft 365 (' + MS_SENDER + ')' : RESEND_API_KEY ? 'Resend' : transporter ? 'SMTP (' + SMTP_HOST + ')' : 'not set up');
 
 async function sendMailNow(subject, html) {
+  if (graphReady()) {
+    const token = await graphAccessToken();
+    const r = await fetch(`https://graph.microsoft.com/v1.0/users/${encodeURIComponent(MS_SENDER)}/sendMail`, {
+      method: 'POST',
+      headers: { Authorization: 'Bearer ' + token, 'content-type': 'application/json' },
+      body: JSON.stringify({
+        message: { subject, body: { contentType: 'HTML', content: html }, toRecipients: NOTIFY_TO.map((address) => ({ emailAddress: { address } })) },
+        saveToSentItems: true,
+      }),
+    });
+    if (!r.ok) throw new Error('microsoft send ' + r.status + ' ' + (await r.text()).slice(0, 200));
+    return;
+  }
   if (RESEND_API_KEY) {
     const r = await fetch('https://api.resend.com/emails', {
       method: 'POST',
@@ -337,5 +367,5 @@ app.listen(PORT, () => {
     : 'AI: OFF (no ANTHROPIC_API_KEY variable found)');
   console.log('Staff dashboard: ' + (STAFF_PASSWORD ? 'password set' : 'NO PASSWORD SET'));
   console.log('Trial password: ' + (env('TRIAL_PASSWORD') ? 'set from TRIAL_PASSWORD' : 'using the default'));
-  console.log('Email: ' + mailMethod() + ' -> ' + NOTIFY_TO.join(', ') + (mailReady() ? '' : ' (NOT SENDING: set RESEND_API_KEY or SMTP_HOST/SMTP_USER/SMTP_PASS)'));
+  console.log('Email: ' + mailMethod() + ' -> ' + NOTIFY_TO.join(', ') + (mailReady() ? '' : ' (NOT SENDING: set MS_TENANT_ID/MS_CLIENT_ID/MS_CLIENT_SECRET/MS_SENDER, or RESEND_API_KEY)'));
 });

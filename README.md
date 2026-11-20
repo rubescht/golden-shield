@@ -13,7 +13,8 @@ A simple, senior-friendly app for aged care residents: cyber safety lessons, AI 
 | `STAFF_PASSWORD` | Password for the staff dashboard (`/#staff`). Required. |
 | `TRIAL_PASSWORD` | Password clients type on the sign-in screen. Default `GoldenShield2026`. Checked on the server, never sent to the browser. |
 | `NOTIFY_TO` | Who gets the alert emails. Default `vip@codeblackgroup.com.au` (comma-separate for more). |
-| `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS` | Email account used to send alerts, e.g. Microsoft 365: `smtp.office365.com`, `587`, the mailbox address and its password (Authenticated SMTP must be enabled for that mailbox). |
+| `MS_TENANT_ID`, `MS_CLIENT_ID`, `MS_CLIENT_SECRET`, `MS_SENDER` | **Recommended.** Sends alerts from a Microsoft 365 mailbox through Microsoft Graph (works on Render's free plan, which blocks SMTP). Needs an Entra app registration with the `Mail.Send` application permission and admin consent. `MS_SENDER` is the mailbox it sends from. |
+| `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS` | Plain SMTP instead. Does not work on Render's free plan (SMTP ports are blocked there). |
 | `RESEND_API_KEY` | Alternative to SMTP: send alerts through Resend instead. |
 | `MAIL_FROM` | Optional sender, e.g. `Golden Shield <noreply@codeblackgroup.com.au>`. Defaults to the SMTP user. |
 | `ANTHROPIC_API_KEY` | Turns on the AI scam checker and the "Goldie" practice chat. Optional — without it the checker uses built-in warning-sign rules. |
