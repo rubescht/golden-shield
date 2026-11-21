@@ -24,6 +24,8 @@ const DB_FILE = path.join(DATA_DIR, 'db.json');
 
 // ---------- email ----------
 const NOTIFY_TO = (env('NOTIFY_TO') || 'vip@codeblackgroup.com.au').split(',').map((s) => s.trim()).filter(Boolean);
+// Urgent help requests also go straight to these people.
+const URGENT_TO = (env('URGENT_TO') || 'rubesch@midnightit.com.au').split(',').map((s) => s.trim()).filter(Boolean);
 const RESEND_API_KEY = env('RESEND_API_KEY');
 const SMTP_HOST = env('SMTP_HOST');
 const SMTP_USER = env('SMTP_USER');
@@ -57,14 +59,15 @@ async function graphAccessToken() {
 const mailReady = () => !!(graphReady() || RESEND_API_KEY || transporter);
 const mailMethod = () => (graphReady() ? 'Microsoft 365 (' + MS_SENDER + ')' : RESEND_API_KEY ? 'Resend' : transporter ? 'SMTP (' + SMTP_HOST + ')' : 'not set up');
 
-async function sendMailNow(subject, html) {
+async function sendMailNow(subject, html, extraTo = []) {
+  const to = [...new Set([...NOTIFY_TO, ...extraTo])];
   if (graphReady()) {
     const token = await graphAccessToken();
     const r = await fetch(`https://graph.microsoft.com/v1.0/users/${encodeURIComponent(MS_SENDER)}/sendMail`, {
       method: 'POST',
       headers: { Authorization: 'Bearer ' + token, 'content-type': 'application/json' },
       body: JSON.stringify({
-        message: { subject, body: { contentType: 'HTML', content: html }, toRecipients: NOTIFY_TO.map((address) => ({ emailAddress: { address } })) },
+        message: { subject, body: { contentType: 'HTML', content: html }, toRecipients: to.map((address) => ({ emailAddress: { address } })) },
         saveToSentItems: true,
       }),
     });
@@ -75,21 +78,21 @@ async function sendMailNow(subject, html) {
     const r = await fetch('https://api.resend.com/emails', {
       method: 'POST',
       headers: { Authorization: 'Bearer ' + RESEND_API_KEY, 'content-type': 'application/json' },
-      body: JSON.stringify({ from: MAIL_FROM, to: NOTIFY_TO, subject, html }),
+      body: JSON.stringify({ from: MAIL_FROM, to, subject, html }),
     });
     if (!r.ok) throw new Error('resend ' + r.status + ' ' + (await r.text()).slice(0, 200));
     return;
   }
-  if (transporter) { await transporter.sendMail({ from: MAIL_FROM, to: NOTIFY_TO.join(', '), subject, html }); return; }
+  if (transporter) { await transporter.sendMail({ from: MAIL_FROM, to: to.join(', '), subject, html }); return; }
   throw new Error('email not set up');
 }
 
 // Emails that fail are kept and retried every 5 minutes (up to a day).
-async function notify(subject, html) {
-  try { await sendMailNow(subject, html); return true; }
+async function notify(subject, html, extraTo = []) {
+  try { await sendMailNow(subject, html, extraTo); return true; }
   catch (e) {
     console.error('email failed:', e.message);
-    db.outbox.push({ subject, html, tries: 1, first: new Date().toISOString() }); save();
+    db.outbox.push({ subject, html, extraTo, tries: 1, first: new Date().toISOString() }); save();
     return false;
   }
 }
@@ -97,7 +100,7 @@ setInterval(async () => {
   if (!db.outbox.length || !mailReady()) return;
   const keep = [];
   for (const m of db.outbox) {
-    try { await sendMailNow(m.subject, m.html); }
+    try { await sendMailNow(m.subject, m.html, m.extraTo || []); }
     catch (e) { m.tries++; if (m.tries < 288) keep.push(m); else console.error('email dropped after retries:', m.subject); }
   }
   db.outbox = keep; save();
@@ -271,7 +274,7 @@ app.post('/api/requests', trialOnly, limit(10, 10 * 60e3), async (req, res) => {
     ['Name', name], ['Needs help with', TOPICS[item.topic]], ['How soon', URGENCY[item.urgency]], ['How they want help', item.how || '—'],
     ['Room / where they live', item.room || '—'], ['Phone', item.phone || t.phone || '—'], ['Message', item.message || '—'],
     ['Trial organisation', t.org || '—'], ['Trial email', t.email || '—'], ['Sent at', mel(item.created)],
-  ])));
+  ])), urgent ? URGENT_TO : []);
   save();
 });
 
@@ -372,5 +375,5 @@ app.listen(PORT, () => {
     transporter.verify().then(() => console.log('Email login: OK, mail server accepted the login'))
       .catch((e) => console.log('Email login: FAILED - ' + String(e && e.message || e).slice(0, 300)));
   }
-  console.log('Email: ' + mailMethod() + ' -> ' + NOTIFY_TO.join(', ') + (mailReady() ? '' : ' (NOT SENDING: set MS_TENANT_ID/MS_CLIENT_ID/MS_CLIENT_SECRET/MS_SENDER, or RESEND_API_KEY)'));
+  console.log('Email: ' + mailMethod() + ' -> ' + NOTIFY_TO.join(', ') + ' (urgent also to ' + URGENT_TO.join(', ') + ')' + (mailReady() ? '' : ' (NOT SENDING: set MS_TENANT_ID/MS_CLIENT_ID/MS_CLIENT_SECRET/MS_SENDER, or RESEND_API_KEY)'));
 });
