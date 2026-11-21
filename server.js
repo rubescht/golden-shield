@@ -236,19 +236,52 @@ function siteCors(req, res, next) {
   const o = req.get('origin') || '';
   if (!SITE_ORIGINS.includes(o)) return res.status(403).json({ error: 'origin not allowed' });
   res.set('Access-Control-Allow-Origin', o); res.set('Vary', 'Origin');
-  res.set('Access-Control-Allow-Methods', 'POST, OPTIONS'); res.set('Access-Control-Allow-Headers', 'content-type');
+  res.set('Access-Control-Allow-Methods', 'GET, POST, OPTIONS'); res.set('Access-Control-Allow-Headers', 'content-type');
   if (req.method === 'OPTIONS') return res.sendStatus(204);
   next();
 }
+// Anti-spam: every enquiry needs a fresh, signed challenge from this server, solved by the visitor's
+// browser in the background (a small proof-of-work, about a second), used once, and not sent too fast.
+const POW_BITS = Number(env('POW_BITS')) || 16;
+const usedChallenges = new Map();
+setInterval(() => { const now = Date.now(); for (const [k, t] of usedChallenges) if (now - t > 3 * 3600e3) usedChallenges.delete(k); }, 600e3);
+const signChallenge = (salt, ts, bits) => crypto.createHmac('sha256', TOKEN_SECRET).update(`web|${salt}|${ts}|${bits}`).digest('hex');
+function zeroBits(buf) { let n = 0; for (const b of buf) { if (b === 0) { n += 8; continue; } n += Math.clz32(b) - 24; break; } return n; }
+const enquiryDay = { day: '', count: 0, byEmail: new Map() };
 app.options('/api/website-enquiry', siteCors);
+app.options('/api/website-enquiry/challenge', siteCors);
+app.get('/api/website-enquiry/challenge', siteCors, limit(30, 10 * 60e3), (req, res) => {
+  const salt = crypto.randomBytes(16).toString('hex'), ts = Date.now(), bits = POW_BITS;
+  res.json({ salt, ts, bits, sig: signChallenge(salt, ts, bits) });
+});
 app.post('/api/website-enquiry', siteCors, limit(5, 10 * 60e3), async (req, res) => {
   const b = req.body || {};
   if (str(b.website, 200)) return res.json({ ok: true }); // honeypot: bots fill hidden fields
+  // 1. proof-of-work challenge: signed by us, solved, recent, not too fast, used once
+  const c = b.challenge || {};
+  const salt = str(c.salt, 64), ts = Number(c.ts), bits = Number(c.bits), sig = str(c.sig, 128), nonce = str(String(c.nonce ?? ''), 40);
+  const age = Date.now() - ts;
+  if (!salt || !nonce || !sig || bits < POW_BITS || !sameSecret(sig, signChallenge(salt, ts, bits))) return res.status(400).json({ error: 'bad challenge' });
+  if (age < 4000 || age > 3 * 3600e3) return res.status(400).json({ error: 'challenge timing' });
+  if (usedChallenges.has(salt)) return res.status(400).json({ error: 'challenge used' });
+  if (zeroBits(crypto.createHash('sha256').update(salt + ':' + nonce).digest()) < bits) return res.status(400).json({ error: 'challenge unsolved' });
+  usedChallenges.set(salt, Date.now());
   const e = {
     first: str(b.first, 80), last: str(b.last, 80), email: str(b.email, 160), phone: str(b.phone, 40),
     company: str(b.company, 160), message: str(b.message, 5000), page: str(b.page, 300),
   };
   if (!e.first || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e.email)) return res.status(400).json({ error: 'missing fields' });
+  // 2. content checks: no links in name/company, few links in the message, no junk characters
+  const urlRe = /(https?:\/\/|www\.|\.(ru|cn|xyz|top|click|loan|bet)\b)/i;
+  if ([e.first, e.last, e.company, e.phone].some((v) => urlRe.test(v) || /[<>{}\[\]]/.test(v))) return res.status(400).json({ error: 'invalid details' });
+  if ((e.message.match(/https?:\/\/|www\./gi) || []).length > 2) return res.status(400).json({ error: 'too many links' });
+  if (e.phone && !/^[0-9+()\s.-]{6,20}$/.test(e.phone)) return res.status(400).json({ error: 'invalid phone' });
+  // 3. volume limits: each email at most 3 a day, and at most 60 enquiries a day in total
+  const today = new Date().toISOString().slice(0, 10);
+  if (enquiryDay.day !== today) { enquiryDay.day = today; enquiryDay.count = 0; enquiryDay.byEmail.clear(); }
+  const ek = e.email.toLowerCase(), sent = enquiryDay.byEmail.get(ek) || 0;
+  if (sent >= 3 || enquiryDay.count >= 60) return res.status(429).json({ error: 'too many enquiries today' });
+  enquiryDay.byEmail.set(ek, sent + 1); enquiryDay.count++;
   const name = (e.first + ' ' + e.last).trim();
   const now = new Date().toISOString();
   db.enquiries = db.enquiries || []; db.enquiries.push({ ...e, at: now }); save();
