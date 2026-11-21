@@ -228,6 +228,39 @@ app.use((req, res, next) => {
 app.use('/api', (req, res, next) => { res.set('Cache-Control', 'no-store'); next(); });
 app.set('etag', false);
 app.get('/api/config', (req, res) => res.json({ ai: !!ANTHROPIC_API_KEY }));
+// ---------- Code Black Group website: "Send my map" enquiries ----------
+// Only the CBG website may call this; each enquiry is emailed to NOTIFY_TO (vip@).
+const SITE_ORIGINS = (env('SITE_ORIGINS') || 'https://codeblackgroup-website.onrender.com,https://codeblackgroup.com.au,https://www.codeblackgroup.com.au')
+  .split(',').map((s) => s.trim()).filter(Boolean);
+function siteCors(req, res, next) {
+  const o = req.get('origin') || '';
+  if (!SITE_ORIGINS.includes(o)) return res.status(403).json({ error: 'origin not allowed' });
+  res.set('Access-Control-Allow-Origin', o); res.set('Vary', 'Origin');
+  res.set('Access-Control-Allow-Methods', 'POST, OPTIONS'); res.set('Access-Control-Allow-Headers', 'content-type');
+  if (req.method === 'OPTIONS') return res.sendStatus(204);
+  next();
+}
+app.options('/api/website-enquiry', siteCors);
+app.post('/api/website-enquiry', siteCors, limit(5, 10 * 60e3), async (req, res) => {
+  const b = req.body || {};
+  if (str(b.website, 200)) return res.json({ ok: true }); // honeypot: bots fill hidden fields
+  const e = {
+    first: str(b.first, 80), last: str(b.last, 80), email: str(b.email, 160), phone: str(b.phone, 40),
+    company: str(b.company, 160), message: str(b.message, 5000), page: str(b.page, 300),
+  };
+  if (!e.first || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e.email)) return res.status(400).json({ error: 'missing fields' });
+  const name = (e.first + ' ' + e.last).trim();
+  const now = new Date().toISOString();
+  db.enquiries = db.enquiries || []; db.enquiries.push({ ...e, at: now }); save();
+  const msgHtml = '<p style="white-space:pre-wrap;font-family:Arial,sans-serif">' + h(e.message || '—') + '</p>';
+  const ok = await notify(`New website enquiry: ${name}${e.company ? ' (' + e.company + ')' : ''}`,
+    `<p>A new enquiry has come in from the Code Black Group website Discovery Lab.</p>`
+    + table([['Name', name], ['Email', e.email], ['Phone', e.phone || '—'], ['Organisation', e.company || '—'], ['Received', mel(now)], ['Page', e.page || '—']])
+    + '<h3 style="font-family:Arial,sans-serif">Discovery map and message</h3>' + msgHtml
+    + `<p>Reply to this email address to respond: <a href="mailto:${h(e.email)}">${h(e.email)}</a></p>`);
+  res.json({ ok: true, queued: !ok });
+});
+
 app.get('/healthz', (req, res) => res.send('ok'));
 
 // Trial sign-in: checks the password on the server, saves the details, emails the team.
