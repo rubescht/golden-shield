@@ -247,7 +247,8 @@ const usedChallenges = new Map();
 setInterval(() => { const now = Date.now(); for (const [k, t] of usedChallenges) if (now - t > 3 * 3600e3) usedChallenges.delete(k); }, 600e3);
 const signChallenge = (salt, ts, bits) => crypto.createHmac('sha256', TOKEN_SECRET).update(`web|${salt}|${ts}|${bits}`).digest('hex');
 function zeroBits(buf) { let n = 0; for (const b of buf) { if (b === 0) { n += 8; continue; } n += Math.clz32(b) - 24; break; } return n; }
-const enquiryDay = { day: '', count: 0, byEmail: new Map() };
+const enquiryDay = { day: '', count: 0, byEmail: new Map(), byIp: new Map(), msgs: new Set() };
+const DISPOSABLE = /(?:^|\.)(mailinator\.com|guerrillamail\.(?:com|net|org)|10minutemail\.com|temp-mail\.org|tempmail\.(?:com|net)|yopmail\.com|trashmail\.com|sharklasers\.com|getnada\.com|dispostable\.com|maildrop\.cc|throwawaymail\.com|fakeinbox\.com|mintemail\.com|emailondeck\.com|mohmal\.com|tempr\.email|discard\.email)$/i;
 app.options('/api/website-enquiry', siteCors);
 app.options('/api/website-enquiry/challenge', siteCors);
 app.get('/api/website-enquiry/challenge', siteCors, limit(30, 10 * 60e3), (req, res) => {
@@ -271,6 +272,11 @@ app.post('/api/website-enquiry', siteCors, limit(5, 10 * 60e3), async (req, res)
     company: str(b.company, 160), message: str(b.message, 5000), page: str(b.page, 300),
   };
   if (!e.first || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e.email)) return res.status(400).json({ error: 'missing fields' });
+  // 1b. no control characters or line breaks in one-line fields (blocks email header injection)
+  if ([e.first, e.last, e.email, e.phone, e.company, e.page].some((v) => /[\u0000-\u001f\u007f]/.test(v))) return res.status(400).json({ error: 'invalid details' });
+  if (/[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f]/.test(e.message)) return res.status(400).json({ error: 'invalid message' });
+  // 1c. throwaway inboxes commonly used by bots
+  if (DISPOSABLE.test(e.email.split('@')[1] || '')) return res.status(400).json({ error: 'please use a work or personal email' });
   // 2. content checks: no links in name/company, few links in the message, no junk characters
   const urlRe = /(https?:\/\/|www\.|\.(ru|cn|xyz|top|click|loan|bet)\b)/i;
   if ([e.first, e.last, e.company, e.phone].some((v) => urlRe.test(v) || /[<>{}\[\]]/.test(v))) return res.status(400).json({ error: 'invalid details' });
@@ -278,10 +284,14 @@ app.post('/api/website-enquiry', siteCors, limit(5, 10 * 60e3), async (req, res)
   if (e.phone && !/^[0-9+()\s.-]{6,20}$/.test(e.phone)) return res.status(400).json({ error: 'invalid phone' });
   // 3. volume limits: each email at most 3 a day, and at most 60 enquiries a day in total
   const today = new Date().toISOString().slice(0, 10);
-  if (enquiryDay.day !== today) { enquiryDay.day = today; enquiryDay.count = 0; enquiryDay.byEmail.clear(); }
+  if (enquiryDay.day !== today) { enquiryDay.day = today; enquiryDay.count = 0; enquiryDay.byEmail.clear(); enquiryDay.byIp.clear(); enquiryDay.msgs.clear(); }
   const ek = e.email.toLowerCase(), sent = enquiryDay.byEmail.get(ek) || 0;
-  if (sent >= 3 || enquiryDay.count >= 60) return res.status(429).json({ error: 'too many enquiries today' });
-  enquiryDay.byEmail.set(ek, sent + 1); enquiryDay.count++;
+  const ipSent = enquiryDay.byIp.get(req.ip) || 0;
+  // the same message sent again (bots and AI spam tools rotate names and emails but reuse text)
+  const mk = crypto.createHash('sha256').update(e.message.toLowerCase().replace(/\s+/g, ' ').trim()).digest('hex');
+  if (e.message.length > 40 && enquiryDay.msgs.has(mk)) return res.status(429).json({ error: 'duplicate enquiry' });
+  if (sent >= 3 || ipSent >= 5 || enquiryDay.count >= 60) return res.status(429).json({ error: 'too many enquiries today' });
+  enquiryDay.byEmail.set(ek, sent + 1); enquiryDay.byIp.set(req.ip, ipSent + 1); enquiryDay.msgs.add(mk); enquiryDay.count++;
   const name = (e.first + ' ' + e.last).trim();
   const now = new Date().toISOString();
   db.enquiries = db.enquiries || []; db.enquiries.push({ ...e, at: now }); save();
