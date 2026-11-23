@@ -218,11 +218,18 @@ STYLE: short sentences, plain English, Australian spelling, numbered steps for h
 // ---------- app ----------
 const app = express();
 app.set('trust proxy', 1);
-app.use(express.json({ limit: '7mb' }));
+app.disable('x-powered-by');
+// Only the scam checker takes screenshots; everything else gets a small body limit.
+app.use('/api/check', express.json({ limit: '7mb' }));
+app.use(express.json({ limit: '64kb' }));
 app.use((req, res, next) => {
   res.set('X-Content-Type-Options', 'nosniff');
   res.set('Referrer-Policy', 'no-referrer');
   res.set('X-Frame-Options', 'DENY');
+  res.set('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
+  res.set('Content-Security-Policy', "frame-ancestors 'none'; base-uri 'self'; object-src 'none'; form-action 'self'");
+  res.set('Permissions-Policy', 'camera=(), microphone=(), geolocation=(), payment=(), usb=()');
+  res.set('Cross-Origin-Opener-Policy', 'same-origin');
   next();
 });
 app.use('/api', (req, res, next) => { res.set('Cache-Control', 'no-store'); next(); });
@@ -448,7 +455,7 @@ app.post('/api/requests', trialOnly, limit(10, 10 * 60e3), async (req, res) => {
   save();
 });
 
-app.get('/api/requests/mine', trialOnly, (req, res) => {
+app.get('/api/requests/mine', limit(60, 10 * 60e3), trialOnly, (req, res) => {
   const doc = db.requests[req.uid] || { items: [] };
   res.json({ items: doc.items.map(({ phone, emailed, ...rest }) => rest) });
 });
@@ -474,9 +481,9 @@ app.post('/api/bookings', trialOnly, limit(30, 10 * 60e3), async (req, res) => {
   ])));
 });
 
-app.get('/api/bookings/mine', trialOnly, (req, res) => res.json(db.bookings[req.uid] || { sessions: {} }));
+app.get('/api/bookings/mine', limit(60, 10 * 60e3), trialOnly, (req, res) => res.json(db.bookings[req.uid] || { sessions: {} }));
 
-app.get('/api/staff/overview', staffOnly, (req, res) => {
+app.get('/api/staff/overview', limit(30, 10 * 60e3), staffOnly, (req, res) => {
   const requests = [];
   for (const [uid, doc] of Object.entries(db.requests)) for (const it of doc.items) requests.push({ ...it, uid });
   const bookings = {};
@@ -484,7 +491,7 @@ app.get('/api/staff/overview', staffOnly, (req, res) => {
   res.json({ requests, bookings, trials: Object.values(db.trials), email: { ready: mailReady(), method: mailMethod(), to: NOTIFY_TO, waiting: db.outbox.length } });
 });
 
-app.patch('/api/staff/requests', staffOnly, (req, res) => {
+app.patch('/api/staff/requests', limit(60, 10 * 60e3), staffOnly, (req, res) => {
   const { uid, id, status } = req.body || {};
   const doc = db.requests[uid];
   if (!doc || !['new', 'progress', 'done'].includes(status)) return res.status(400).json({ error: 'bad request' });
@@ -494,15 +501,15 @@ app.patch('/api/staff/requests', staffOnly, (req, res) => {
   res.json({ ok: true });
 });
 
-app.post('/api/staff/test-email', staffOnly, limit(5, 10 * 60e3), async (req, res) => {
+app.post('/api/staff/test-email', limit(5, 10 * 60e3), staffOnly, async (req, res) => {
   try { await sendMailNow('Golden Shield: test email', emailWrap('This is a test email from the Golden Shield app. Emails are working.', '')); res.json({ ok: true }); }
-  catch (e) { res.status(502).json({ error: e.message }); }
+  catch (e) { console.error('test email failed', e.message); res.status(502).json({ error: 'email failed, see server logs' }); }
 });
 
 app.post('/api/check', trialOnly, limit(20, 10 * 60e3), async (req, res) => {
   if (!ANTHROPIC_API_KEY) return res.status(503).json({ error: 'ai off' });
   const text = redactStrict(str(req.body && req.body.text, 3000));
-  const image = req.body && typeof req.body.image === 'string' ? req.body.image : '';
+  const image = req.body && typeof req.body.image === 'string' && /^[A-Za-z0-9+/=]+$/.test(req.body.image) && req.body.image.length < 7e6 ? req.body.image : '';
   const mediaType = ['image/png', 'image/jpeg', 'image/gif', 'image/webp'].includes(req.body && req.body.mediaType) ? req.body.mediaType : 'image/png';
   if (!text && !image) return res.status(400).json({ error: 'nothing to check' });
   const content = [];
