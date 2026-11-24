@@ -239,6 +239,23 @@ app.get('/api/config', (req, res) => res.json({ ai: !!ANTHROPIC_API_KEY }));
 // Only the CBG website may call this; each enquiry is emailed to NOTIFY_TO (vip@).
 const SITE_ORIGINS = (env('SITE_ORIGINS') || 'https://codeblackgroup-website.onrender.com,https://codeblackgroup.com.au,https://www.codeblackgroup.com.au')
   .split(',').map((s) => s.trim()).filter(Boolean);
+// The SOS scam-help panel also runs on every Code Black Group division website.
+const GROUP_ORIGINS = SITE_ORIGINS.concat((env('HELP_ORIGINS') || [
+  'https://midnightit-website.onrender.com', 'https://midnightit.com.au', 'https://www.midnightit.com.au',
+  'https://strikeforce-website.onrender.com', 'https://strikeforcecyber.com', 'https://www.strikeforcecyber.com',
+  'https://wize-website.onrender.com', 'https://wizesolutions.com.au', 'https://www.wizesolutions.com.au',
+  'https://whooptech-website.onrender.com',
+  'https://aidome-website.onrender.com', 'https://aidome-website-mobile.onrender.com', 'https://aidome.com.au', 'https://www.aidome.com.au',
+  'https://3eyes.com.au', 'https://www.3eyes.com.au',
+].join(',')).split(',').map((s) => s.trim()).filter(Boolean));
+function helpCors(req, res, next) {
+  const o = req.get('origin') || '';
+  if (!GROUP_ORIGINS.includes(o)) return res.status(403).json({ error: 'origin not allowed' });
+  res.set('Access-Control-Allow-Origin', o); res.set('Vary', 'Origin');
+  res.set('Access-Control-Allow-Methods', 'GET, POST, OPTIONS'); res.set('Access-Control-Allow-Headers', 'content-type');
+  if (req.method === 'OPTIONS') return res.sendStatus(204);
+  next();
+}
 function siteCors(req, res, next) {
   const o = req.get('origin') || '';
   if (!SITE_ORIGINS.includes(o)) return res.status(403).json({ error: 'origin not allowed' });
@@ -344,12 +361,12 @@ function helpSession(req, res, next) {
   if (!s) { s = { turns: 0, callbacks: 0, exp: Number(exp) }; helpSessions.set(sid, s); }
   req.help = s; next();
 }
-['/api/scam-help/challenge', '/api/scam-help/session', '/api/scam-help/chat', '/api/scam-help/callback'].forEach((p) => app.options(p, siteCors));
-app.get('/api/scam-help/challenge', siteCors, limit(20, 10 * 60e3), (req, res) => {
+['/api/scam-help/challenge', '/api/scam-help/session', '/api/scam-help/chat', '/api/scam-help/callback'].forEach((p) => app.options(p, helpCors));
+app.get('/api/scam-help/challenge', helpCors, limit(20, 10 * 60e3), (req, res) => {
   const salt = crypto.randomBytes(16).toString('hex'), ts = Date.now(), bits = POW_BITS;
   res.json({ salt, ts, bits, sig: signChallenge(salt, ts, bits), ai: !!ANTHROPIC_API_KEY });
 });
-app.post('/api/scam-help/session', siteCors, limit(8, 10 * 60e3), (req, res) => {
+app.post('/api/scam-help/session', helpCors, limit(8, 10 * 60e3), (req, res) => {
   const b = req.body || {}, c = b.challenge || {};
   if (str(b.website, 200)) return res.status(400).json({ error: 'bad request' }); // honeypot
   const salt = str(c.salt, 64), nonce = String(c.nonce ?? '').slice(0, 20), sig = str(c.sig, 128), ts = Number(c.ts), bits = Number(c.bits);
@@ -363,7 +380,7 @@ app.post('/api/scam-help/session', siteCors, limit(8, 10 * 60e3), (req, res) => 
   helpSessions.set(sid, { turns: 0, callbacks: 0, exp });
   res.json({ token: `${sid}.${exp}.${helpSig(sid, exp)}`, ai: !!ANTHROPIC_API_KEY });
 });
-app.post('/api/scam-help/chat', siteCors, limit(20, 10 * 60e3), helpSession, async (req, res) => {
+app.post('/api/scam-help/chat', helpCors, limit(20, 10 * 60e3), helpSession, async (req, res) => {
   helpDayReset();
   const ipN = helpDay.byIp.get(req.ip) || 0;
   if (req.help.turns >= 16) return res.status(429).json({ error: 'session limit', text: 'To keep going, please call Code Black Group on 1300 737 562 or request an urgent call back below.' });
@@ -384,7 +401,7 @@ app.post('/api/scam-help/chat', siteCors, limit(20, 10 * 60e3), helpSession, asy
   try { res.json({ text: cleanOut(await claude(MODEL_HELP, HELP_SYSTEM, msgs, 450)).slice(0, 1600), ai: true, redacted }); }
   catch (e) { console.error('scam-help failed', e.message); res.json({ text: HELP_FALLBACK, ai: false, redacted }); }
 });
-app.post('/api/scam-help/callback', siteCors, limit(4, 10 * 60e3), helpSession, async (req, res) => {
+app.post('/api/scam-help/callback', helpCors, limit(4, 10 * 60e3), helpSession, async (req, res) => {
   helpDayReset();
   const b = req.body || {};
   const e = { name: str(b.name, 80), phone: str(b.phone, 30), when: str(b.when, 60), what: str(b.what, 600), page: str(b.page, 300) };
