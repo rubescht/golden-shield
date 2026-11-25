@@ -254,7 +254,7 @@ footer{padding-block:2rem 1rem;display:flex;flex-direction:column;gap:.6rem;font
 .brandfoot svg.mark{width:46px;height:46px;color:var(--gold);flex:none}
 .brandfoot b{font-family:var(--f-display);letter-spacing:.12em;display:block;font-size:.9rem}
 .brandfoot span{font-size:.78rem;color:var(--on-brand-muted)}
-.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(6rem + env(safe-area-inset-bottom,0px));background:var(--brand);color:var(--on-brand);box-shadow:inset 0 0 0 2px var(--gold);padding:14px 22px;border-radius:18px;z-index:30;width:max-content;max-width:min(420px,calc(100% - 32px));font-weight:700;text-align:center}
+.toast{position:fixed;left:50%;transform:translateX(-50%);top:calc(5.2rem + env(safe-area-inset-top,0px));background:var(--brand);color:var(--on-brand);box-shadow:inset 0 0 0 2px var(--gold);padding:14px 22px;border-radius:18px;z-index:30;width:max-content;max-width:min(420px,calc(100% - 32px));font-weight:700;text-align:center}
 .statgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
 .statgrid .big{font-family:var(--f-display);font-size:2rem;font-weight:700;font-variant-numeric:tabular-nums}
 .tablewrap{overflow-x:auto}
@@ -284,13 +284,28 @@ body.locked{overflow:hidden}
 .vopt span{font-size:.78rem;color:var(--muted)}
 .vopt[aria-pressed="true"]{border-color:var(--gold);background:var(--gold-soft)}
 .vnote{font-size:.8rem;color:var(--muted);background:var(--surface-2);border-radius:var(--r-sm);padding:10px 12px}
-.readbar{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(5.6rem + env(safe-area-inset-bottom,0px));z-index:25;display:flex;align-items:center;gap:10px;padding:8px 8px 8px 12px;border-radius:999px;background:var(--brand);color:var(--on-brand);box-shadow:inset 0 0 0 2px var(--gold),0 8px 24px rgba(0,0,0,.2);max-width:calc(100% - 32px)}
+.readbar{position:fixed;left:max(16px,env(safe-area-inset-left,0px));bottom:calc(5.6rem + env(safe-area-inset-bottom,0px));z-index:25;display:flex;align-items:center;gap:10px;padding:8px 8px 8px 12px;border-radius:999px;background:var(--brand);color:var(--on-brand);box-shadow:inset 0 0 0 2px var(--gold),0 8px 24px rgba(0,0,0,.2);max-width:calc(100% - 7rem)}
 .readbar b{font-size:.85rem;white-space:nowrap}
 .readbar .pulse{width:2.2rem;height:2.2rem;border-radius:50%;background:var(--gold);color:var(--on-gold);display:grid;place-items:center;animation:pl 1.4s ease-in-out infinite}
 @keyframes pl{50%{transform:scale(1.1)}}
 .readbar button{min-height:46px;padding:0 16px;border-radius:999px;border:2px solid var(--gold);background:transparent;color:var(--on-brand);font-weight:700;cursor:pointer;font-size:.85rem}
 .readbar button.stop{background:var(--gold);color:var(--on-gold)}
 @media (max-width:380px){.readbar b{display:none}}
+
+/* Floating quick buttons: bigger text, read aloud, SOS — on every page */
+.fab{position:fixed;right:max(12px,env(safe-area-inset-right,0px));bottom:calc(5.9rem + env(safe-area-inset-bottom,0px));z-index:15;display:flex;flex-direction:column;gap:10px}
+.fabbtn{width:4rem;height:4rem;border-radius:50%;border:none;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;cursor:pointer;text-decoration:none;font-family:var(--f-display);font-weight:700;background:var(--brand);color:var(--on-brand);box-shadow:inset 0 0 0 2px var(--gold),0 6px 18px rgba(0,0,0,.22)}
+.fabbtn .i{width:1.5rem;height:1.5rem;color:var(--gold)}
+.fabbtn .fl{font-size:.62rem;letter-spacing:.04em;line-height:1}
+.fabbtn .fa{font-size:1.3rem;line-height:1;color:var(--gold)}
+.fabbtn .fa small{font-size:.7em}
+.fabbtn.on{background:var(--gold);color:var(--on-gold)}
+.fabbtn.on .i{color:var(--on-gold)}
+.fabbtn.sos{background:var(--danger);color:var(--on-danger);box-shadow:0 6px 18px rgba(0,0,0,.22)}
+.fabbtn.sos .i{color:var(--on-danger)}
+.fabbtn:focus-visible{outline:4px solid var(--gold);outline-offset:3px}
+main{padding-bottom:4rem}
+@media (max-width:420px){.fabbtn{width:3.6rem;height:3.6rem}}
 .ack{background:var(--surface);border-radius:var(--r);padding:1.1rem 1.2rem;box-shadow:var(--shadow);display:flex;gap:14px;align-items:flex-start;color:var(--ink);font-size:.85rem;line-height:1.6}
 .ack .dots{flex:none;width:2.4rem;height:2.4rem;border-radius:50%;background:radial-gradient(circle at 50% 50%,var(--gold) 0 22%,transparent 23%),radial-gradient(circle at 50% 50%,transparent 0 40%,var(--gold-ink) 41% 47%,transparent 48%),var(--gold-soft)}
 .ack b{font-family:var(--f-display);display:block;font-size:.9rem;margin-bottom:.2rem}
@@ -542,6 +557,11 @@ body.locked{overflow:hidden}
   <p class="muted" style="font-size:.8rem;text-align:center">We acknowledge the Traditional Custodians of the lands across Australia and pay our respects to Elders past and present.</p>
  </div>
 </div>
+<div class="fab" id="fab" role="group" aria-label="Quick help">
+ <button type="button" class="fabbtn" id="fabText" aria-label="Make the text bigger"><span class="fa" aria-hidden="true">A<small>A</small></span><span class="fl">Text</span></button>
+ <button type="button" class="fabbtn" id="fabRead" aria-label="Read this page to me"><svg class="i" aria-hidden="true"><use href="#i-speaker"/></svg><span class="fl">Read</span></button>
+ <a class="fabbtn sos" href="#help" id="fabSos" aria-label="SOS: get help now"><svg class="i" aria-hidden="true"><use href="#i-lifebuoy"/></svg><span class="fl">SOS</span></a>
+</div>
 <div class="readbar" id="readbar" hidden role="region" aria-label="Reading aloud"><span class="pulse" aria-hidden="true"><svg class="i"><use href="#i-speaker"/></svg></span><b>Reading aloud</b><button type="button" id="rbPause">Pause</button><button type="button" id="rbStop" class="stop">Stop</button></div>
 <div class="toast" id="toast" role="status" hidden></div>
 
@@ -637,68 +657,101 @@ const esc = s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":
 const ic = n=>`<svg class="i" aria-hidden="true"><use href="#i-${n}"/></svg>`;
 function toast(t){const el=$("#toast");el.textContent=t;el.hidden=false;clearTimeout(toast._t);toast._t=setTimeout(()=>el.hidden=true,4000)}
 function go(v){location.hash=v}
-/* ---------- READ ALOUD (Australian voice first) ---------- */
-let tts=null, ttsBusy=false, devBusy=false, devPaused=false, ttsPaused=false;
-let voicePref="claude"; // standard Claude voice; the device's own default voice is the backup
+/* ---------- READ ALOUD ----------
+   1st choice: the server's ElevenLabs voice, played as a normal audio file (works on almost every phone and browser).
+   Backup: the device's own built-in voice. */
+let ttsOn=false, devBusy=false, devPaused=false, readingVia=null, speakId=0, audioURL="";
 let readRate=LS.get("rate",0.95);
-const AU_GOOD=/natural|online|neural|premium|enhanced|karen|lee|catherine|natasha|william|google/i;
+const player=new Audio(); player.preload="auto";
+const IS_IOS=/iP(hone|ad|od)/.test(navigator.userAgent)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1);
+const IN_APP=/FBAN|FBAV|Instagram|LinkedInApp|Line\/|GSA\/|; wv\)|MicroMessenger|Snapchat|Twitter/i.test(navigator.userAgent);
 function allVoices(){ try{ return window.speechSynthesis?speechSynthesis.getVoices():[] }catch(e){ return [] } }
-function auVoices(){ return allVoices().filter(v=>/^en[-_]AU/i.test(v.lang)).sort((a,b)=>(AU_GOOD.test(b.name)?1:0)-(AU_GOOD.test(a.name)?1:0)) }
 function pickDeviceVoice(){
-  const all=allVoices();
+  const v=allVoices(); if(!v.length) return null;
+  const by=re=>v.filter(x=>re.test(x.lang));
+  const good=/natural|online|neural|premium|enhanced|google|siri|karen|samantha|daniel/i;
+  for(const re of [/^en[-_]AU/i,/^en[-_]GB/i,/^en[-_]US/i,/^en/i]){ const l=by(re); if(l.length) return l.find(x=>good.test(x.name))||l.find(x=>x.localService)||l[0]; }
   return null;
 }
-function chunks(text){ const parts=(String(text).match(/[^.!?]+[.!?]*\s*/g)||[String(text)]).map(s=>s.trim()).filter(Boolean); const out=[]; let cur=""; parts.forEach(p=>{ if((cur+" "+p).length>500&&cur){out.push(cur.trim());cur=p}else cur+=" "+p }); if(cur.trim()) out.push(cur.trim()); return out.map(s=>s.slice(0,1900)) }
-function setReading(on){ const rb=$("#readbar"); if(!rb) return; rb.hidden=!on; if(!on){devPaused=false;ttsPaused=false;$("#rbPause").textContent="Pause"} }
-function stopSpeak(){ if(tts&&ttsBusy){ tts.stop().catch(()=>{}) } try{ if(window.speechSynthesis&&(speechSynthesis.speaking||speechSynthesis.pending||devBusy)) speechSynthesis.cancel() }catch(e){} devBusy=false; setReading(false) }
-// iPhone/iPad: wake speech on the first tap so later readings are allowed to play.
-let speechWoken=false;
-function wakeSpeech(){ if(speechWoken||!window.speechSynthesis) return; speechWoken=true; try{ const u=new SpeechSynthesisUtterance(" "); u.volume=0; speechSynthesis.speak(u) }catch(e){} }
-document.addEventListener("touchend",wakeSpeech,{once:true,passive:true});
-document.addEventListener("click",wakeSpeech,{once:true});
-const IS_IOS=/iP(hone|ad|od)/.test(navigator.userAgent)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1);
-function deviceSpeak(text,voice){
-  if(!window.speechSynthesis||!window.SpeechSynthesisUtterance){ toast(IS_IOS?"Read-aloud doesn't work inside this app view. Open Golden Shield in Safari to hear it.":"Read-aloud isn't available on this device."); return }
-  try{
-    try{ speechSynthesis.resume() }catch(e){}
-    const list=chunks(text); devBusy=true; setReading(true); let started=false;
-    list.forEach((t,i)=>{ const u=new SpeechSynthesisUtterance(t); if(voice){u.voice=voice;u.lang=voice.lang}else{u.lang=(navigator.language&&/^en/i.test(navigator.language))?navigator.language:"en-AU"} u.rate=readRate; u.volume=1;
-      if(i===0) u.onstart=()=>{started=true};
-      if(i===list.length-1){ u.onend=()=>{devBusy=false;setReading(false)} }
-      u.onerror=(ev)=>{ if(ev&&ev.error&&ev.error!=="interrupted"&&ev.error!=="canceled"){ devBusy=false; setReading(false); toast(IS_IOS?"Couldn't play the voice. Check the iPhone isn't on silent and the volume is up, then tap again.":"Couldn't play the voice. Please tap again.") } };
-      speechSynthesis.speak(u) });
-    setTimeout(()=>{ if(devBusy&&!started&&!(speechSynthesis.speaking)){ toast(IS_IOS?"Can't hear anything? Flip the silent switch on the side of your iPhone off and turn the volume up.":"Can't hear anything? Check your volume is turned up.") } },2500);
-  }catch(e){ devBusy=false; setReading(false); toast("Read-aloud isn't available on this device.") }
+function chunks(text){ const parts=(String(text).match(/[^.!?]+[.!?]*\s*/g)||[String(text)]).map(s=>s.trim()).filter(Boolean); const out=[]; let cur=""; parts.forEach(p=>{ if((cur+" "+p).length>260&&cur){out.push(cur.trim());cur=p}else cur+=" "+p }); if(cur.trim()) out.push(cur.trim()); return out.map(s=>s.slice(0,600)) }
+function setReading(on){
+  const rb=$("#readbar"); if(rb){ rb.hidden=!on; if(!on){devPaused=false;$("#rbPause").textContent="Pause"} }
+  const fr=$("#fabRead"); if(fr){ fr.classList.toggle("on",on); fr.setAttribute("aria-label",on?"Stop reading":"Read this page to me"); fr.querySelector(".fl").textContent=on?"Stop":"Read"; }
 }
-async function speak(text){
-  stopSpeak();
-  const dev=pickDeviceVoice();
-  const useClaude = tts && (voicePref==="claude" || (voicePref==="auto" && !dev));
-  if(!useClaude){ deviceSpeak(text,dev); return }
-  ttsBusy=true; setReading(true);
-  try{ await tts.speak(chunks(text).map(t=>({text:t})),{voice:"buttery",rate:readRate,language:"en"}) }
-  catch(e){
-    const c=e&&e.code;
-    if(c==="not_granted"||c==="unavailable"){ tts=null; renderVoices(); toast("The Claude voice is turned off here. Using this device's voice instead."); if(c==="unavailable") deviceSpeak(text,dev) }
-    else if(c==="rate_limited") toast("That's a lot of reading for now. Please try again a bit later.");
-    else if(c==="no_gesture") toast("Please tap Read it to me again.");
-    else if(c==="busy") toast("Reading will work once you've finished speaking.");
-    else if(c!=="stopped") deviceSpeak(text,dev);
+function stopSpeak(){
+  speakId++;
+  try{ player.pause(); }catch(e){}
+  try{ if(window.speechSynthesis&&(speechSynthesis.speaking||speechSynthesis.pending)) speechSynthesis.cancel() }catch(e){}
+  devBusy=false; readingVia=null; setReading(false);
+}
+function noVoiceHelp(){
+  if(IN_APP) return "Read-aloud doesn't work inside this app's browser. Open Golden Shield in Safari or Chrome to hear it.";
+  if(IS_IOS) return "Can't hear anything? Flip the silent switch on the side of your iPhone off and turn the volume up.";
+  return "Can't hear anything? Check your volume is turned up.";
+}
+function deviceSpeak(text){
+  if(!window.speechSynthesis||!window.SpeechSynthesisUtterance){ toast(IN_APP||IS_IOS?"Read-aloud doesn't work in this view. Open Golden Shield in Safari or Chrome to hear it.":"Read-aloud isn't available on this device."); return }
+  const myId=speakId, voice=pickDeviceVoice(), list=chunks(text);
+  const go=()=>{
+    if(myId!==speakId) return;
+    try{
+      if(speechSynthesis.paused) speechSynthesis.resume();
+      devBusy=true; readingVia="device"; setReading(true); let started=false;
+      list.forEach((t,i)=>{ const u=new SpeechSynthesisUtterance(t); if(voice){u.voice=voice;u.lang=voice.lang} u.rate=readRate; u.volume=1;
+        u.onstart=()=>{started=true};
+        if(i===list.length-1){ u.onend=()=>{ if(readingVia==="device"){devBusy=false;readingVia=null;setReading(false)} } }
+        u.onerror=(ev)=>{ if(ev&&ev.error&&ev.error!=="interrupted"&&ev.error!=="canceled"&&readingVia==="device"){ devBusy=false; readingVia=null; setReading(false); toast(noVoiceHelp()) } };
+        speechSynthesis.speak(u) });
+      setTimeout(()=>{ if(myId===speakId&&devBusy&&!started&&!speechSynthesis.speaking) toast(noVoiceHelp()) },3000);
+    }catch(e){ devBusy=false; readingVia=null; setReading(false); toast("Read-aloud isn't available on this device.") }
+  };
+  // Some phones drop speech started straight after a cancel, so wait a moment if something was playing.
+  let busy=false; try{ busy=speechSynthesis.speaking||speechSynthesis.pending }catch(e){}
+  if(busy){ try{speechSynthesis.cancel()}catch(e){} setTimeout(go,180) } else go();
+}
+async function serverSpeak(text){
+  const myId=++speakId; readingVia="server"; setReading(true);
+  // Start the audio player inside the tap itself, so phones allow it to play once the voice arrives.
+  try{ player.src="/silence.mp3"; const p=player.play(); if(p&&p.catch) p.catch(()=>{}); }catch(e){}
+  try{
+    const r=await fetch("/api/tts",{method:"POST",headers:{"content-type":"application/json","x-uid":uid,"x-trial-token":trialToken},body:JSON.stringify({text:String(text).slice(0,4000)})});
+    if(!r.ok) throw new Error("tts "+r.status);
+    const blob=await r.blob(); if(myId!==speakId) return;
+    if(audioURL) URL.revokeObjectURL(audioURL); audioURL=URL.createObjectURL(blob);
+    player.src=audioURL; player.playbackRate=readRate;
+    await player.play();
+  }catch(e){
+    if(myId!==speakId) return;
+    readingVia=null; setReading(false); deviceSpeak(text);
   }
-  finally{ ttsBusy=false; if(!devBusy) setReading(false) }
+}
+player.addEventListener("ended",()=>{ if(readingVia==="server"&&!/silence\.mp3$/.test(player.src)){ readingVia=null; setReading(false) } });
+function speak(text){
+  text=String(text||"").replace(/\s+/g," ").trim(); if(!text) return;
+  stopSpeak();
+  if(ttsOn&&typeof trialToken!=="undefined"&&trialToken) serverSpeak(text); else deviceSpeak(text);
 }
 $("#rbStop").onclick=stopSpeak;
-$("#rbPause").onclick=async()=>{
+$("#rbPause").onclick=()=>{
   const b=$("#rbPause");
-  if(ttsBusy&&tts){ try{ if(ttsPaused){await tts.resume();ttsPaused=false;b.textContent="Pause"}else{await tts.pause();ttsPaused=true;b.textContent="Resume"} }catch(e){} return }
+  if(readingVia==="server"){ if(player.paused){ player.play().catch(()=>{}); b.textContent="Pause" } else { player.pause(); b.textContent="Resume" } return }
   try{ if(devPaused){speechSynthesis.resume();devPaused=false;b.textContent="Pause"}else{speechSynthesis.pause();devPaused=true;b.textContent="Resume"} }catch(e){}
 };
 function renderVoices(){
   $$("[data-rate]").forEach(b=>b.setAttribute("aria-pressed",+b.dataset.rate===readRate));
 }
-$$("[data-rate]").forEach(b=>b.onclick=()=>{readRate=+b.dataset.rate;LS.set("rate",readRate);if(tts&&tts.setRate)tts.setRate(readRate).catch(()=>{});renderVoices()});
+$$("[data-rate]").forEach(b=>b.onclick=()=>{readRate=+b.dataset.rate;LS.set("rate",readRate);try{player.playbackRate=readRate}catch(e){}renderVoices()});
 $("#voiceTest").onclick=()=>speak("Hello! I'm your Golden Shield reading voice. Remember: stop, check, and ask.");
-try{ if(window.speechSynthesis){ speechSynthesis.addEventListener?speechSynthesis.addEventListener("voiceschanged",renderVoices):(speechSynthesis.onvoiceschanged=renderVoices) } }catch(e){}
+try{ if(window.speechSynthesis&&speechSynthesis.addEventListener) speechSynthesis.addEventListener("voiceschanged",()=>{}) }catch(e){}
+
+/* What the floating Read button reads: the lesson script on a lesson, otherwise the words on the current page. */
+let lessonReadText="";
+function pageText(){
+  const v=document.querySelector(".view.on"); if(!v) return "";
+  if(v.id==="v-lesson"&&lessonReadText) return lessonReadText;
+  const skip=new Set([...v.querySelectorAll("button,.back,.btn,.seg a,.ex,.starter,.chip,label,option")].map(n=>n.innerText.trim()).filter(Boolean));
+  return v.innerText.split(/\n+/).map(s=>s.trim()).filter(s=>s&&!skip.has(s)).map(s=>/[.!?:]$/.test(s)?s:s+".").join(" ");
+}
 
 /* ---------- display settings ---------- */
 const SIZES=[18,21,25];
@@ -758,6 +811,7 @@ function renderLesson(id){
    <div class="card panel-do"><h2>What to do</h2><ul class="dos">${l.todo.map(t=>`<li>${ic("check")}<span>${esc(t)}</span></li>`).join("")}</ul></div>
    <div class="card"><p class="eyebrow">Quick question</p><h2>${esc(l.q.text)}</h2><div class="opts">${l.q.opts.map((o,i)=>`<button class="opt" data-i="${i}"><span class="L">${"ABC"[i]}</span><span>${esc(o)}</span></button>`).join("")}</div><p class="fb" id="fb" aria-live="polite"></p></div>
    <div class="btns">${nxt?`<a class="btn" href="#lesson-${nxt.id}" style="flex:1">Next lesson ${ic("right")}</a>`:`<a class="btn" href="#${l.track==="ai"?"ai":"learn"}" style="flex:1">Back to all lessons</a>`}<a class="btn ghost" href="#help">Ask a question</a></div>`;
+  lessonReadText=readText;
   $("#readBtn").onclick=()=>speak(readText);
   $$("#v-lesson .opt").forEach(b=>b.onclick=()=>{
     const i=+b.dataset.i; $$("#v-lesson .opt").forEach(x=>x.classList.remove("right","wrong"));
@@ -821,7 +875,7 @@ async function api(path,opts={}){
   return body;
 }
 function afterSignIn(){
-  api("/api/config").then(c=>{ aiOn=!!(c&&c.ai); $("#imgWrap").hidden=!aiOn; $("#chatNote").textContent=aiOn?"":"The AI helper isn't switched on yet. You can still read all the AI lessons."; }).catch(()=>{});
+  api("/api/config").then(c=>{ aiOn=!!(c&&c.ai); ttsOn=!!(c&&c.tts); $("#imgWrap").hidden=!aiOn; $("#chatNote").textContent=aiOn?"":"The AI helper isn't switched on yet. You can still read all the AI lessons."; }).catch(()=>{});
   loadMine();
   api("/api/bookings/mine").then(b=>{ if(b&&b.sessions){ myBookings=b.sessions; LS.set("bookings",myBookings); renderSessions(); } }).catch(()=>{});
 }
@@ -1035,6 +1089,12 @@ $("#signOut").onclick=()=>{
   myReqData={items:[]}; renderMyReqs();
   $("#sheet").hidden=true; greet(); go("home"); lockGate();
 };
+
+/* ---------- FLOATING BUTTONS ---------- */
+const SIZE_NAMES=["Standard","Large","Extra large"];
+$("#fabText").onclick=()=>{ sizeIx=(sizeIx+1)%SIZES.length; LS.set("size",sizeIx); applyDisplay(); toast("Text size: "+SIZE_NAMES[sizeIx]); };
+$("#fabRead").onclick=()=>{ if(readingVia){ stopSpeak(); return } const t=pageText(); if(!t){ toast("There's nothing to read on this page."); return } speak(t); };
+$("#fabSos").onclick=()=>{ stopSpeak(); };
 
 /* ---------- START ---------- */
 $("#hName").value=LS.get("name","");

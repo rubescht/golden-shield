@@ -12,6 +12,8 @@ A simple, senior-friendly app for aged care residents: cyber safety lessons, AI 
 |---|---|
 | `STAFF_PASSWORD` | Password for the staff dashboard (`/#staff`). Required. |
 | `TRIAL_PASSWORD` | Password clients type on the sign-in screen. Set this in Render (keep it out of the code). Checked on the server, never sent to the browser. |
+| `ELEVENLABS_API_KEY` | Turns on the clear read-aloud voice (ElevenLabs). Without it, "Read to me" uses each device's built-in voice, which some phones and in-app browsers don't have. |
+| `ELEVENLABS_VOICE_ID` | Optional. Voice used for read-aloud. Default: Udem – Calm & Clear Educational Narrator. |
 | `NOTIFY_TO` | Who gets the alert emails. Default `vip@codeblackgroup.com.au` (comma-separate for more). |
 | `MS_TENANT_ID`, `MS_CLIENT_ID`, `MS_CLIENT_SECRET`, `MS_SENDER` | **Recommended.** Sends alerts from a Microsoft 365 mailbox through Microsoft Graph (works on Render's free plan, which blocks SMTP). Needs an Entra app registration with the `Mail.Send` application permission and admin consent. `MS_SENDER` is the mailbox it sends from. |
 | `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS` | Plain SMTP instead. Does not work on Render's free plan (SMTP ports are blocked there). |

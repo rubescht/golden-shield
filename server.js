@@ -17,6 +17,10 @@ const TRIAL_PASSWORD = env('TRIAL_PASSWORD') || 'GoldenShield2026';
 const keyEnvName = Object.keys(process.env).find((k) => k.trim().toUpperCase() === 'ANTHROPIC_API_KEY')
   || Object.keys(process.env).find((k) => /ANTHROPIC|CLAUDE/i.test(k) && /KEY/i.test(k));
 const ANTHROPIC_API_KEY = keyEnvName ? String(process.env[keyEnvName]).trim() : '';
+// Read-aloud voice (ElevenLabs). Without a key, the app falls back to the device's own voice.
+const ELEVEN_KEY = env('ELEVENLABS_API_KEY');
+const ELEVEN_VOICE = env('ELEVENLABS_VOICE_ID') || 'g4XAeWx0tMolN1G3c3P5'; // Udem - Calm & Clear Educational Narrator
+const ELEVEN_MODEL = env('ELEVENLABS_MODEL') || 'eleven_flash_v2_5';
 const MODEL_CHECK = env('MODEL_CHECK') || 'claude-sonnet-5-5';
 const MODEL_CHAT = env('MODEL_CHAT') || 'claude-haiku-5-5';
 const DATA_DIR = env('DATA_DIR') || path.join(__dirname, 'data');
@@ -234,7 +238,7 @@ app.use((req, res, next) => {
 });
 app.use('/api', (req, res, next) => { res.set('Cache-Control', 'no-store'); next(); });
 app.set('etag', false);
-app.get('/api/config', (req, res) => res.json({ ai: !!ANTHROPIC_API_KEY }));
+app.get('/api/config', (req, res) => res.json({ ai: !!ANTHROPIC_API_KEY, tts: !!ELEVEN_KEY }));
 // ---------- Code Black Group website: "Send my map" enquiries ----------
 // Only the CBG website may call this; each enquiry is emailed to NOTIFY_TO (vip@).
 const SITE_ORIGINS = (env('SITE_ORIGINS') || 'https://codeblackgroup-website.onrender.com,https://codeblackgroup.com.au,https://www.codeblackgroup.com.au')
@@ -523,6 +527,32 @@ app.post('/api/staff/test-email', limit(5, 10 * 60e3), staffOnly, async (req, re
   catch (e) { console.error('test email failed', e.message); res.status(502).json({ error: 'email failed, see server logs' }); }
 });
 
+// Read aloud: turns page text into speech so it plays on any phone or browser.
+const ttsCache = new Map();
+app.post('/api/tts', trialOnly, limit(60, 10 * 60e3), async (req, res) => {
+  if (!ELEVEN_KEY) return res.status(503).json({ error: 'tts off' });
+  const text = str(req.body && req.body.text, 4000).replace(/\s+/g, ' ');
+  if (!text) return res.status(400).json({ error: 'no text' });
+  const key = crypto.createHash('sha256').update(ELEVEN_VOICE + '|' + ELEVEN_MODEL + '|' + text).digest('hex');
+  let buf = ttsCache.get(key);
+  if (!buf) {
+    try {
+      const r = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${encodeURIComponent(ELEVEN_VOICE)}?output_format=mp3_44100_64`, {
+        method: 'POST',
+        headers: { 'xi-api-key': ELEVEN_KEY, 'content-type': 'application/json', accept: 'audio/mpeg' },
+        body: JSON.stringify({ text, model_id: ELEVEN_MODEL, voice_settings: { stability: 0.6, similarity_boost: 0.75, speed: 0.92 } }),
+      });
+      if (!r.ok) throw new Error('elevenlabs ' + r.status + ' ' + (await r.text()).slice(0, 200));
+      buf = Buffer.from(await r.arrayBuffer());
+      ttsCache.set(key, buf);
+      if (ttsCache.size > 300) ttsCache.delete(ttsCache.keys().next().value);
+    } catch (e) { console.error('tts failed', e.message); return res.status(502).json({ error: 'tts failed' }); }
+  }
+  res.set('Content-Type', 'audio/mpeg');
+  res.set('Cache-Control', 'private, max-age=3600');
+  res.send(buf);
+});
+
 app.post('/api/check', trialOnly, limit(20, 10 * 60e3), async (req, res) => {
   if (!ANTHROPIC_API_KEY) return res.status(503).json({ error: 'ai off' });
   const text = redactStrict(str(req.body && req.body.text, 3000));
@@ -562,6 +592,7 @@ app.listen(PORT, () => {
   console.log(ANTHROPIC_API_KEY
     ? `AI: ON (key found in variable "${keyEnvName}", ${looksRight ? 'format looks right' : 'WARNING: value does not start with sk-ant-'})`
     : 'AI: OFF (no ANTHROPIC_API_KEY variable found)');
+  console.log('Read aloud: ' + (ELEVEN_KEY ? 'ElevenLabs voice ' + ELEVEN_VOICE : 'device voice only (no ELEVENLABS_API_KEY)'));
   console.log('Staff dashboard: ' + (STAFF_PASSWORD ? 'password set' : 'NO PASSWORD SET'));
   console.log('Trial password: ' + (env('TRIAL_PASSWORD') ? 'set from TRIAL_PASSWORD' : 'using the default'));
   if (transporter && !graphReady() && !RESEND_API_KEY) {
